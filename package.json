@@ -4,5 +4,8 @@
     "express": "^4.21.1",
     "minimist": "^1.2.8",
     "mysql": "^2.18.1"
+  },
+  "scripts": {
+    "start": "node server.js"
   }
 }
