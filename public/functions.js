@@ -53,17 +53,6 @@ function getCurrentDate() {// Function to get the current date in the format YYY
     return `${year}-${month}-${day}`;
 }
 
-// from ChatGPT, modified by Lui Rabideau under prompt "recommend password function in textbox javascript and html"
-function generateRandomPassword(length){// Generate password function 
-    const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_-+=<>?/{}[]";
-    let password = "";
-    for (let i = 0; i < length; i++) {
-      const randomIndex = Math.floor(Math.random() * charset.length);
-      password += charset.charAt(randomIndex);
-    }
-    return password;
-}
-
 function generatePassword(){// Used in conjunction with the function above. This function is called at the click of a button and it takes the value of the generatePassword function and returns it to a specificied elementID
   const passwordField = document.getElementById("password");
   const generatedPassword = generateRandomPassword(10); // Change the length as needed
@@ -200,70 +189,6 @@ function checkTextBox(){// Used in products.html to display the active errors in
 }
 
 /*------------------------- INVOICE AND SHOPPING CART PAGE SPECIFIC FUNCTIONS --------------------------*/
-
-function generateInvoiceTable(){// The generate item rows function in INVOICE_HTML
-    // form was submitted so process the invoice
-  for (let prod_key in shopping_cart) {
-    let products = all_products[prod_key];
-    for (let i in products) {
-      let a_qty = shopping_cart[prod_key][`quantity${i}`];
-    //creates item rows
-        extended_price = a_qty * products[i].price;
-        subtotal += extended_price;
-        //checks for quantities = 0
-        if(a_qty == 0){
-          continue;
-        }else{
-          document.write(`
-            <tr style="height: 100px;">
-              <td><div class="image-container"><img src="${products[i].image}" style="width: 100%; height: 100%;">              
-              <div class="popup">${products[i].description}</div></div>
-              </td>
-              <td>${products[i].brand}</td>
-              <td>${a_qty}</td>
-              <td>$${products[i].price.toFixed(2)}</td>
-              <td>$${extended_price.toFixed(2)}</td>
-            </tr>`);
-        }
-      }    
-        // Subtotal calculation takes place after every loop
-        
-    };
-};
-
-function generateCartTable(){// The generate item rows function in SHOPPINGCART_HTML0
-  for (let prod_key in shopping_cart) {
-    let products = all_products[prod_key];
-    for (let i in products) {
-      let a_qty = shopping_cart[prod_key][`quantity${i}`];
-    //creates item rows
-      extended_price = a_qty * products[i].price;
-      subtotal += extended_price;
-        if(a_qty == 0){//checks for quantities = 0
-          continue;
-        }else{
-        let fav = shopping_cart[prod_key][`favorite${i}`];
-        // the div class id="pop up" is IR5
-          document.write(`
-            <tr style="height: 100px;">
-              <td><div class="image-container"><img src="${products[i].image}" style="width: 100%; height: 100%;">              
-              <div class="popup">${products[i].description}</div></div>
-              </td>
-              <td><input type="checkbox" id="checkbox${prod_key}_${i}" name="favorite${i}" onchange="updateFav('${prod_key}',${i});"></td>
-              <td>${products[i].brand}</td>
-              <td><label>Edit:</label><input type="number" id="quantityTextbox${prod_key}_${i}" onchange="updateQuantity('${prod_key}',${i});" value="${a_qty}"></td>
-              <td>$${products[i].price.toFixed(2)}</td>
-              <td>$${extended_price.toFixed(2)}</td>
-            </tr>`);
-            if(fav == "on"){
-              document.getElementById(`checkbox${prod_key}_${i}`).checked = true;
-            } else {
-              document.getElementById(`checkbox${prod_key}_${i}`).checked = false;
-            }  
-        }
-    }  
-  };
-};
 
 function updateQuantity(location, productIndex){
   // get the shopping cart data for this user
