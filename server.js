@@ -146,6 +146,10 @@ app.post('/register', function (request, response){// Makes a new user while val
   }
 });  
 
+app.get('/logout', function (request, response){// Redirects user
+  response.redirect(`./index.html`)
+});
+
 /*----------------------------------- ROUTING -----------------------------------*/
 app.all('*', function (request, response, next) {
   console.log(request.method + ' to ' + request.path);

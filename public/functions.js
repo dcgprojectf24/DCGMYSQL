@@ -25,6 +25,7 @@ function navBar(){// Makes a navbar
         <a href="./search.html" class="w3-bar-item w3-button w3-mobile">Reports</a>
         <a href="./maps.html" class="w3-bar-item w3-button w3-mobile">Maps</a>
         <a href="./account.html" class="w3-bar-item w3-button w3-right w3-light-grey w3-mobile">Account</a>
+        <a href="./logout" class="w3-bar-item w3-button w3-mobile" onclick="logout()">Log Out</a>
       </div>
    `);
   } else {
