@@ -4,7 +4,7 @@
 <title>W3.CSS Template</title>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="https://www.w3schools.com/w3css/w3.css">
+<link rel="stylesheet" href="./css/w3.css">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <style>
@@ -13,19 +13,23 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", Arial, Helvetica, sans-serif}
 </head>
 <body class="w3-light-grey">
 
-<!-- Navigation Bar -->
+<!---------------------------- Navigation Bar Start ---------------------------->
 <div class="w3-bar w3-white w3-large">
-  <a href="#" class="w3-bar-item w3-button w3-red w3-mobile"><i class="fa fa-bed w3-margin-right"></i>Logo</a>
-  <a href="#rooms" class="w3-bar-item w3-button w3-mobile">Rooms</a>
-  <a href="#about" class="w3-bar-item w3-button w3-mobile">About</a>
-  <a href="#contact" class="w3-bar-item w3-button w3-mobile">Contact</a>
-  <a href="#contact" class="w3-bar-item w3-button w3-right w3-light-grey w3-mobile">Book Now</a>
+  <a href="./index.html" class="w3-bar-item w3-button w3-green w3-mobile"><i class="fa fa-bed w3-margin-right"></i>Home</a>
+  <a href="./about.html" class="w3-bar-item w3-button w3-mobile">About</a>
+  <a href="./team.html" class="w3-bar-item w3-button w3-mobile">Team</a>
+  <a href="./search.html" class="w3-bar-item w3-button w3-mobile">Search</a>
+  <a href="./search.html" class="w3-bar-item w3-button w3-mobile">Reports</a>
+  <a href="./maps.html" class="w3-bar-item w3-button w3-mobile">Maps</a>
+  <a href="./login.html" class="w3-bar-item w3-button w3-right w3-light-grey w3-mobile">Login</a>
 </div>
+<!---------------------------- Navigation Bar End ---------------------------->
+
 <!-- Header -->
 <header class="w3-display-container w3-content" style="max-width:1500px;">
-  <img class="w3-image" src="/w3images/hotel.jpg" alt="The Hotel" style="min-width:1000px" width="1500" height="800">
+  <img class="w3-image" src="/images/hotel.jpg" alt="The Hotel" style="min-width:1000px" width="1500" height="800">
   <div class="w3-display-left w3-padding w3-col l6 m8">
-    <div class="w3-container w3-red">
+    <div class="w3-container w3-green">
       <h2><i class="fa fa-bed w3-margin-right"></i>Hotel Name</h2>
     </div>
     <div class="w3-container w3-white w3-padding-16">
@@ -89,7 +93,7 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", Arial, Helvetica, sans-serif}
 
   <div class="w3-row-padding w3-padding-16">
     <div class="w3-third w3-margin-bottom">
-      <img src="/w3images/room_single.jpg" alt="Norway" style="width:100%">
+      <img src="/images/room_single.jpg" alt="Norway" style="width:100%">
       <div class="w3-container w3-white">
         <h3>Single Room</h3>
         <h6 class="w3-opacity">From $99</h6>
@@ -100,7 +104,7 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", Arial, Helvetica, sans-serif}
       </div>
     </div>
     <div class="w3-third w3-margin-bottom">
-      <img src="/w3images/room_double.jpg" alt="Norway" style="width:100%">
+      <img src="/images/room_double.jpg" alt="Norway" style="width:100%">
       <div class="w3-container w3-white">
         <h3>Double Room</h3>
         <h6 class="w3-opacity">From $149</h6>
@@ -111,7 +115,7 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", Arial, Helvetica, sans-serif}
       </div>
     </div>
     <div class="w3-third w3-margin-bottom">
-      <img src="/w3images/room_deluxe.jpg" alt="Norway" style="width:100%">
+      <img src="/images/room_deluxe.jpg" alt="Norway" style="width:100%">
       <div class="w3-container w3-white">
         <h3>Deluxe Room</h3>
         <h6 class="w3-opacity">From $199</h6>
@@ -131,17 +135,17 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", Arial, Helvetica, sans-serif}
     </div>
     <div class="w3-col l8 12">
       <!-- Image of location/map -->
-      <img src="/w3images/map.jpg" class="w3-image w3-greyscale" style="width:100%;">
+      <img src="/images/map.jpg" class="w3-image w3-greyscale" style="width:100%;">
     </div>
   </div>
   
   <div class="w3-row-padding w3-large w3-center" style="margin:32px 0">
-    <div class="w3-third"><i class="fa fa-map-marker w3-text-red"></i> 423 Some adr, Chicago, US</div>
-    <div class="w3-third"><i class="fa fa-phone w3-text-red"></i> Phone: +00 151515</div>
-    <div class="w3-third"><i class="fa fa-envelope w3-text-red"></i> Email: mail@mail.com</div>
+    <div class="w3-third"><i class="fa fa-map-marker w3-text-green"></i> 423 Some adr, Chicago, US</div>
+    <div class="w3-third"><i class="fa fa-phone w3-text-green"></i> Phone: +00 151515</div>
+    <div class="w3-third"><i class="fa fa-envelope w3-text-green"></i> Email: mail@mail.com</div>
   </div>
 
-  <div class="w3-panel w3-red w3-leftbar w3-padding-32">
+  <div class="w3-panel w3-green w3-leftbar w3-padding-32">
     <h6><i class="fa fa-info w3-deep-orange w3-padding w3-margin-right"></i> On demand, we can offer playstation, babycall, children care, dog equipment, etc.</h6>
   </div>
 
@@ -153,7 +157,7 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", Arial, Helvetica, sans-serif}
   <div class="w3-row-padding w3-padding-16 w3-text-white w3-large">
     <div class="w3-half w3-margin-bottom">
       <div class="w3-display-container">
-        <img src="/w3images/cinqueterre.jpg" alt="Cinque Terre" style="width:100%">
+        <img src="/images/cinqueterre.jpg" alt="Cinque Terre" style="width:100%">
         <span class="w3-display-bottomleft w3-padding">Cinque Terre</span>
       </div>
     </div>
@@ -161,13 +165,13 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", Arial, Helvetica, sans-serif}
       <div class="w3-row-padding" style="margin:0 -16px">
         <div class="w3-half w3-margin-bottom">
           <div class="w3-display-container">
-            <img src="/w3images/newyork2.jpg" alt="New York" style="width:100%">
+            <img src="/images/newyork2.jpg" alt="New York" style="width:100%">
             <span class="w3-display-bottomleft w3-padding">New York</span>
           </div>
         </div>
         <div class="w3-half w3-margin-bottom">
           <div class="w3-display-container">
-            <img src="/w3images/sanfran.jpg" alt="San Francisco" style="width:100%">
+            <img src="/images/sanfran.jpg" alt="San Francisco" style="width:100%">
             <span class="w3-display-bottomleft w3-padding">San Francisco</span>
           </div>
         </div>
@@ -175,13 +179,13 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", Arial, Helvetica, sans-serif}
       <div class="w3-row-padding" style="margin:0 -16px">
         <div class="w3-half w3-margin-bottom">
           <div class="w3-display-container">
-            <img src="/w3images/pisa.jpg" alt="Pisa" style="width:100%">
+            <img src="/images/pisa.jpg" alt="Pisa" style="width:100%">
             <span class="w3-display-bottomleft w3-padding">Pisa</span>
           </div>
         </div>
         <div class="w3-half w3-margin-bottom">
           <div class="w3-display-container">
-            <img src="/w3images/paris.jpg" alt="Paris" style="width:100%">
+            <img src="/images/paris.jpg" alt="Paris" style="width:100%">
             <span class="w3-display-bottomleft w3-padding">Paris</span>
           </div>
         </div>
@@ -194,15 +198,15 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", Arial, Helvetica, sans-serif}
     <p>Join our newsletter.</p>
     <label>E-mail</label>
     <input class="w3-input w3-border" type="text" placeholder="Your Email address">
-    <button type="button" class="w3-button w3-red w3-margin-top">Subscribe</button>
+    <button type="button" class="w3-button w3-green w3-margin-top">Subscribe</button>
   </div>
 
   <div class="w3-container" id="contact">
     <h2>Contact</h2>
     <p>If you have any questions, do not hesitate to ask them.</p>
-    <i class="fa fa-map-marker w3-text-red" style="width:30px"></i> Chicago, US<br>
-    <i class="fa fa-phone w3-text-red" style="width:30px"></i> Phone: +00 151515<br>
-    <i class="fa fa-envelope w3-text-red" style="width:30px"> </i> Email: mail@mail.com<br>
+    <i class="fa fa-map-marker w3-text-green" style="width:30px"></i> Chicago, US<br>
+    <i class="fa fa-phone w3-text-green" style="width:30px"></i> Phone: +00 151515<br>
+    <i class="fa fa-envelope w3-text-green" style="width:30px"> </i> Email: mail@mail.com<br>
     <form action="/action_page.php" target="_blank">
       <p><input class="w3-input w3-padding-16 w3-border" type="text" placeholder="Name" required name="Name"></p>
       <p><input class="w3-input w3-padding-16 w3-border" type="text" placeholder="Email" required name="Email"></p>

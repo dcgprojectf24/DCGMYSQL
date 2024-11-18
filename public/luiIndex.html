@@ -1,0 +1,53 @@
+<!------------------ Created by Lui Rabideau, due on 12/15/2023 ---------------------->
+<!-- Design from W3schools: W3.CSS 4.15 December 2020 by Jan Egil and Borge Refsnes -->
+<!-------- (https://www.w3schools.com/w3css/tryw3css_templates_architect.htm) -------->
+<!----------------------------- UHM ITM352 Assignment 3 ------------------------------>
+<!DOCTYPE html>
+<html>
+<head>
+<title>Home</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- files needed to run the page (the CSS and favicon are included in the headDeclarations function) -->
+<script src="./functions.js"></script>
+<script>faviconInfo()</script>
+</head>
+<body>
+<!---------------------------------------------------- Navbar ---------------------------------------------------->
+<script>navBar();</script>
+<br><br><br><br>
+<!---------------------------------------------------- Header ---------------------------------------------------->
+<header class="w3-display-container w3-content w3-wide" style="max-width:1500px;" id="home">
+    <img class="w3-image" src="./images/main.jpg" alt="Architecture" width="1500" height="800">
+    <div class="w3-display-middle w3-margin-top w3-center">
+      <h1 class="w3-xxlarge w3-text-white"><span class="w3-padding w3-black w3-opacity-min"><b>Ryer</b></span> <span class="w3-hide-small w3-text-light-grey">Architects</span></h1>
+    </div>
+</header>
+<!---------------------------------------------------- Page content ---------------------------------------------------->
+<div class="w3-content w3-padding content" style="max-width:1564px">
+<!-- Welcome Section -->
+    <div class="w3-container w3-padding-32">
+      <h2 class="w3-border-bottom w3-border-light-grey w3-padding-16">Welcome to <b>Ryer</b> Architects</h2>
+      <p style="text-align: center; font-size: medium;">
+        At Ryer, we believe that our architecture is more than just creating models of buildings; it's about shaping environments that inspire and elevate the human experience.
+      </p><p style="text-align: center;"> 
+        Established 2017, our firm is a collective of passionate architects and designers dedicated to crafting pieces that seamlessly blend aesthetics, functionality, and sustainability.
+      </p>
+    </div>
+    <!-- About Section -->
+    <div class="w3-container w3-padding-32" id="about">
+      <h2 class="w3-border-bottom w3-border-light-grey w3-padding-16">About</h2>
+        <p>
+          At Ryer, we embrace innovation and stay at the forefront of design trends and technologies. We are committed to sustainable practices, integrating eco-friendly solutions into our designs to create spaces that are not only visually stunning but also environmentally responsible.
+        </p><p>
+          Collaboration is at the heart of our process. We work closely with our clients, listening to their aspirations and concerns, to co-create spaces that reflect their vision. Our transparent communication, attention to detail, and commitment to timelines ensure a seamless experience from concept to completion.
+        </p>
+    </div>
+    <!-- Image of location/map -->
+    <div class="w3-container">
+      <img src="./images/costalview.jpg" class="w3-image" style="width:100%">
+    </div>
+</div>
+<!---------------------------------------------------- End page content ---------------------------------------------------->
+</body>
+</html>
