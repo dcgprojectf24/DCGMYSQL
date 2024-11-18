@@ -3,6 +3,30 @@ var app = express();
 var myParser = require("body-parser");
 var mysql = require('mysql');
 
+const session = require('express-session');
+app.use(session({secret: "MySecretKey", resave: true, saveUninitialized: true}));
+
+let userLoggedin = {};
+
+const fs = require('fs');
+const { type } = require('os');
+
+//USER DATA STUFF
+let user_reg_data = {};
+let user_data_filename = __dirname + '/user_data.json';
+
+if (fs.existsSync(user_data_filename)){// if the user data file exists, read it and parse it
+    // get the filesize and print it out
+    console.log(`${user_data_filename} has ${fs.statSync(user_data_filename).size} characters.`);
+    // let user_reg_data = require('./user_data.json');
+    let user_reg_data_JSON = fs.readFileSync(user_data_filename, 'utf-8');
+    user_reg_data = JSON.parse(user_reg_data_JSON);
+} else {
+    console.log(`Error! ${user_data_filename} does not exist!`);
+}
+
+
+
 // Connects to Database
 console.log("Connecting to localhost..."); 
 var con = mysql.createConnection({
@@ -87,7 +111,7 @@ app.post('/login', function (request, response){// Validates a users login, and 
         if(cartCookie == 0) {
           response.redirect(`./index.html`)
         } else {
-          response.redirect(`./shoppingCart.html`);
+          response.redirect(`./account.html`);
         }
      } else {
         response.redirect(`./login.html?error=pass`)
@@ -115,10 +139,10 @@ app.post('/register', function (request, response){// Makes a new user while val
         if(cartCookie == 0) {
           response.redirect(`./index.html`)
         } else {
-          response.redirect(`./shoppingCart.html`);
+          response.redirect(`./account.html`);
         }  
   } else {
-     response.redirect(`./register.html`)
+    response.redirect(`./register.html`)
   }
 });  
 

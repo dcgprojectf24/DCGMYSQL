@@ -17,36 +17,27 @@ function navBar(){// Makes a navbar
   let total = getCookie("totalIC");
   if(isloggedin == 1){
     document.write(`
-    <div class="w3-top">
-    <div class="w3-bar w3-white w3-wide w3-padding w3-card">
-     <a href="./index.html" class="w3-bar-item w3-button"><b>Ryer</b> Architects</a>
-     <!-- Float links to the right. Hide them on small screens -->
-     <div class="w3-right w3-hide-small">
-       <a href="./products.html?location=NewYork" class="w3-bar-item w3-button">New York</a>
-       <a href="./products.html?location=SanFran" class="w3-bar-item w3-button">San Francisco</a>
-       <a href="./products.html?location=Chicago" class="w3-bar-item w3-button">Chicago</a>
-       <a href="./team.html" class="w3-bar-item w3-button">Our Team</a>
-       <a href="./logout" class="w3-bar-item w3-button" onclick="logout()">Log Out</a>
-       <a href="./shoppingCart.html" class="w3-bar-item w3-button">${nameCookie}'s Cart: (${total}) items</a>
-     </div>
-    </div>
-   </div>
+      <div class="w3-bar w3-white w3-large">
+        <a href="./index.html" class="w3-bar-item w3-button w3-green w3-mobile"><i class="fa fa-bed w3-margin-right"></i>Home</a>
+        <a href="./about.html" class="w3-bar-item w3-button w3-mobile">About</a>
+        <a href="./team.html" class="w3-bar-item w3-button w3-mobile">Team</a>
+        <a href="./search.html" class="w3-bar-item w3-button w3-mobile">Search</a>
+        <a href="./search.html" class="w3-bar-item w3-button w3-mobile">Reports</a>
+        <a href="./maps.html" class="w3-bar-item w3-button w3-mobile">Maps</a>
+        <a href="./account.html" class="w3-bar-item w3-button w3-right w3-light-grey w3-mobile">Account</a>
+      </div>
    `);
   } else {
     document.write(`
-    <div class="w3-top">
-    <div class="w3-bar w3-white w3-wide w3-padding w3-card">
-     <a href="./index.html" class="w3-bar-item w3-button"><b>Ryer</b> Architects</a>
-     <!-- Float links to the right. Hide them on small screens -->
-     <div class="w3-right w3-hide-small">
-       <a href="./products.html?location=NewYork" class="w3-bar-item w3-button">New York</a>
-       <a href="./products.html?location=SanFran" class="w3-bar-item w3-button">San Francisco</a>
-       <a href="./products.html?location=Chicago" class="w3-bar-item w3-button">Chicago</a>
-       <a href="./team.html" class="w3-bar-item w3-button">Our Team</a>
-       <a href="./login.html" class="w3-bar-item w3-button">Login</a>
-     </div>
-    </div>
-   </div>
+      <div class="w3-bar w3-white w3-large">
+        <a href="./index.html" class="w3-bar-item w3-button w3-green w3-mobile"><i class="fa fa-bed w3-margin-right"></i>Home</a>
+        <a href="./about.html" class="w3-bar-item w3-button w3-mobile">About</a>
+        <a href="./team.html" class="w3-bar-item w3-button w3-mobile">Team</a>
+        <a href="./search.html" class="w3-bar-item w3-button w3-mobile">Search</a>
+        <a href="./search.html" class="w3-bar-item w3-button w3-mobile">Reports</a>
+        <a href="./maps.html" class="w3-bar-item w3-button w3-mobile">Maps</a>
+        <a href="./login.html" class="w3-bar-item w3-button w3-right w3-light-grey w3-mobile">Login</a>
+      </div>
    `);
   }
 }
