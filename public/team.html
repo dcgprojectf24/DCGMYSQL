@@ -1,0 +1,78 @@
+<!------------------ Created by Lui Rabideau, due on 12/15/2023 ---------------------->
+<!-- Design from W3schools: W3.CSS 4.15 December 2020 by Jan Egil and Borge Refsnes -->
+<!-------- (https://www.w3schools.com/w3css/tryw3css_templates_architect.htm) -------->
+<!----------------------------- UHM ITM352 Assignment 3 ------------------------------>
+<!DOCTYPE html>
+<html>
+<head>
+<title>Our Team</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- files needed to run the page (the CSS and favicon are included in the headDeclarations function) -->
+<script src="./functions.js"></script>
+<script src="./professionals.js"></script>
+<script>
+faviconInfo();
+loadJSON('get_cart', function (response) {// get the shopping cart data for this user
+  shopping_cart = JSON.parse(response);  // Parsing JSON string into object
+  function countTotals(shopping_cart) {
+    let counts = 0;// Initialize a counter for favorites
+    for (let prod_key in shopping_cart) {// Iterate through each city
+      let city = shopping_cart[prod_key]
+      for(let i in shopping_cart[prod_key]){// Iterate through each product
+        if (i.startsWith("quantity")) { // count the quantities
+          let num = 0;
+          num = shopping_cart[prod_key][i];
+          counts = counts + num;
+        }
+      }
+    }
+    return counts;
+  }
+const totalInCart = countTotals(shopping_cart);
+console.log(totalInCart);
+setCookie("totalIC", totalInCart, 30)
+});
+</script>
+</head>
+<body>
+<!-- Navbar -->
+<script>navBar()</script>
+<br><br><br><br>
+  <!-- Header -->
+  <header class="w3-display-container w3-content w3-wide" style="max-width:1500px;" id="home">
+    <img class="w3-image" src="./images/main.jpg" alt="Architecture" width="1500" height="800">
+    <div class="w3-display-middle w3-margin-top w3-center">
+      <h1 class="w3-xxlarge w3-text-white"><span class="w3-padding w3-black w3-opacity-min"><b>Our Team</b></span></h1>
+    </div>
+  </header>
+  <!-- Page content -->
+  <div class="w3-content w3-padding" style="max-width:1564px">
+    <!-- About Section -->
+    <div class="w3-container w3-padding-32" id="about">
+      <h3 class="w3-border-bottom w3-border-light-grey w3-padding-16">Our Philosophy: Design with Purpose</h3>
+      <p>
+        Every project we undertake is guided by a commitment to meaningful design. We understand that architecture has the power to influence lives, and we approach each endeavor with a holistic perspective, considering not only the physical structures but also the impact on communities and the environment.
+      </p><p>
+        Our team comprises seasoned architects, designers, and professionals who bring a diverse range of expertise to the table. Learn more about the individuals driving our creative force: 
+      </p>
+    </div>
+    <div class="w3-row-padding w3-grayscale"> 
+      <script>
+        teamTable();
+      </script>
+    </div>
+    <!-- Contact Us Section -->
+    <div class="w3-container w3-padding-32" id="about">
+      <p>
+        Ready to embark on your architectural journey? Connect with us to discuss your project or schedule a consultation. At Ryer, we don't just design spaces; we create environments that leave a lasting impression. Join us in redefining the future of architecture.
+      </p>
+    </div>
+    <!-- Image of location/map -->
+    <div class="w3-container">
+      <img src="./images/costalview.jpg" class="w3-image" style="width:100%">
+    </div>
+  </div>
+  <!-- End page content -->
+</body>
+</html>

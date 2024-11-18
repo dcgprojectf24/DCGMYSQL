@@ -1,0 +1,49 @@
+<!------------------ Created by Lui Rabideau, due on 12/15/2023 ---------------------->
+<!-- Design from W3schools: W3.CSS 4.15 December 2020 by Jan Egil and Borge Refsnes -->
+<!-------- (https://www.w3schools.com/w3css/tryw3css_templates_architect.htm) -------->
+<!----------------------------- UHM ITM352 Assignment 3 ------------------------------>
+<!DOCTYPE html>
+<html>
+<head>
+<title>Register</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- files needed to run the page (the CSS and favicon are included in the headDeclarations function) -->
+<script src="./functions.js"></script>
+<link rel="stylesheet" href="./css/login.css">
+<script>faviconInfo()</script>
+</head>
+<body>
+<!-- Navbar -->
+<script>navBar()</script>
+<br><br><br><br>
+<!-- Header -->
+<div class="login-container">
+    <h2>Registration</h2>
+    <form action="./register" method="post">
+        <!-- first name -->
+        <label for="firstname">First Name:</label>
+        <input type="text" id="firstname" name="firstname" required>
+        <!-- last name -->
+        <label for="lastname">Last Name:</label>
+        <input type="text" id="lastname" name="lastname" required>
+        <!-- email -->
+        <label for="username">Email:</label>
+        <input type="email" id="username" name="username" required>
+        <!-- password -->
+        <label for="password">Password:</label>
+        <input type="text" id="password" name="password" required>
+        <!-- generates a random password -->
+        <p style="text-align: center;">
+            <button id="generateBtn" onclick="generatePassword()">Generate Password</button>
+        </p>
+        <!-- form submit -->
+        <p style="text-align: center;"><button type="submit">Login</button></p>
+        <script>
+            let inCart = getCookie("totalIC");
+            document.write(`<input type="hidden" name="total" value="${inCart}">`);
+        </script>
+    </form>
+</div>
+</body>
+</html>

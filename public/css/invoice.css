@@ -1,0 +1,92 @@
+.image-container {
+    position: relative;
+    display: inline-block;
+}
+
+.popup {
+    display: none;
+    position: absolute;
+    background-color: #f1f1f1;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    z-index: 1;
+}
+
+.image-container:hover .popup {
+    display: block;
+}
+
+header{
+    width: 100%;
+    height: 15%;
+    background-color: black;
+    position:fixed;
+}
+.logo{
+    width: 1%;
+    float: left;
+    text-align: left;
+    line-height: 95px;
+    font-size: 10px;
+}
+.logo a {
+    font-size: 10px;
+    font-family: Arial, Helvetica, sans-serif;
+    color: aliceblue;
+    letter-spacing: 4px;
+}
+nav{
+    float: right;
+    line-height: 100px;
+}
+nav a{
+    font-family: Arial, Helvetica, sans-serif;
+    color: aliceblue;
+    letter-spacing: 4px;
+    padding: 36px 10px;
+    margin: 0 1px;
+    font-weight: 500;
+}
+nav a:hoover{
+    background: azure;
+    color: black;
+}
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+}
+
+.invoice {
+    width: 80%;
+    margin: auto;
+    border: 1px solid #ccc;
+    padding: 20px;
+    background-color: #f9f9f9;
+}
+
+.invoice-header,
+.invoice-body,
+.invoice-footer {
+    margin-bottom: 20px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+th {
+    background-color: #f2f2f2;
+}
+
+.total {
+    font-weight: bold;
+}
