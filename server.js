@@ -95,7 +95,7 @@ app.post("/process_query", function (request, response) {
   query_DB(POST, response);
 });
 
-/*---------------------------------- LOGIN/REGISTER ----------------------------------*/
+/*---------------------------------- LOGIN/LOGOUT/REGISTER ----------------------------------*/
 app.post('/login', function (request, response){// Validates a users login, and redirects page to the page if invalid and to cart if valid
   // Process login form POST and redirect to logged in page if ok, back to login page if not
   let the_username = request.body.username.toLowerCase();
@@ -146,7 +146,7 @@ app.post('/register', function (request, response){// Makes a new user while val
   }
 });  
 
-app.get('/logout', function (request, response){// Redirects user
+app.get('/logout', function (request, response){// Redirects user to home page after logging out
   response.redirect(`./index.html`)
 });
 
