@@ -3,6 +3,7 @@ var app = express();
 var myParser = require("body-parser");
 var mysql = require('mysql');
 
+// Connects to Database
 console.log("Connecting to localhost..."); 
 var con = mysql.createConnection({
   host: '127.0.0.1',
@@ -20,6 +21,7 @@ con.connect(function (err) {
 app.use(express.static('./public'));
 app.use(myParser.urlencoded({ extended: true }));
 
+/*---------------------------------- FUNCTIONS ----------------------------------*/
 function isNonNegInt(stringToCheck, returnErrors = false) {
   errors = []; // assume no errors at first
   if (Number(stringToCheck) != stringToCheck) errors.push('Not a number!'); // Check if string is a number value
@@ -29,6 +31,8 @@ function isNonNegInt(stringToCheck, returnErrors = false) {
   return returnErrors ? errors : (errors.length == 0);
 }
 
+
+/*---------------------------------- SQL START ----------------------------------*/
 function query_DB(POST, response) {
   if (isNonNegInt(POST['low_price'])
     && isNonNegInt(POST['high_price'])) {   // Only query if we got a low and high price
@@ -61,14 +65,67 @@ function query_DB(POST, response) {
   }
 }
 
-app.all('*', function (request, response, next) {
-  console.log(request.method + ' to ' + request.path);
-  next();
-});
 
 app.post("/process_query", function (request, response) {
   let POST = request.body;
   query_DB(POST, response);
+});
+
+/*---------------------------------- LOGIN/REGISTER ----------------------------------*/
+app.post('/login', function (request, response){// Validates a users login, and redirects page to the page if invalid and to cart if valid
+  // Process login form POST and redirect to logged in page if ok, back to login page if not
+  let the_username = request.body.username.toLowerCase();
+  let the_password = request.body.password;
+  if(typeof user_reg_data[the_username] !== 'undefined'){// check if username is in user_data
+     if(user_reg_data[the_username].password === the_password){// check if the password matches the password in user_reg_data
+        console.log(`${the_username} is logged in!`);
+        response.cookie("username", the_username, {expire: Date.now() + 30 * 60 * 1000});// send a username cookie to indicate logged in
+        response.cookie("name", user_reg_data[the_username].name, {expire: Date.now() + 30 * 60 * 1000});// make a name cookie
+        response.cookie("loggedIn", 1, {expire: Date.now() + 30 * 60 * 1000});// make a logged in cookie
+        userLoggedin[the_username] = true;
+        let cartCookie = Number(request.body.total);
+        if(cartCookie == 0) {
+          response.redirect(`./index.html`)
+        } else {
+          response.redirect(`./shoppingCart.html`);
+        }
+     } else {
+        response.redirect(`./login.html?error=pass`)
+     }
+  } else { // else the user does not exist 
+     response.redirect(`./login.html?error=user`);
+  }
+});
+
+app.post('/register', function (request, response){// Makes a new user while validating that info, then sends the new user to the shopping cart
+  let username = request.body.username.toLowerCase();
+  user_reg_data[username] = {};
+  user_reg_data[username].password = request.body.password;
+  user_reg_data[username].username = request.body.username;  
+  user_reg_data[username].name = request.body.firstname + ' ' + request.body.lastname;
+  // add it to the user_data.json
+  fs.writeFileSync(user_data_filename, JSON.stringify(user_reg_data));
+  if(typeof user_reg_data[username] !== 'undefined' && typeof user_reg_data[username].password !== 'undefined' && typeof user_reg_data[username].username !== 'undefined'){
+     // add new logged in user, place above the redirect
+     userLoggedin[username] = true; 
+     response.cookie("username", username, {expire: Date.now() + 30 * 60 * 1000});// send a username cookie to indicate logged in
+     response.cookie("name", user_reg_data[username].name, {expire: Date.now() + 30 * 60 * 1000});// make a name cookie
+     response.cookie("loggedIn", 1, {expire: Date.now() + 30 * 60 * 1000});// make a logged in cookie
+     let cartCookie = Number(request.body.total);
+        if(cartCookie == 0) {
+          response.redirect(`./index.html`)
+        } else {
+          response.redirect(`./shoppingCart.html`);
+        }  
+  } else {
+     response.redirect(`./register.html`)
+  }
+});  
+
+/*----------------------------------- ROUTING -----------------------------------*/
+app.all('*', function (request, response, next) {
+  console.log(request.method + ' to ' + request.path);
+  next();
 });
 
 app.listen(8080, () => console.log(`listening on port 8080`));

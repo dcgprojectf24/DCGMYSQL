@@ -23,6 +23,28 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", Arial, Helvetica, sans-serif}
     <a href="./login.html" class="w3-bar-item w3-button w3-right w3-light-grey w3-mobile">Login</a>
 </div>
 <!---------------------------- Navigation Bar End ---------------------------->
-
+<div>
+    <h2>Login</h2>
+    <p style="text-align: center;"><div style="color: red;" id="error_message"></div></p>
+    <form action="./login" method="post">
+        <!-- Email -->
+        <label for="username">Email:</label>
+        <input type="email" id="username" name="username" required>
+        <!-- Password -->
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required>
+        <!-- Login -->
+        <p style="text-align: center;"><button type="submit">Login</button></p>
+        <script>
+            let inCart = getCookie("totalIC");
+            document.write(`<input type="hidden" name="total" value="${inCart}">`);
+            loginError();
+        </script>
+    </form>
+    <p style="text-align: center;">
+        <!-- Link to register -->
+        <a href="./register.html">Register</a>
+    </p> 
+</div>
 </body>
 </html>
