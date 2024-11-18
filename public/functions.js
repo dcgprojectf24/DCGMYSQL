@@ -18,7 +18,7 @@ function navBar(){// Makes a navbar
   if(isloggedin == 1){
     document.write(`
       <div class="w3-bar w3-white w3-large">
-        <a href="./index.html" class="w3-bar-item w3-button w3-green w3-mobile"><i class="fa fa-bed w3-margin-right"></i>Home</a>
+        <a href="./index.html" class="w3-bar-item w3-button w3-green w3-mobile">Home</a>
         <a href="./about.html" class="w3-bar-item w3-button w3-mobile">About</a>
         <a href="./team.html" class="w3-bar-item w3-button w3-mobile">Team</a>
         <a href="./search.html" class="w3-bar-item w3-button w3-mobile">Search</a>
@@ -31,7 +31,7 @@ function navBar(){// Makes a navbar
   } else {
     document.write(`
       <div class="w3-bar w3-white w3-large">
-        <a href="./index.html" class="w3-bar-item w3-button w3-green w3-mobile"><i class="fa fa-bed w3-margin-right"></i>Home</a>
+        <a href="./index.html" class="w3-bar-item w3-button w3-green w3-mobile">Home</a>
         <a href="./about.html" class="w3-bar-item w3-button w3-mobile">About</a>
         <a href="./team.html" class="w3-bar-item w3-button w3-mobile">Team</a>
         <a href="./search.html" class="w3-bar-item w3-button w3-mobile">Search</a>

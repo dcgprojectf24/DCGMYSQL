@@ -25,8 +25,6 @@ if (fs.existsSync(user_data_filename)){// if the user data file exists, read it 
     console.log(`Error! ${user_data_filename} does not exist!`);
 }
 
-
-
 // Connects to Database
 console.log("Connecting to localhost..."); 
 var con = mysql.createConnection({
