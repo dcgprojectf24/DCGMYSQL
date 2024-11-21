@@ -7,16 +7,97 @@
 <link rel="stylesheet" href="./css/w3.css">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<link rel="shortcut icon" href="./images/HPC_logo_zoom.jpg" type="image/png">
+<link rel="shortcut icon" href="./images/DCG_logo.jpg" type="image/png">
 <script src="./functions.js"></script>
 <style>
 body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", Arial, Helvetica, sans-serif}
+.hero {
+    background-image: url('./images/project_banner.jpg'); /* Replace with actual image path */
+    background-size: cover;
+    background-position: center;
+    height: 60vh;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+.hero h1 {
+    font-size: 3rem;
+    font-weight: bold;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+}
+.hero p {
+    font-size: 1.5rem;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.7);
+}
+.feature-section {
+    margin: 20px;
+}
+.feature {
+    text-align: center;
+    padding: 20px;
+}
+.feature-icon {
+    font-size: 3rem;
+    color: #007bff;
+}
+.feature-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin: 10px 0;
+}
 </style>
 </head>
 <body class="w3-light-grey">
 <!---------------------------- Navigation Bar Start ---------------------------->   
 <script>navBar();</script>
 <!---------------------------- Navigation Bar End ---------------------------->
-      
+
+<div class="hero">
+  <div>
+    <h1>Welcome to the DCG Database Project</h1>
+    <p>Streamlining the Hamilton Library's Hawaiian and Pacific Collection</p>
+  </div>
+</div>
+
+<div class="w3-container feature-section">
+  <div class="w3-row-padding w3-margin-top">
+    <div class="w3-third">
+      <div class="w3-card feature w3-white">
+        <i class="fa fa-database feature-icon"></i>
+        <div class="feature-title">Centralized Data Management</div>
+        <p>Organizing fragmented spreadsheets into a unified, scalable database system.</p>
+      </div>
+    </div>
+    <div class="w3-third">
+      <div class="w3-card feature w3-white">
+        <i class="fa fa-search feature-icon"></i>
+        <div class="feature-title">Advanced Search Features</div>
+        <p>Effortlessly locate records, including books, maps, and audiovisual materials.</p>
+      </div>
+    </div>
+    <div class="w3-third">
+      <div class="w3-card feature w3-white">
+        <i class="fa fa-users feature-icon"></i>
+        <div class="feature-title">User-Friendly Interface</div>
+        <p>Empowering librarians and researchers with intuitive tools for data entry and retrieval.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="w3-container w3-padding-32 w3-white">
+  <h2>Our Project</h2>
+  <p>
+    The Database Consulting Group (DCG) is collaborating with Hamilton Library to revolutionize its data management for the Hawaiian and Pacific Collection. By replacing outdated Excel-based workflows with a robust relational database, our project enhances accessibility, organization, and efficiency for both librarians and users.
+  </p>
+  <a href="about.html" class="w3-button w3-blue w3-margin-top">Learn More</a>
+</div>
+
+<footer class="w3-container w3-center w3-light-grey w3-padding-16">
+  <p>© 2024 Database Consulting Group. All rights reserved.</p>
+</footer>
+
 </body>
 </html>
