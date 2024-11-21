@@ -10,6 +10,34 @@
 <script src="./functions.js"></script>
 <style>
 body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", Arial, Helvetica, sans-serif}
+.hero {
+    background-image: url('./images/about_banner.jpg'); /* Replace with an appropriate banner image */
+    background-size: cover;
+    background-position: center;
+    height: 50vh;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+.hero h1 {
+    font-size: 3rem;
+    font-weight: bold;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+}
+.container {
+    margin: 20px;
+}
+.section {
+    margin-bottom: 20px;
+}
+.section-title {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 10px;
+}
 </style>
 </head>
 <body class="w3-light-grey">
@@ -17,46 +45,47 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", Arial, Helvetica, sans-serif}
 <script>navBar();</script>
 <!---------------------------- Navigation Bar End ---------------------------->
 
-<div class="w3-content w3-margin-top">
-  <div class="w3-card w3-white w3-padding">
-    <h1 class="w3-center">About Our Project</h1>
+<div class="hero">
+  <h1>About Our Project</h1>
+</div>
+
+<div class="container">
+  <div class="section">
+    <h2 class="section-title">Our Mission</h2>
     <p>
-      Welcome to the Hawaiian and Pacific Collection Database Project! Our team, the Database Consulting Group (DCG), is dedicated to creating a cutting-edge database management system for Hamilton Library at the University of Hawaiʻi at Mānoa.
+      The Database Consulting Group (DCG) is dedicated to transforming Hamilton Library's Hawaiian and Pacific Collections into a centralized, efficient, and user-friendly database. By modernizing the current Excel-based system, we aim to enhance data accessibility, reduce inefficiencies, and ensure the long-term preservation of invaluable archival materials.
     </p>
-    
-    <h2>Our Mission</h2>
+  </div>
+
+  <div class="section">
+    <h2 class="section-title">What We Offer</h2>
     <p>
-      The Hawaiian and Pacific Collection at Hamilton Library is a vital resource for researchers, students, and community members. Our project aims to modernize its data management system, transitioning from Excel spreadsheets to a robust and scalable database. This new system will streamline cataloging, improve accessibility, and support advanced reporting to better serve the library's diverse user base.
+      Our project provides a web-integrated database system tailored to the needs of library staff and researchers. The system includes advanced search capabilities, robust reporting tools, and secure user authentication to streamline cataloging, retrieval, and analysis of the library's extensive collection.
     </p>
-    
-    <h2>Key Features</h2>
+  </div>
+
+  <div class="section">
+    <h2 class="section-title">Data and Content We Manage</h2>
+    <p>
+      Our database is designed to handle a wide range of specialized content, including:
+    </p>
     <ul>
-      <li><strong>Web-Based Interface:</strong> Easy-to-use, intuitive design accessible via the web.</li>
-      <li><strong>Dynamic Search:</strong> Advanced filters for author, title, location, and publication year.</li>
-      <li><strong>Data Integration:</strong> Seamlessly migrate existing Excel-based records into a unified database.</li>
-      <li><strong>Geographic Data Insights:</strong> Analyze records by colonial and indigenous languages, as well as regional concentrations.</li>
-      <li><strong>User Roles:</strong> Secure login and role-based access for librarians and authorized users.</li>
-      <li><strong>Reports:</strong> Generate detailed inventory and usage reports for informed decision-making.</li>
+      <li><strong>Books:</strong> Detailed metadata such as titles, authors, publication dates, and descriptions.</li>
+      <li><strong>Maps:</strong> Geographic data showing colonial versus indigenous languages and location-specific details.</li>
+      <li><strong>Audiovisual Materials:</strong> Formats, descriptions, and associated creators or titles.</li>
+      <li><strong>Archival Records:</strong> Trust Territory of the Pacific Islands (TTPI) indexes, including land records and historical documents.</li>
+      <li><strong>Serials and Articles:</strong> Titles, authors, and sponsoring bodies for single-issue serial collections.</li>
     </ul>
-    
-    <h2>Our Approach</h2>
     <p>
-      We follow the Rapid Application Development (RAD) methodology, emphasizing speed, flexibility, and stakeholder involvement. This iterative approach ensures the final system reflects the needs of its users, incorporating feedback at every stage of development. From initial requirements analysis to performance evaluation, our process is designed to deliver a high-quality solution efficiently.
+      These datasets are interconnected, allowing users to perform comprehensive queries and generate insights across multiple content types.
     </p>
-    
-    <h2>Meet the Team</h2>
+  </div>
+
+  <div class="section">
+    <h2 class="section-title">Our Approach</h2>
     <p>
-      We are a group of Management Information Systems students at the Shidler College of Business. Through hands-on coursework and collaboration, we have gained the technical expertise and project management skills needed to tackle complex database projects. Our commitment to innovation and excellence drives every step of this project.
+      Using the Rapid Application Development (RAD) methodology, we are implementing an iterative process that incorporates continuous user feedback and refinement. Our team’s expertise ensures a seamless transition from the current file-based system to a relational database solution that is scalable, secure, and tailored to the unique requirements of Hamilton Library.
     </p>
-    
-    <h2>Contact Us</h2>
-    <p>
-      For inquiries or feedback, please contact us at <a href="mailto:erabidea@hawaii.edu">erabidea@hawaii.edu</a>.
-    </p>
-    
-    <footer class="w3-container w3-light-grey w3-margin-top">
-      <p>© 2024 Database Consulting Group. All rights reserved.</p>
-    </footer>
   </div>
 </div>
 
