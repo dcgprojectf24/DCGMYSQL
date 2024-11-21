@@ -10,14 +10,17 @@ function faviconInfo(){//contains favicon and css information
       <link rel="shortcut icon" href="./images/letterR.png" type="image/png">
     `)
 }
-
-function navBar(){// Makes a navbar
+//nav bar - upated by Tassia for styling and adding a logo 
+function navBar() {
   let isloggedin = getCookie("loggedIn");
   let nameCookie = getCookie("name");
   let total = getCookie("totalIC");
-  if(isloggedin == 1){
+  if (isloggedin == 1) {
     document.write(`
       <div class="w3-bar w3-white w3-large">
+        <div class="w3-bar-item w3-left" style="display: flex; align-items: center;">
+          <img src="./images/logo.png" alt="Logo" style="height: 40px;">
+        </div>
         <a href="./index.html" class="w3-bar-item w3-button w3-green w3-mobile">Home</a>
         <a href="./about.html" class="w3-bar-item w3-button w3-mobile">About</a>
         <a href="./team.html" class="w3-bar-item w3-button w3-mobile">Team</a>
@@ -27,10 +30,13 @@ function navBar(){// Makes a navbar
         <a href="./account.html" class="w3-bar-item w3-button w3-right w3-light-grey w3-mobile">Account</a>
         <a href="./logout" class="w3-bar-item w3-button w3-mobile" onclick="logout()">Log Out</a>
       </div>
-   `);
+    `);
   } else {
     document.write(`
       <div class="w3-bar w3-white w3-large">
+        <div class="w3-bar-item w3-left" style="display: flex; align-items: center;">
+          <img src="./images/DCGLogo.png" alt="Logo" style="height: 30px;">
+        </div>
         <a href="./index.html" class="w3-bar-item w3-button w3-green w3-mobile">Home</a>
         <a href="./about.html" class="w3-bar-item w3-button w3-mobile">About</a>
         <a href="./team.html" class="w3-bar-item w3-button w3-mobile">Team</a>
@@ -39,9 +45,10 @@ function navBar(){// Makes a navbar
         <a href="./maps.html" class="w3-bar-item w3-button w3-mobile">Maps</a>
         <a href="./login.html" class="w3-bar-item w3-button w3-right w3-light-grey w3-mobile">Login</a>
       </div>
-   `);
+    `);
   }
 }
+
 
 // from ChatGPT, modified by Lui Rabideau under prompt "function that gets current date"
 function getCurrentDate() {// Function to get the current date in the format YYYY-MM-DD

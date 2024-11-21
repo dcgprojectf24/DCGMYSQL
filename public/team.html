@@ -9,46 +9,93 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <script src="./functions.js"></script>
 <style>
-body,h1,h2,h3,h4,h5,h6 {
-    font-family: "Raleway", Arial, Helvetica, sans-serif;
+/* General Body Styles */
+body, h1, h2, h3, h4, h5, h6 {
+    font-family: 'Raleway', Arial, Helvetica, sans-serif;
+    line-height: 1.6;
+    /* this is for lui, if you want to use an animated background this is an idea as to how it would look with a random gif I found */
+   /* background: url(https://64.media.tumblr.com/fbd2117dabf21d43c7692d3158741934/tumblr_pcs78oFp3h1vbdodoo1_1280.gif); */}
+
+/* Title of the Page */
+h1 {
+    text-align: center;
+    font-size: 3rem;
+    margin-bottom: 40px;
 }
+
+/* Team Section Layout */
+.team-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+}
+
+/* Profile Card */
 .profile-card {
-    max-width: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    max-width: 800px;
     margin: 20px;
     padding: 20px;
     background-color: white;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    text-align: center;
 }
+
+/* Alternate Left and Right Layout */
+.profile-card:nth-child(odd) {
+    flex-direction: row-reverse; /* Reverse the order for odd items */
+}
+
+.profile-card:nth-child(even) {
+    flex-direction: row; /* Keep even items in normal order */
+}
+
+/* Image Styling for Circular Profile Images */
 .profile-photo {
-    width: 100px;
-    height: 100px;
-    margin-bottom: 10px;
+    width: 120px;
+    height: 120px;
     border-radius: 50%;
     background-color: #ccc;
+    margin-right: 20px; /* Right margin to separate image from bio */
+    margin-bottom: 20px; /* Ensure spacing for small screens */
+    object-fit: cover; /* Make sure the image fits without distortion */
 }
+
+/* Bio Content Styling */
+.profile-bio {
+    text-align: left;
+    max-width: 600px;
+}
+
+/* Name and Role Styling */
 .profile-name {
-    font-size: 20px;
+    font-size: 22px;
     font-weight: bold;
     margin-bottom: 5px;
 }
+
 .profile-role {
-    font-size: 16px;
+    font-size: 18px;
     color: #666;
     margin-bottom: 10px;
 }
+
+/* Description Styling */
 .profile-description {
     font-size: 14px;
     color: #555;
-    text-align: left;
 }
-.team-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 20px;
-    padding: 20px;
+
+/* Divider Line Between Members */
+.profile-card .divider {
+    width: 100%;
+    height: 2px;
+    background-color: #ddd;
+    margin: 20px 0;
 }
 </style>
 </head>
@@ -58,57 +105,68 @@ body,h1,h2,h3,h4,h5,h6 {
 <script>navBar();</script>
 <!---------------------------- Navigation Bar End ---------------------------->
 
+<!-- Team Section -->
 <div class="w3-content w3-padding">
-    <h1 class="w3-center">Meet the Team</h1>
+    <h1>Meet the Team</h1>
     <div class="team-container">
         <!-- Lui Rabideau -->
         <div class="profile-card">
-            <div class="profile-photo"></div>
-            <div class="profile-name">Lui Rabideau</div>
-            <div class="profile-role">Project Manager</div>
-            <p class="profile-description">
-                Lui Rabideau is an experienced Project Manager and IT specialist with a background in network systems, database architecture, and software development. They will lead tasks like normalization, relational schema creation, and web-DB integration.
-            </p>
+            <img src="images/lui_HS.jpg" alt="Lui Rabideau" class="profile-photo">
+            <div class="profile-bio">
+                <div class="profile-name">Lui Rabideau</div>
+                <div class="profile-role">Project Manager</div>
+                <p class="profile-description">
+                    Lui Rabideau is an experienced Project Manager and IT specialist with a background in network systems, database architecture, and software development. They will lead tasks like normalization, relational schema creation, and web-DB integration.
+                </p>
+            </div>
         </div>
 
         <!-- Xin Lin -->
         <div class="profile-card">
-            <div class="profile-photo"></div>
-            <div class="profile-name">Xin Lin</div>
-            <div class="profile-role">Operations Manager</div>
-            <p class="profile-description">
-                Xin Lin brings focus and efficiency to the project, managing operations and ensuring smooth workflows. With expertise in financial analytics and SQL optimization, she will refine the ER diagram and assist in report and query creation.
-            </p>
+            <img src="images/XinHS.jpg" alt="Xin Lin" class="profile-photo">
+            <div class="profile-bio">
+                <div class="profile-name">Xin Lin</div>
+                <div class="profile-role">Operations Manager</div>
+                <p class="profile-description">
+                    Xin Lin brings focus and efficiency to the project, managing operations and ensuring smooth workflows. With expertise in financial analytics and SQL optimization, she will refine the ER diagram and assist in report and query creation.
+                </p>
+            </div>
         </div>
 
         <!-- Emma Sharp -->
         <div class="profile-card">
-            <div class="profile-photo"></div>
-            <div class="profile-name">Emma Sharp</div>
-            <div class="profile-role">Systems Architect</div>
-            <p class="profile-description">
-                Emma Sharp specializes in designing efficient solutions for complex business challenges. She will guide database architecture and evaluate DBMS options, ensuring a design that meets the project's needs.
-            </p>
+            <img src="images/Emma_Headshot.jpg" alt="Emma Sharp" class="profile-photo">
+            <div class="profile-bio">
+                <div class="profile-name">Emma Sharp</div>
+                <div class="profile-role">Systems Architect</div>
+                <p class="profile-description">
+                    Emma Sharp specializes in designing efficient solutions for complex business challenges. She will guide database architecture and evaluate DBMS options, ensuring a design that meets the project's needs.
+                </p>
+            </div>
         </div>
 
         <!-- Jessica Bandol -->
         <div class="profile-card">
-            <div class="profile-photo"></div>
-            <div class="profile-name">Jessica Bandol</div>
-            <div class="profile-role">Data Architect</div>
-            <p class="profile-description">
-                Jessica Bandol brings a creative yet meticulous energy to data analytics and web design. She will develop the DFD diagram, design website UI, and handle schema creation, ensuring accurate data flow and visually engaging interfaces.
-            </p>
+            <img src="images/Bandol_Headshot.JPG" alt="Jessica Bandol" class="profile-photo">
+            <div class="profile-bio">
+                <div class="profile-name">Jessica Bandol</div>
+                <div class="profile-role">Data Architect</div>
+                <p class="profile-description">
+                    Jessica Bandol brings a creative yet meticulous energy to data analytics and web design. She will develop the DFD diagram, design website UI, and handle schema creation, ensuring accurate data flow and visually engaging interfaces.
+                </p>
+            </div>
         </div>
 
         <!-- Tassia Corcoran -->
         <div class="profile-card">
-            <div class="profile-photo"></div>
-            <div class="profile-name">Tassia Corcoran</div>
-            <div class="profile-role">Data Visualization Engineer</div>
-            <p class="profile-description">
-                Tassia Corcoran excels in data visualization and web design. She will create and refine the ER diagram and contribute to the website design, ensuring a user-friendly database interface.
-            </p>
+            <img src="images/corcoran_HS.jpg" alt="Tassia Corcoran" class="profile-photo">
+            <div class="profile-bio">
+                <div class="profile-name">Tassia Corcoran</div>
+                <div class="profile-role">Data Visualization Engineer</div>
+                <p class="profile-description">
+                    Tassia Corcoran excels in data visualization and web design. She will create and refine the ER diagram and contribute to the website design, ensuring a user-friendly database interface.
+                </p>
+            </div>
         </div>
     </div>
 </div>
