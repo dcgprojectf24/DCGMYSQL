@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>About</title>
+<title>About the Hawaiian & Pacific Collections</title>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="./css/w3.css">
@@ -9,53 +9,40 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <script src="./functions.js"></script>
 <style>
-/* General Body Styles */
 body, h1, h2, h3, h4, h5, h6 {
-    font-family: 'Raleway', Arial, sans-serif;
+    font-family: "Raleway", Arial, sans-serif;
     line-height: 1.6;
 }
 
-/* Hero Section */
 .hero {
     background-image: url('./images/about.jpg'); /* Replace with your image path */
     background-size: cover;
     background-position: center;
-    height: 60vh; /* Adjust as needed */
+    height: 60vh;
     color: white;
     display: flex;
     align-items: center;
     justify-content: center;
     text-align: center;
-    position: relative;
 }
-/* Hero Section Header */
+
 .hero h1 {
     font-size: 3rem;
     font-weight: bold;
-    text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.8); /* Stronger shadow for better contrast */
-    color: white !important; /* Ensures the text is white */
-    z-index: 1;
+    text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.8);
+    color: white !important;
 }
 
-/* Remove the overlay entirely */
-.hero::before {
-    display: none;
-}
-
-
-/* Container for the content */
 .container {
     margin: 40px auto;
     max-width: 1200px;
     padding: 20px;
 }
 
-/* Section Styles */
 .section {
     margin-bottom: 40px;
 }
 
-/* Section Titles */
 .section-title {
     font-size: 2.5rem;
     font-weight: bold;
@@ -64,50 +51,29 @@ body, h1, h2, h3, h4, h5, h6 {
     text-align: center;
 }
 
-/* Text for the sections */
-.section p {
+.section-divider {
+    width: 50px;
+    height: 3px;
+    background-color: #007bff;
+    margin: 10px auto;
+}
+
+.section p, .section ul {
     font-size: 1.2rem;
     color: #555;
     text-align: center;
 }
 
-/* Divider Line Between Sections */
-.section-divider {
-    width: 50px;
-    height: 3px;
-    background-color: #007bff; /* Blue color */
-    margin: 10px auto;
-}
-
-/* List Styling */
 ul {
     list-style: none;
-    padding-left: 0;
+    padding: 0;
+    margin: 10px auto;
 }
 
 ul li {
     font-size: 1.1rem;
-    color: #555;
     padding: 5px 0;
-}
-
-/* CTA Button Styling */
-.learn-more-btn {
-    display: inline-block;
-    margin-top: 20px;
-    padding: 12px 24px;
-    background-color: #007bff;
-    color: white;
-    font-size: 1.2rem;
-    border-radius: 25px;
-    text-decoration: none;
     text-align: center;
-    transition: background-color 0.3s ease, transform 0.3s ease;
-}
-
-.learn-more-btn:hover {
-    background-color: #0056b3;
-    transform: scale(1.05);
 }
 </style>
 </head>
@@ -118,57 +84,61 @@ ul li {
 
 <!-- Hero Section -->
 <div class="hero">
-  <h1>About Our Project</h1>
+  <h1>About the Hawaiian & Pacific Collections</h1>
 </div>
 
-<!-- Content Section -->
 <div class="container">
-  
-  <!-- Our Mission Section -->
+
+  <!-- Description Section -->
   <div class="section">
-    <h2 class="section-title">Our Mission</h2>
+    <h2 class="section-title">Description</h2>
     <div class="section-divider"></div>
     <p>
-      The Database Consulting Group (DCG) is dedicated to transforming Hamilton Library's Hawaiian and Pacific Collections into a centralized, efficient, and user-friendly database. By modernizing the current Excel-based system, we aim to enhance data accessibility, reduce inefficiencies, and ensure the long-term preservation of invaluable archival materials.
+      The Hawaiian and Pacific Collections are leading research collections about Hawai’i and the broader Pacific Islands region. These collections support the teaching and research mission of the University, as well as the research needs of local, national, and international scholars.
+    </p>
+    <p>
+      The Hawaiian Collection is a comprehensive collection of retrospective and current materials pertaining to Hawai’i, spanning from the 18th century to the present. The Pacific Collection focuses on the island regions of Melanesia, Micronesia, and Polynesia, with strengths in government documents, ethnographic studies, and voyaging accounts.
+    </p>
+    <p>
+      The collections are housed in closed stacks on the 5th floor of Hamilton Library. Materials can be requested online at any time through OneSearch and are generally available 15 minutes after the request.
     </p>
   </div>
 
-  <!-- What We Offer Section -->
+  <!-- Hours Section -->
   <div class="section">
-    <h2 class="section-title">What We Offer</h2>
+    <h2 class="section-title">Hours</h2>
     <div class="section-divider"></div>
-    <p>
-      Our project provides a web-integrated database system tailored to the needs of library staff and researchers. The system includes advanced search capabilities, robust reporting tools, and secure user authentication to streamline cataloging, retrieval, and analysis of the library's extensive collection.
-    </p>
-  </div>
-
-  <!-- Data and Content We Manage Section -->
-  <div class="section">
-    <h2 class="section-title">Data and Content We Manage</h2>
-    <div class="section-divider"></div>
-    <p>
-      Our database is designed to handle a wide range of specialized content, including:
-    </p>
+    <p><strong>Fall 2024 (8/26 - 12/21):</strong></p>
     <ul>
-      <li><strong>Books:</strong> Detailed metadata such as titles, authors, publication dates, and descriptions.</li>
-      <li><strong>Maps:</strong> Geographic data showing colonial versus indigenous languages and location-specific details.</li>
-      <li><strong>Audiovisual Materials:</strong> Formats, descriptions, and associated creators or titles.</li>
-      <li><strong>Archival Records:</strong> Trust Territory of the Pacific Islands (TTPI) indexes, including land records and historical documents.</li>
-      <li><strong>Serials and Articles:</strong> Titles, authors, and sponsoring bodies for single-issue serial collections.</li>
+      <li>Monday-Friday: 9am - 5pm</li>
+      <li>Saturday: Closed</li>
+      <li>Sunday: 1pm - 5pm</li>
+      <li>*Closed on holidays: Mon 9/2, Tues 11/5, Mon 11/11, Thurs-Fri 11/28-29</li>
+    </ul>
+    <p><strong>Winter Break 2024 (12/21 - 1/12/2025):</strong></p>
+    <ul>
+      <li>Dec. 21-29: Closed</li>
+      <li>Dec. 30 - Jan. 12, 2025: Monday-Friday: 10am - 2pm</li>
+      <li>Saturday: Closed</li>
+      <li>Sunday: Closed</li>
+      <li>*Closed on holiday: Wed 1/1</li>
     </ul>
   </div>
 
-  <!-- Our Approach Section -->
+  <!-- Contact Information Section -->
   <div class="section">
-    <h2 class="section-title">Our Approach</h2>
+    <h2 class="section-title">Contact Information</h2>
     <div class="section-divider"></div>
-    <p>
-      Using the Rapid Application Development (RAD) methodology, we are implementing an iterative process that incorporates continuous user feedback and refinement. Our team’s expertise ensures a seamless transition from the current file-based system to a relational database solution that is scalable, secure, and tailored to the unique requirements of Hamilton Library.
-    </p>
+    <p>Email: <a href="mailto:hawnpac@hawaii.edu">hawnpac@hawaii.edu</a></p>
+    <p>Phone: 808-956-8264</p>
+    <p><a href="inquiry_form.html" class="w3-button w3-blue">Inquiry Form</a></p>
   </div>
 
- 
 </div>
+
+<footer class="w3-container w3-center w3-light-grey w3-padding-16">
+  <p>© 2024 Hamilton Library. All rights reserved.</p>
+</footer>
 
 </body>
 </html>
