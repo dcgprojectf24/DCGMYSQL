@@ -721,6 +721,10 @@ ul li {
     animation: fadeInSlide 0.8s ease-out forwards; /* Apply animation */
 }
 
+/*Contact info */
+.contactinfo{
+    text-align: center;
+}
 /* Stagger the animation delay for each profile card */
 .profile-card:nth-child(1) {
     animation-delay: 0s;

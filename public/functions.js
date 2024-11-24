@@ -11,6 +11,7 @@ function faviconInfo(){//contains favicon and css information
     `)
 }
 //nav bar - upated by Tassia for styling and adding a logo 
+//xin updated logo again and also adjusted order and name
 function navBar() {
   let isloggedin = getCookie("loggedIn");
   let nameCookie = getCookie("name");
@@ -19,14 +20,14 @@ function navBar() {
     document.write(`
       <div class="w3-bar w3-white w3-large">
         <div class="w3-bar-item w3-left" style="display: flex; align-items: center;">
-          <img src="./images/logo.png" alt="Logo" style="height: 40px;">
+          <img src="./images/HAPClogo.png" alt="Logo" style="height: 40px;">
         </div>
         <a href="./index.html" class="w3-bar-item w3-button w3-green w3-mobile">Home</a>
         <a href="./about.html" class="w3-bar-item w3-button w3-mobile">About</a>
-        <a href="./team.html" class="w3-bar-item w3-button w3-mobile">Team</a>
         <a href="./search.html" class="w3-bar-item w3-button w3-mobile">Search</a>
         <a href="./search.html" class="w3-bar-item w3-button w3-mobile">Reports</a>
         <a href="./maps.html" class="w3-bar-item w3-button w3-mobile">Maps</a>
+        <a href="./team.html" class="w3-bar-item w3-button w3-mobile">Contact Us</a>
         <a href="./account.html" class="w3-bar-item w3-button w3-right w3-light-grey w3-mobile">Account</a>
         <a href="./logout" class="w3-bar-item w3-button w3-mobile" onclick="logout()">Log Out</a>
       </div>
@@ -35,14 +36,14 @@ function navBar() {
     document.write(`
       <div class="w3-bar w3-white w3-large">
         <div class="w3-bar-item w3-left" style="display: flex; align-items: center;">
-          <img src="./images/DCGLogo.png" alt="Logo" style="height: 30px;">
+          <img src="./images/HAPClogo.png" alt="Logo" style="height: 30px;">
         </div>
         <a href="./index.html" class="w3-bar-item w3-button w3-green w3-mobile">Home</a>
         <a href="./about.html" class="w3-bar-item w3-button w3-mobile">About</a>
-        <a href="./team.html" class="w3-bar-item w3-button w3-mobile">Team</a>
         <a href="./search.html" class="w3-bar-item w3-button w3-mobile">Search</a>
         <a href="./search.html" class="w3-bar-item w3-button w3-mobile">Reports</a>
         <a href="./maps.html" class="w3-bar-item w3-button w3-mobile">Maps</a>
+        <a href="./team.html" class="w3-bar-item w3-button w3-mobile">Contact Us</a>
         <a href="./login.html" class="w3-bar-item w3-button w3-right w3-light-grey w3-mobile">Login</a>
       </div>
     `);
