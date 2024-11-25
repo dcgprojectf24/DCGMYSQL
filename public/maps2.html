@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Pacific Islands Map</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            text-align: center;
+        }
+        header {
+            background-color: #333;
+            color: white;
+            padding: 10px;
+        }
+        .map-container {
+            position: relative;
+            display: inline-block;
+            margin: 20px;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+        area {
+            cursor: pointer;
+        }
+        .tooltip {
+            position: absolute;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 14px;
+            visibility: hidden;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        #hoverImage {
+            position: absolute;
+            max-width: 100px; /* Adjust the size */
+            display: none;
+            pointer-events: none;
+            z-index: 10;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Interactive Pacific Islands Map</h1>
+</header>
+
+<div class="map-container">
+    <img src="images/pacificisland.png" alt="Pacific Islands Map" usemap="#pacific-map" >
+    <img id="hoverImage" src="" alt="Hover Image"> <!-- Hover image element -->
+    <div id="tooltip" class="tooltip"></div>
+
+    <map name="pacific-map">
+        <!-- Define clickable areas -->
+        <area shape="circle" coords="243,150,20" href="marianaislands.html" alt="Mariana Islands" data-image="images/northern-marianas-islands-flag.png">
+        <area shape="circle" coords="450,50,20" href="hawaii.html" alt="Hawaii" data-tooltip="Hawaii">
+        <area shape="circle" coords="600,200,20" href="guam.html" alt="Guam" data-tooltip="Guam">
+        <area shape="circle" coords="700,300,25" href="fiji.html" alt="Fiji" data-tooltip="Fiji">
+        <area shape="circle" coords="750,400,20" href="tahiti.html" alt="Tahiti" data-tooltip="Tahiti">
+        <!-- Add more regions as needed -->
+    </map>
+</div>
+
+<script>
+    const hoverImage = document.getElementById("hoverImage");
+
+    document.querySelectorAll("area").forEach(area => {
+        // Show image on mouseenter
+        area.addEventListener("mouseenter", (e) => {
+            const imageSrc = area.getAttribute("data-image");
+            if (imageSrc) {
+                hoverImage.src = imageSrc; // Set the hover image source
+                hoverImage.style.display = "block"; // Show the image
+            }
+        });
+
+        // Move the image with the cursor
+        area.addEventListener("mousemove", (e) => {
+            hoverImage.style.left = e.pageX + "px"; // Position to the right of the cursor
+            hoverImage.style.top = e.pageY -150 + "px"; // Position topbelow the cursor
+        });
+
+        // Hide image on mouseleave
+        area.addEventListener("mouseleave", () => {
+            hoverImage.style.display = "none"; // Hide the image
+        });
+    });
+</script>
+
+</body>
+</html>

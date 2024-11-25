@@ -9,13 +9,239 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <script src="./functions.js"></script>
 <style>
-body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", Arial, Helvetica, sans-serif}
+/* General Body Styles */
+body, h1, h2, h3, h4, h5, h6 {
+    font-family: 'Raleway', Arial, Helvetica, sans-serif;
+    line-height: 1.6;
+    /* this is for lui, if you want to use an animated background this is an idea as to how it would look with a random gif I found */
+   /* background: url(https://64.media.tumblr.com/fbd2117dabf21d43c7692d3158741934/tumblr_pcs78oFp3h1vbdodoo1_1280.gif); */}
+
+/* Title of the Page */
+h1 {
+    text-align: center;
+    font-size: 3rem;
+    margin-bottom: 40px;
+}
+
+/* Team Section Layout */
+.team-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+}
+
+/* Profile Card */
+.profile-card {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    max-width: 800px;
+    margin: 20px;
+    padding: 20px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Alternate Left and Right Layout */
+.profile-card:nth-child(odd) {
+    flex-direction: row-reverse; /* Reverse the order for odd items */
+}
+
+.profile-card:nth-child(even) {
+    flex-direction: row; /* Keep even items in normal order */
+}
+
+/* Image Styling for Circular Profile Images */
+.profile-photo {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background-color: #ccc;
+    margin-right: 20px; /* Right margin to separate image from bio */
+    margin-bottom: 20px; /* Ensure spacing for small screens */
+    object-fit: cover; /* Make sure the image fits without distortion */
+}
+
+/* Bio Content Styling */
+.profile-bio {
+    text-align: left;
+    max-width: 600px;
+}
+
+/* Name and Role Styling */
+.profile-name {
+    font-size: 22px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.profile-role {
+    font-size: 18px;
+    color: #666;
+    margin-bottom: 10px;
+}
+
+/* Description Styling */
+.profile-description {
+    font-size: 14px;
+    color: #555;
+}
+
+/* Divider Line Between Members */
+.profile-card .divider {
+    width: 100%;
+    height: 2px;
+    background-color: #ddd;
+    margin: 20px 0;
+}
 </style>
 </head>
 <body class="w3-light-grey">
+
 <!---------------------------- Navigation Bar Start ---------------------------->
 <script>navBar();</script>
 <!---------------------------- Navigation Bar End ---------------------------->
+
+<!-- Team Section -->
+<div class="w3-content w3-padding">
+    <h1>Contact Us</h1>
+    
+     <!-- Contact Info -->
+    <div class="contactinfo">
+        Hawaiian & Pacific Collections Department
+        <br>
+        Fifth Floor, Hamilton Library, 2550 McCarthy Mall, Honolulu, HI 96822
+        <br>
+        808-956-8264 
+        <br>
+        <a href="mailto:hawnpac@hawaii.edu">hawnpac@hawaii.eduu</a>
+        
+            </div>
+            &nbsp;
+            <hr>
+            <h1>Meet the Team</h1>
+            <div class="team-container">
+                    <!-- Jodie Mattos -->
+                    <div class="profile-card">
+                        <img src="images/Mattos_Jodie.jpg" alt="Jodie Mattos" class="profile-photo">
+                        <div class="profile-bio">
+                            <div class="profile-name">Jodie Mattos</div>
+                            <div class="profile-role">Librarian V</div>
+                            <p class="profile-description">
+                                Hawaiian Collection Librarian and Department Chair
+                                <br>
+                                Pacific Collection Librarian
+                                <br>
+                                Hawaiian and Pacific Collections
+                                <br>
+                                Public Services Division
+                                <br>
+                                <a href="mailto:jodie@hawaii.edu">jodie@hawaii.edu</a>
+                                <br>
+                                (808) 956-2851
+                            </p>
+                        </div>
+                    </div>
+            
+        <!-- Stu Dawrs -->
+        <div class="profile-card">
+            <img src="images/Dawrs_Stu.jpg" alt="Stu Dawrs" class="profile-photo">
+            <div class="profile-bio">
+                <div class="profile-name">Stu Dawrs</div>
+                <div class="profile-role">Librarian V</div>
+                <p class="profile-description">
+                    Pacific Collection Librarian
+                    <br>
+                    Hawaiian and Pacific Collections
+                    <br>
+                    Public Services Division
+                    <br>
+                    <a href="mailto:dawrs@hawaii.edu">dawrs@hawaii.edu</a>
+                    <br>
+                    (808) 956-9779
+                </p>
+            </div>
+        </div>
+    <!-- Eleanor Kleiber -->
+    <div class="profile-card">
+        <img src="images/Eleanor.png" alt="Eleanor Kleiber" class="profile-photo">
+        <div class="profile-bio">
+            <div class="profile-name">Eleanor Kleiber</div>
+            <div class="profile-role">Librarian V</div>
+            <p class="profile-description">
+                Pacific Collection Librarian
+                <br>
+                Hawaiian and Pacific Collections
+                <br>
+                Public Services Division
+                <br>
+                <a href="mailto:ekleiber@hawaii.edu">ekleiber@hawaii.edu</a>
+                <br>
+                (808) 956-2847
+            </p>
+        </div>
+    </div>
+         <!-- Dore Minatodani -->
+         <div class="profile-card">
+            <img src="images/Minatodani_Dore.jpg" alt="Dore Minatodani" class="profile-photo">
+            <div class="profile-bio">
+                <div class="profile-name">Dore Minatodani</div>
+                <div class="profile-role">Librarian III</div>
+                <p class="profile-description">
+                    Pacific Collection Librarian
+                    <br>
+                    Hawaiian and Pacific Collections
+                    <br>
+                    Public Services Division
+                    <br>
+                    <a href="mailto:dorem@hawaii.edu">dorem@hawaii.edu</a>
+                    <br>
+                    (808) 956-2852
+                </p>
+            </div>
+        </div>
+             <!-- Kapena Shim -->
+             <div class="profile-card">
+                <img src="images/Kepena.png" alt="Kapena Shim" class="profile-photo">
+                <div class="profile-bio">
+                    <div class="profile-name">Kapena Shim</div>
+                    <div class="profile-role">Librarian III</div>
+                    <p class="profile-description">
+                        Pacific Collection Librarian
+                        <br>
+                        Hawaiian and Pacific Collections
+                        <br>
+                        Public Services Division
+                        <br>
+                        <a href="mailto:kapena@hawaii.edu">kapena@hawaii.edu</a>
+                        <br>
+                        (808) 956-9296
+                    </p>
+                </div>
+            </div>
+
+        <!-- Benjamin Dias -->
+        <div class="profile-card">
+            <img src="images/Ben.png" alt="Benjamin Dias" class="profile-photo">
+            <div class="profile-bio">
+                <div class="profile-name">Benjamin Dias</div>
+                <div class="profile-role">Library Assistant IV</div>
+                <p class="profile-description">
+                    Hawaiian and Pacific Collections
+                    <br>
+                    Public Services Division
+                    <br>
+                    <a href="mailto:bjdias@hawaii.edu">bjdias@hawaii.edu</a>
+                    <br>
+                    (808) 956-8264
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
 
 </body>
 </html>

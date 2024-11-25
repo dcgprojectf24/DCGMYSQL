@@ -25,8 +25,6 @@ if (fs.existsSync(user_data_filename)){// if the user data file exists, read it 
     console.log(`Error! ${user_data_filename} does not exist!`);
 }
 
-
-
 // Connects to Database
 console.log("Connecting to localhost..."); 
 var con = mysql.createConnection({
@@ -58,20 +56,21 @@ function isNonNegInt(stringToCheck, returnErrors = false) {
 
 /*---------------------------------- SQL START ----------------------------------*/
 function query_DB(POST, response) {
-  if (isNonNegInt(POST['low_price'])
-    && isNonNegInt(POST['high_price'])) {   // Only query if we got a low and high price
-    low = POST['low_price'];      // Grab the parameters from the submitted form
+  if (isNonNegInt(POST['low_price']) && isNonNegInt(POST['high_price'])) {// Only query if we got a low and high price
+    low = POST['low_price']; // Grab the parameters from the submitted form
     high = POST['high_price'];
-    query = "SELECT * FROM Room where price > " + low + " and price < " + high;  // Build the query string
+    /*---------------------------------- QUERY ----------------------------------*/
+    query = "SELECT * FROM Room where price > " + low + " and price < " + high; // Build the query string
     con.query(query, function (err, result, fields) {   // Run the query
       if (err) throw err;
       console.log(result);
       var res_string = JSON.stringify(result);
       var res_json = JSON.parse(res_string);
       console.log(res_json);
-
+    /*---------------------------------- QUERY ----------------------------------*/
+    /*---------------------------------- DISPLAY ----------------------------------*/
       // Now build the response: table of results and form to do another query
-      response_form = `<form action="Room-query.html" method="GET">`;
+      response_form = `<form action="homeSQL.html" method="GET">`;
       response_form += `<table border="3" cellpadding="5" cellspacing="5">`;
       response_form += `<td><B>Room#</td><td><B>Hotel#</td><td><B>Type</td><td><B>Price</td></b>`;
       for (i in res_json) {
@@ -84,7 +83,8 @@ function query_DB(POST, response) {
       response_form += `<input type="submit" value="Another Query?"> </form>`;
       response.send(response_form);
     });
-  } else {
+    /*---------------------------------- DISPLAY ----------------------------------*/
+  } else { // If any errors occur
     response.send("Enter some prices doofus!");
   }
 }
