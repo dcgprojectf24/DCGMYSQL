@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Inquiry Form</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="./css/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<script src="./functions.js"></script>
+<style>
+body, h1, h2, h3, h4, h5, h6 {
+    font-family: "Raleway", Arial, Helvetica, sans-serif;
+}
+.container {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+.section-title {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 15px;
+    text-align: center;
+}
+.section-divider {
+    width: 50px;
+    height: 3px;
+    background-color: #389cda;
+    margin: 10px auto;
+}
+form label {
+    font-size: 1.1rem;
+    color: #333;
+}
+form input, form textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+}
+form textarea {
+    resize: vertical;
+    height: 100px;
+}
+form button {
+    background-color: #4a7c89;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+form button:hover {
+    background-color: #628edc;
+    transform: scale(1.05);
+}
+</style>
+</head>
+<body class="w3-light-grey">
+
+<!-- Navigation Bar -->
+<script>navBar();</script>
+
+<div class="container">
+  <!-- Ad Hoc Query Section -->
+  <h2 class="section-title">Ad Hoc Query Submission</h2>
+  <div class="section-divider"></div>
+  <p>If your search needs are not covered by our current database features, submit an ad hoc query here. These requests will be sent to our team for processing. All inquiries for ad hoc search queries should be directed to <a href="mailto:erabidea@hawaii.edu">erabidea@hawaii.edu</a>.</p>
+  <form action="mailto:erabidea@hawaii.edu" method="post" enctype="text/plain">
+    <label for="adhoc-query">Describe Your Search Query:</label>
+    <textarea id="adhoc-query" name="adhoc-query" placeholder="Enter specific details about your search..."></textarea>
+    <button type="submit">Submit Query</button>
+  </form>
+</div>
+
+<div class="container">
+  <!-- General Inquiry Form -->
+  <h2 class="section-title">General Material Request</h2>
+  <div class="section-divider"></div>
+  <p>The collections are housed in closed stacks on the 5th floor of Hamilton Library. Materials can be requested online at any time through this form and are generally available 15 minutes after the request.</p>
+  <form action="mailto:hawnpac@hawaii.edu" method="post" enctype="text/plain">
+    <label for="name">Your Name:</label>
+    <input type="text" id="name" name="name" placeholder="Enter your full name" required>
+    
+    <label for="email">Your Email:</label>
+    <input type="email" id="email" name="email" placeholder="Enter your email address" required>
+    
+    <label for="material-details">Material Details:</label>
+    <textarea id="material-details" name="material-details" placeholder="Enter details of the material you want to request (e.g., title, author, publication year)..." required></textarea>
+    
+    <button type="submit">Submit Request</button>
+  </form>
+</div>
+
+<footer class="w3-container w3-center w3-light-grey w3-padding-16">
+  <p>© 2024 Hamilton Library. All rights reserved.</p>
+</footer>
+
+</body>
+</html>
