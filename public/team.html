@@ -13,8 +13,20 @@
 body, h1, h2, h3, h4, h5, h6 {
     font-family: 'Raleway', Arial, Helvetica, sans-serif;
     line-height: 1.6;
-    /* this is for lui, if you want to use an animated background this is an idea as to how it would look with a random gif I found */
-   /* background: url(https://64.media.tumblr.com/fbd2117dabf21d43c7692d3158741934/tumblr_pcs78oFp3h1vbdodoo1_1280.gif); */}
+}
+
+/* Hero Banner */
+.hero {
+    background-image: url('./images/team-banner.jpg');
+    background-size: cover;
+    background-position: center;
+    height: 50vh;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
 
 /* Title of the Page */
 h1 {
@@ -47,11 +59,11 @@ h1 {
 
 /* Alternate Left and Right Layout */
 .profile-card:nth-child(odd) {
-    flex-direction: row-reverse; /* Reverse the order for odd items */
+    flex-direction: row-reverse;
 }
 
 .profile-card:nth-child(even) {
-    flex-direction: row; /* Keep even items in normal order */
+    flex-direction: row;
 }
 
 /* Image Styling for Circular Profile Images */
@@ -60,9 +72,9 @@ h1 {
     height: 120px;
     border-radius: 50%;
     background-color: #ccc;
-    margin-right: 20px; /* Right margin to separate image from bio */
-    margin-bottom: 20px; /* Ensure spacing for small screens */
-    object-fit: cover; /* Make sure the image fits without distortion */
+    margin-right: 20px;
+    margin-bottom: 20px;
+    object-fit: cover;
 }
 
 /* Bio Content Styling */
@@ -84,18 +96,28 @@ h1 {
     margin-bottom: 10px;
 }
 
-/* Description Styling */
-.profile-description {
-    font-size: 14px;
-    color: #555;
+/* Inquiry Form Button */
+.inquiry-button {
+    display: inline-block;
+    background-color: #4a7c89;
+    color: white;
+    padding: 10px 20px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
-/* Divider Line Between Members */
-.profile-card .divider {
-    width: 100%;
-    height: 2px;
-    background-color: #ddd;
-    margin: 20px 0;
+.inquiry-button:hover {
+    background-color: #628edc;
+    transform: scale(1.05);
+}
+
+.contactinfo {
+    text-align: center;
+    margin-bottom: 20px;
 }
 </style>
 </head>
@@ -105,23 +127,26 @@ h1 {
 <script>navBar();</script>
 <!---------------------------- Navigation Bar End ---------------------------->
 
-<!-- Team Section -->
-<div class="w3-content w3-padding">
+<!-- Hero Section -->
+<div class="hero">
     <h1>Contact Us</h1>
-    
-     <!-- Contact Info -->
+</div>
+
+<!-- Contact Us Section -->
+<div class="w3-content w3-padding">
     <div class="contactinfo">
-        Hawaiian & Pacific Collections Department
-        <br>
-        Fifth Floor, Hamilton Library, 2550 McCarthy Mall, Honolulu, HI 96822
-        <br>
-        808-956-8264 
-        <br>
-        <a href="mailto:hawnpac@hawaii.edu">hawnpac@hawaii.eduu</a>
-        
-            </div>
-            &nbsp;
-            <hr>
+        <p>Hawaiian & Pacific Collections Department</p>
+        <p>Fifth Floor, Hamilton Library, 2550 McCarthy Mall, Honolulu, HI 96822</p>
+        <p>Phone: 808-956-8264</p>
+        <p>Email: <a href="mailto:hawnpac@hawaii.edu">hawnpac@hawaii.edu</a></p>
+    </div>
+    <div class="w3-center">
+        <p>Looking for specific materials or need help with an advanced search?</p>
+        <a href="inquiry_form.html" class="inquiry-button">Visit the Inquiry Form</a>
+    </div>
+</div>
+
+<hr>
             <h1>Meet the Team</h1>
             <div class="team-container">
                     <!-- Jodie Mattos -->
