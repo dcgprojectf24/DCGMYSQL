@@ -93,6 +93,21 @@ ul li {
     transform: scale(1.05); /* Slight zoom on hover */
 }
 
+.iframe-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%; /* Ensures the container spans the full width of the screen */
+    margin: 0; /* Removes any automatic margins */
+    padding: 0; /* Removes padding around the container */
+}
+
+iframe {
+    width: 100%; /* Makes the iframe take the full width of the container */
+    height: 100vh; /* Adjusts the height to fill the screen vertically */
+    border: none; /* Removes the border for a seamless look */
+}
+
 </style>
 </head>
 <body class="w3-light-grey">
@@ -152,6 +167,15 @@ ul li {
       <p><a href="inquiry_form.html" class="inquiry-button">Inquiry Form</a></p>
     </div>
   
+    <div class="iframe-container">
+      <iframe 
+        src="https://forms.office.com/Pages/ResponsePage.aspx?id=ovnogof7V0mOId9fMnXjKPCUYSJs3kpAma8tSe3JLQNUNFRRWEJNMFRNV05CS0hMQlFNTU9QRzJURi4u&embed=true" 
+        allowfullscreen 
+        webkitallowfullscreen 
+        mozallowfullscreen 
+        msallowfullscreen>
+      </iframe>
+    </div>
 
 </div>
 
