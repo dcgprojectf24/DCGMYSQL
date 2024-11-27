@@ -10,7 +10,9 @@
 <link rel="shortcut icon" href="./images/HPC_logo_zoom.jpg" type="image/png">
 <script src="./functions.js"></script>
 <style>
-body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", Arial, Helvetica, sans-serif}
+body, h1, h2, h3, h4, h5, h6 {
+    font-family: "Raleway", Arial, Helvetica, sans-serif;
+}
 .hero {
     background-image: url('./images/Books.jpg'); /* Replace with actual image path */
     background-size: cover;
@@ -25,32 +27,66 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", Arial, Helvetica, sans-serif}
 .hero h1 {
     font-size: 3rem;
     font-weight: bold;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
 }
 .hero p {
     font-size: 1.5rem;
-    text-shadow: 1px 1px 3px rgba(0,0,0,0.7);
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
 }
-.feature-section {
-    margin: 20px;
-}
-.feature {
+.logo-container {
     text-align: center;
-    padding: 20px;
+    margin: 20px 0;
+}
+.logo-container img {
+    max-width: 150px;
+    height: auto;
+}
+.feature-strip {
+    display: flex;
+    justify-content: space-around;
+    padding: 20px 10px;
+    background-color: #f9f9f9;
+    margin-top: 20px;
+}
+.feature-item {
+    flex: 1;
+    text-align: center;
+    padding: 10px;
 }
 .feature-icon {
-    font-size: 3rem;
-    color: #007bff;
+    font-size: 2.5rem;
+    color: #4a7c89;
+    margin-bottom: 10px;
 }
 .feature-title {
-    font-size: 1.5rem;
+    font-size: 1.25rem;
     font-weight: bold;
-    margin: 10px 0;
+    margin-bottom: 5px;
+}
+.feature-description {
+    font-size: 1rem;
+    color: #555;
+}
+.learn-more-button {
+    display: inline-block;
+    background-color: #4a7c89; 
+    color: white; 
+    padding: 10px 20px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+.learn-more-button:hover {
+    background-color: #628edc; 
+    transform: scale(1.05); /* Slight zoom on hover */
 }
 </style>
 </head>
 <body class="w3-light-grey">
-<!---------------------------- Navigation Bar Start ---------------------------->   
+<!---------------------------- Navigation Bar Start ---------------------------->
 <script>navBar();</script>
 <!---------------------------- Navigation Bar End ---------------------------->
 
@@ -61,11 +97,14 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", Arial, Helvetica, sans-serif}
   </div>
 </div>
 
-<div class="w3-container w3-center w3-padding-32">
+<div class="w3-container w3-center w3-padding-10">
   <h2 class="w3-text-grey">About the Collection</h2>
 </div>
 
-<div class="w3-container w3-padding-64">
+<div class="w3-container w3-padding-10">
+  <div class="logo-container">
+    <img src="./images/HAPClogo.png" alt="Hawaiian and Pacific Collections Logo">
+  </div>
   <p>
     The Hawaiian and Pacific Collections are internationally recognized research collections. We collect material in all formats, languages, subjects, academic levels, and eras, within the geographic scope of Hawaiʻi and the broader regions of Polynesia, Melanesia, and Micronesia.
   </p>
@@ -74,42 +113,29 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", Arial, Helvetica, sans-serif}
   </p>
 </div>
 
-<div class="w3-container feature-section">
-  <div class="w3-row-padding w3-margin-top">
-    <!-- Feature 1 -->
-    <div class="w3-col m4">
-      <div class="w3-card w3-padding">
-        <i class="fa fa-book feature-icon"></i>
-        <h3 class="feature-title">Extensive Archives</h3>
-        <p>Access books, maps, audiovisual materials, and rare documents covering Hawaiian and Pacific history.</p>
-      </div>
-    </div>
-
-    <!-- Feature 2 -->
-    <div class="w3-col m4">
-      <div class="w3-card w3-padding">
-        <i class="fa fa-search feature-icon"></i>
-        <h3 class="feature-title">Advanced Search Tools</h3>
-        <p>Search across various collections with advanced filters for precision and ease.</p>
-      </div>
-    </div>
-
-    <!-- Feature 3 -->
-    <div class="w3-col m4">
-      <div class="w3-card w3-padding">
-        <i class="fa fa-users feature-icon"></i>
-        <h3 class="feature-title">Dedicated Support</h3>
-        <p>Receive personalized assistance from our knowledgeable librarians and staff.</p>
-      </div>
-    </div>
+<div class="feature-strip">
+  <div class="feature-item">
+    <i class="fa fa-book feature-icon"></i>
+    <h3 class="feature-title">Extensive Archives</h3>
+    <p class="feature-description">Books, maps, and audiovisual materials spanning Hawaiian and Pacific history.</p>
+  </div>
+  <div class="feature-item">
+    <i class="fa fa-search feature-icon"></i>
+    <h3 class="feature-title">Advanced Search</h3>
+    <p class="feature-description">Precision search with filters for location, author, and publication date.</p>
+  </div>
+  <div class="feature-item">
+    <i class="fa fa-users feature-icon"></i>
+    <h3 class="feature-title">Dedicated Support</h3>
+    <p class="feature-description">Expert assistance from experienced librarians and staff.</p>
   </div>
 </div>
 
-<div class="w3-container w3-padding-64 w3-light-grey">
+<div class="w3-container w3-padding-30 w3-light-grey">
   <h2 class="w3-center">Explore More</h2>
   <p class="w3-center">Discover how to make the most of our unique collection and services.</p>
   <div class="w3-center">
-    <a href="about.html" class="w3-button w3-blue">Learn More</a>
+    <a href="about.html" class="learn-more-button">Learn More</a>
   </div>
 </div>
 
