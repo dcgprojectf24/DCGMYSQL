@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Geo Records</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        header {
+            background-color: #0077b6;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2rem;
+        }
+
+        main {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        th, td {
+            text-align: left;
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #0077b6;
+            color: white;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 20px;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Geo Records</h1>
+    </header>
+    <main>
+        <h2 id="location-title">Loading...</h2>
+        <table id="results-table">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Department Name</th>
+                    <th>Year Range</th>
+                    <th>Subject</th>
+                    <th>Description</th>
+                    <th>Medium</th>
+                    <th>Language</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Rows will be dynamically inserted here -->
+            </tbody>
+        </table>
+        <div class="no-results" id="no-results" style="display: none;">
+            No records found for this location.
+        </div>
+    </main>
+    <script>
+        // Extract the location parameter from the query string
+        const params = new URLSearchParams(window.location.search);
+        const location = params.get("location");
+
+        // Update the page title with the location
+        const locationTitle = document.getElementById("location-title");
+        locationTitle.textContent = `Results for: ${location}`;
+
+        // Fetch records from the server
+        fetch(`/geo?location=${encodeURIComponent(location)}`)
+            .then(response => response.json())
+            .then(data => {
+                const tableBody = document.getElementById("results-table").querySelector("tbody");
+                const noResultsDiv = document.getElementById("no-results");
+
+                // Clear the table body
+                tableBody.innerHTML = "";
+
+                if (data.results && data.results.length > 0) {
+                    // Populate the table with rows
+                    data.results.forEach(record => {
+                        const row = `
+                            <tr>
+                                <td>${record.Title}</td>
+                                <td>${record.Department_Name}</td>
+                                <td>${record.Year_Range}</td>
+                                <td>${record.Subject}</td>
+                                <td>${record.Description}</td>
+                                <td>${record.Medium}</td>
+                                <td>${record.Language}</td>
+                            </tr>
+                        `;
+                        tableBody.innerHTML += row;
+                    });
+
+                    noResultsDiv.style.display = "none";
+                } else {
+                    // Show the "no results" message
+                    noResultsDiv.style.display = "block";
+                }
+            })
+            .catch(error => {
+                console.error("Error fetching records:", error);
+            });
+    </script>
+</body>
+</html>

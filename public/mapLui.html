@@ -62,69 +62,83 @@
     <img src="images/pacificisland.png" alt="Pacific Islands Map" usemap="#pacific-map">
     <img id="hoverImage" src="" alt="Hover Image">
     <div id="tooltip"></div>
-    <script>
-        // Load the JSON file and create map areas
-
-                // Loop through the JSON data and create <area> elements
-        for (let i in geo) {
-        let area = geoData[i];
-        document.write(`
-            <area shape="${area.shape}" 
-            coords="${area.coords}" 
-            href="${area.href}" 
-            alt="${area.alt}" 
-            data-image="${area.dataImage}" 
-            data-tooltip="${area.dataTooltip}">
-        `);
-}
-    </script>
 </div>
-
+<!---------------------------- So much JavaScript it should be in another file ---------------------------->
 <script>
+fetch('geo.json')
+    .then(response => response.json())
+    .then(data => {
+        geo = data;
+        renderMap();
+    });
+
+    function renderMap() {
+    const mapContainer = document.querySelector('.map-container');
+    const mapElement = document.createElement('map');
+    mapElement.setAttribute('name', 'pacific-map');
+
+    geo.forEach(area => {
+        const areaElement = document.createElement('area');
+        areaElement.setAttribute('shape', area.shape);
+        areaElement.setAttribute('coords', area.coords);
+        areaElement.setAttribute('href', `geo.html?location=${encodeURIComponent(area.href)}`);
+        areaElement.setAttribute('alt', area.alt);
+        areaElement.setAttribute('data-image', area.dataImage);
+        areaElement.setAttribute('data-tooltip', area.dataTooltip);
+        areaElement.setAttribute('data-original-coords', area.coords); // Store original coords
+        mapElement.appendChild(areaElement);
+    });
+
+    mapContainer.appendChild(mapElement);
+
+    // Add click event listeners after the <area> elements are appended
+    document.querySelectorAll("area").forEach(area => {
+        area.addEventListener("click", event => {
+            event.preventDefault(); // Prevent default navigation
+
+            const location = area.getAttribute("data-tooltip"); // Or use another unique identifier
+            window.location.href = `/geo?location=${encodeURIComponent(location)}`;
+        });
+    });
+
+    // Hover functionality
     const hoverImage = document.getElementById("hoverImage");
     const tooltip = document.getElementById("tooltip");
 
-    // Add event listeners for hover functionality
     document.querySelectorAll("area").forEach(area => {
         area.addEventListener("mouseenter", () => {
             const imageSrc = area.getAttribute("data-image");
             const tooltipText = area.getAttribute("data-tooltip");
 
             if (imageSrc) {
-                hoverImage.src = imageSrc; // Set hover image source
-                hoverImage.style.display = "block"; // Show hover image
+                hoverImage.src = imageSrc;
+                hoverImage.style.display = "block";
             }
 
             if (tooltipText) {
-                tooltip.textContent = tooltipText; // Set tooltip text
-                tooltip.style.display = "block"; // Show tooltip
+                tooltip.textContent = tooltipText;
+                tooltip.style.display = "block";
             }
         });
 
         area.addEventListener("mousemove", (e) => {
-            // Position hover image
             hoverImage.style.left = `${e.pageX + 15}px`;
             hoverImage.style.top = `${e.pageY + 15}px`;
-
-            // Position tooltip slightly above the hover image
             tooltip.style.left = `${e.pageX + 15}px`;
-            tooltip.style.top = `${e.pageY - 20}px`; // Adjust to position above hover image
+            tooltip.style.top = `${e.pageY - 20}px`;
         });
 
         area.addEventListener("mouseleave", () => {
-            hoverImage.style.display = "none"; // Hide hover image
-            tooltip.style.display = "none"; // Hide tooltip
+            hoverImage.style.display = "none";
+            tooltip.style.display = "none";
         });
     });
-    document.addEventListener("DOMContentLoaded", () => {
+
+    // Coordinate adjustment
     const mapImage = document.querySelector("img[usemap]");
-    const areas = document.querySelectorAll("area");
-    
-    // Store the original width and height of the image
     const originalWidth = mapImage.naturalWidth;
     const originalHeight = mapImage.naturalHeight;
 
-    // Function to adjust coordinates
     function adjustCoordinates() {
         const currentWidth = mapImage.offsetWidth;
         const currentHeight = mapImage.offsetHeight;
@@ -132,24 +146,18 @@
         const widthRatio = currentWidth / originalWidth;
         const heightRatio = currentHeight / originalHeight;
 
-        areas.forEach(area => {
+        document.querySelectorAll("area").forEach(area => {
             const originalCoords = area.getAttribute("data-original-coords").split(",").map(Number);
-            const adjustedCoords = originalCoords.map((coord, index) => 
+            const adjustedCoords = originalCoords.map((coord, index) =>
                 index % 2 === 0 ? coord * widthRatio : coord * heightRatio
             );
             area.coords = adjustedCoords.join(",");
         });
     }
 
-    // Store original coordinates in a data attribute
-    areas.forEach(area => {
-        area.setAttribute("data-original-coords", area.coords);
-    });
-
-    // Adjust coordinates on load and resize
     window.addEventListener("resize", adjustCoordinates);
     adjustCoordinates();
-});
+}
 
 </script>
 

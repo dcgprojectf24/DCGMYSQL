@@ -150,6 +150,43 @@ app.get('/logout', function (request, response){// Redirects user to home page a
   response.redirect(`./index.html`)
 });
 
+
+
+
+
+
+
+
+
+
+app.get("/geo", (req, res) => {
+  let location = req.query.location;
+
+  if (!location) {
+      return res.status(400).send("Location is required.");
+  }
+
+  let query = "SELECT Title, Department_Name, Year_Range, Subject, Description, Medium, Language FROM RECORDS WHERE Geo_Location LIKE '%" + location + "%';";
+
+  con.query(query, function (err, result, fields) {   // Run the query
+    if (err) throw err; // Handle MySQL errors
+
+    console.log(result); // Debugging: Log results to the server console
+
+    // Send the results to the client as JSON
+    res.json({ results: result });
+  });
+});
+
+
+
+
+
+
+
+
+
+
 /*----------------------------------- ROUTING -----------------------------------*/
 app.all('*', function (request, response, next) {
   console.log(request.method + ' to ' + request.path);
@@ -158,13 +195,17 @@ app.all('*', function (request, response, next) {
 
 app.listen(8080, () => console.log(`listening on port 8080`));
 
-// process the geo.json stuff into a js file
-const all_geo = require(__dirname + "/geo.json");
-app.get('/geo.js', function(request, response, next){// making a products array within the server
-   // the response will be js
-   response.type('.js');
-   // turning stuff into a string
-   let geo_str = `let all_geo = ${JSON.stringify(all_geo)}`;
-   // sends the string
-   response.send(geo_str);
-});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
