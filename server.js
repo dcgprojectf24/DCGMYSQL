@@ -155,28 +155,63 @@ app.get('/logout', function (request, response){// Redirects user to home page a
 
 
 
-
+/*---------------------------------- SQL SHIT ----------------------------------*/
+// Configure the session middleware
+app.use(session({
+  secret: 'your_secret_key', // Replace with a secure key
+  resave: false,
+  saveUninitialized: true,
+  cookie: { secure: false } // Set to true if using HTTPS
+}));
 
 
 
 app.get("/geo", (req, res) => {
-  let location = req.query.location;
+  const location = req.query.location;
+  const page = parseInt(req.query.page) || 1; // Default to page 1
+  const limit = parseInt(req.query.limit) || 10; // Default to 10 records per page
+  const offset = (page - 1) * limit;
 
   if (!location) {
       return res.status(400).send("Location is required.");
   }
 
-  let query = "SELECT Title, Department_Name, Year_Range, Subject, Description, Medium, Language FROM RECORDS WHERE Geo_Location LIKE '%" + location + "%';";
+  const query = `
+      SELECT Title, Department_Name, Year_Range, Subject, Description, Medium, Language 
+      FROM RECORDS 
+      WHERE Geo_Location LIKE '%${location}%'
+      LIMIT ${limit} OFFSET ${offset};
+  `;
 
-  con.query(query, function (err, result, fields) {   // Run the query
-    if (err) throw err; // Handle MySQL errors
+  con.query(query, (err, result) => {
+      if (err) throw err;
 
-    console.log(result); // Debugging: Log results to the server console
+      // Log the first page of results to the terminal
+      console.log(`Page ${page} Results:`, result);
 
-    // Send the results to the client as JSON
-    res.json({ results: result });
+      // Store results in session
+      req.session.geoResults = result;
+      req.session.geoLocation = location;
+
+      // Redirect to geo.html with the query parameters
+      res.redirect(`/geo.html?location=${encodeURIComponent(location)}&page=${page}`);
   });
 });
+
+
+
+
+app.get("/get-session-data", (req, res) => {
+  if (!req.session.geoResults || !req.session.geoLocation) {
+      return res.status(404).json({ error: "No session data available." });
+  }
+
+  res.json({
+      location: req.session.geoLocation,
+      results: req.session.geoResults
+  });
+});
+
 
 
 

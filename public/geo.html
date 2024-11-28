@@ -4,13 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Geo Records</title>
+    <link rel="stylesheet" href="./css/w3.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: "Raleway", Arial, sans-serif;
+            background-color: #f4f4f4;
             margin: 0;
             padding: 0;
-            background-color: #f4f4f4;
-            color: #333;
         }
 
         header {
@@ -20,18 +21,13 @@
             text-align: center;
         }
 
-        header h1 {
-            margin: 0;
-            font-size: 2rem;
-        }
-
-        main {
-            max-width: 1200px;
-            margin: 20px auto;
-            padding: 20px;
-            background: white;
+        .table-container {
+            background-color: white;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             border-radius: 8px;
+            margin: 20px auto;
+            padding: 20px;
+            max-width: 1000px;
         }
 
         table {
@@ -60,6 +56,24 @@
             padding: 20px;
             color: #555;
         }
+
+        button {
+            display: inline-block;
+            background-color: #0077b6;
+            color: white;
+            padding: 10px 20px;
+            font-size: 1rem;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #005fa3;
+            transform: scale(1.05);
+        }
     </style>
 </head>
 <body>
@@ -67,72 +81,114 @@
         <h1>Geo Records</h1>
     </header>
     <main>
-        <h2 id="location-title">Loading...</h2>
-        <table id="results-table">
-            <thead>
-                <tr>
-                    <th>Title</th>
-                    <th>Department Name</th>
-                    <th>Year Range</th>
-                    <th>Subject</th>
-                    <th>Description</th>
-                    <th>Medium</th>
-                    <th>Language</th>
-                </tr>
-            </thead>
-            <tbody>
-                <!-- Rows will be dynamically inserted here -->
-            </tbody>
-        </table>
-        <div class="no-results" id="no-results" style="display: none;">
-            No records found for this location.
+        <div class="table-container">
+            <h2 id="location-title">Loading...</h2>
+            <table id="results-table">
+                <thead>
+                    <tr>
+                        <th colspan="2">Record Details</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Rows will be dynamically inserted here -->
+                </tbody>
+            </table>
+            <div class="no-results" id="no-results" style="display: none;">
+                No records found for this location.
+            </div>
+            <button id="next-page" style="display: none;">Next Page</button>
         </div>
     </main>
     <script>
-        // Extract the location parameter from the query string
-        const params = new URLSearchParams(window.location.search);
-        const location = params.get("location");
+        // Function to fetch session data
+        async function fetchSessionData() {
+            try {
+                const response = await fetch('/get-session-data');
 
-        // Update the page title with the location
-        const locationTitle = document.getElementById("location-title");
-        locationTitle.textContent = `Results for: ${location}`;
-
-        // Fetch records from the server
-        fetch(`/geo?location=${encodeURIComponent(location)}`)
-            .then(response => response.json())
-            .then(data => {
-                const tableBody = document.getElementById("results-table").querySelector("tbody");
-                const noResultsDiv = document.getElementById("no-results");
-
-                // Clear the table body
-                tableBody.innerHTML = "";
-
-                if (data.results && data.results.length > 0) {
-                    // Populate the table with rows
-                    data.results.forEach(record => {
-                        const row = `
-                            <tr>
-                                <td>${record.Title}</td>
-                                <td>${record.Department_Name}</td>
-                                <td>${record.Year_Range}</td>
-                                <td>${record.Subject}</td>
-                                <td>${record.Description}</td>
-                                <td>${record.Medium}</td>
-                                <td>${record.Language}</td>
-                            </tr>
-                        `;
-                        tableBody.innerHTML += row;
-                    });
-
-                    noResultsDiv.style.display = "none";
-                } else {
-                    // Show the "no results" message
-                    noResultsDiv.style.display = "block";
+                if (!response.ok) {
+                    throw new Error('Failed to fetch session data.');
                 }
-            })
-            .catch(error => {
-                console.error("Error fetching records:", error);
-            });
+
+                const data = await response.json();
+                return data;
+            } catch (error) {
+                console.error('Error fetching session data:', error);
+                return null;
+            }
+        }
+
+        // Function to populate the table
+        async function populateTable() {
+            const data = await fetchSessionData();
+
+            if (!data) {
+                document.getElementById("location-title").textContent = "Error loading data.";
+                return;
+            }
+
+            const tableBody = document.getElementById("results-table").querySelector("tbody");
+            const noResultsDiv = document.getElementById("no-results");
+            const nextPageButton = document.getElementById("next-page");
+
+            // Update the page title
+            document.getElementById("location-title").textContent = `Results for: ${data.location}`;
+
+            // Clear the table body
+            tableBody.innerHTML = "";
+
+            if (data.results && data.results.length > 0) {
+                data.results.forEach(record => {
+                    // Add Title row
+                    const titleRow = `
+                        <tr>
+                            <td colspan="2"><strong>${record.Title}</strong></td>
+                        </tr>
+                    `;
+                    tableBody.innerHTML += titleRow;
+
+                    // Add details row
+                    const detailsRow = `
+                        <tr>
+                            <td><strong>Department:</strong> ${record.Department_Name}</td>
+                            <td><strong>Year Range:</strong> ${record.Year_Range}</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Subject:</strong> ${record.Subject}</td>
+                            <td><strong>Medium:</strong> ${record.Medium}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2"><strong>Language:</strong> ${record.Language}</td>
+                        </tr>
+                    `;
+                    tableBody.innerHTML += detailsRow;
+
+                    // Add Description row
+                    const descriptionRow = `
+                        <tr>
+                            <td colspan="2"><em>${record.Description}</em></td>
+                        </tr>
+                    `;
+                    tableBody.innerHTML += descriptionRow;
+
+                    // Optional separator
+                    const separatorRow = `
+                        <tr>
+                            <td colspan="2"><hr></td>
+                        </tr>
+                    `;
+                    tableBody.innerHTML += separatorRow;
+                });
+
+                noResultsDiv.style.display = "none";
+                nextPageButton.style.display = "block";
+            } else {
+                noResultsDiv.style.display = "block";
+                nextPageButton.style.display = "none";
+            }
+        }
+
+        // Load the table data on page load
+        populateTable();
     </script>
 </body>
 </html>
