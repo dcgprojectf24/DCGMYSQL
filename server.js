@@ -186,9 +186,6 @@ app.get("/geo", (req, res) => {
   con.query(query, (err, result) => {
       if (err) throw err;
 
-      // Log the first page of results to the terminal
-      console.log(`Page ${page} Results:`, result);
-
       // Store results in session
       req.session.geoResults = result;
       req.session.geoLocation = location;

@@ -62,83 +62,65 @@
     <img src="images/pacificisland.png" alt="Pacific Islands Map" usemap="#pacific-map">
     <img id="hoverImage" src="" alt="Hover Image">
     <div id="tooltip"></div>
+    <map name="pacific-map">
+        <area shape="circle" coords="297,106,31" href="marianaislands.html" alt="Mariana Islands" data-image="images/northern-marianas-islands-flag.png" data-tooltip="Mariana Islands">
+        <area shape="circle" coords="778,76,31" href="./hawaii.html" alt="Hawaii" data-image="images/hawaii-flag.png" data-tooltip="Hawaii">
+        <area shape="circle" coords="289,137,10" href="./guam.html" alt="Guam" data-image="images/Guam.png" data-tooltip="Guam">
+        <area shape="circle" coords="193,213,31" href="./palau.html" alt="Palau" data-image="images/Palau-flag.png" data-tooltip="Palau">
+        <area shape="circle" coords="243,182,25" href="./yap.html" alt="Yap" data-image="images/Yap-flag.png" data-tooltip="Yap">
+        <area shape="circle" coords="295,192,26" href="./chuuk.html" alt="Chuuk" data-image="images/Chuuk-flag.jfif" data-tooltip="Chuuk">
+        <area shape="circle" coords="380,217,36" href="./pohnpei.html" alt="Pohnpei" data-image="images/Pohnpei-flag.png" data-tooltip="Pohnpei">
+        <area shape="circle" coords="431,211,23" href="./kosrae.html" alt="Kosrae" data-image="images/Kosrae-flag.png" data-tooltip="Kosrae">
+        <area shape="circle" coords="489,174,51" href="./marshallislands.html" alt="Marshall Islands" data-image="images/Marshall-Islands-flag.png" data-tooltip="Marshall Islands">
+        
+    </map>
 </div>
-<!---------------------------- So much JavaScript it should be in another file ---------------------------->
+
 <script>
-fetch('geo.json')
-    .then(response => response.json())
-    .then(data => {
-        geo = data;
-        renderMap();
-    });
-
-    function renderMap() {
-    const mapContainer = document.querySelector('.map-container');
-    const mapElement = document.createElement('map');
-    mapElement.setAttribute('name', 'pacific-map');
-
-    geo.forEach(area => {
-        const areaElement = document.createElement('area');
-        areaElement.setAttribute('shape', area.shape);
-        areaElement.setAttribute('coords', area.coords);
-        areaElement.setAttribute('href', `geo.html?location=${encodeURIComponent(area.href)}`);
-        areaElement.setAttribute('alt', area.alt);
-        areaElement.setAttribute('data-image', area.dataImage);
-        areaElement.setAttribute('data-tooltip', area.dataTooltip);
-        areaElement.setAttribute('data-original-coords', area.coords); // Store original coords
-        mapElement.appendChild(areaElement);
-    });
-
-    mapContainer.appendChild(mapElement);
-
-    // Add click event listeners after the <area> elements are appended
-    document.querySelectorAll("area").forEach(area => {
-        area.addEventListener("click", event => {
-            event.preventDefault(); // Prevent default navigation
-
-            const location = area.getAttribute("data-tooltip"); // Or use another unique identifier
-            window.location.href = `/geo?location=${encodeURIComponent(location)}`;
-        });
-    });
-
-    // Hover functionality
     const hoverImage = document.getElementById("hoverImage");
     const tooltip = document.getElementById("tooltip");
 
+    // Add event listeners for hover functionality
     document.querySelectorAll("area").forEach(area => {
         area.addEventListener("mouseenter", () => {
             const imageSrc = area.getAttribute("data-image");
             const tooltipText = area.getAttribute("data-tooltip");
 
             if (imageSrc) {
-                hoverImage.src = imageSrc;
-                hoverImage.style.display = "block";
+                hoverImage.src = imageSrc; // Set hover image source
+                hoverImage.style.display = "block"; // Show hover image
             }
 
             if (tooltipText) {
-                tooltip.textContent = tooltipText;
-                tooltip.style.display = "block";
+                tooltip.textContent = tooltipText; // Set tooltip text
+                tooltip.style.display = "block"; // Show tooltip
             }
         });
 
         area.addEventListener("mousemove", (e) => {
+            // Position hover image
             hoverImage.style.left = `${e.pageX + 15}px`;
             hoverImage.style.top = `${e.pageY + 15}px`;
+
+            // Position tooltip slightly above the hover image
             tooltip.style.left = `${e.pageX + 15}px`;
-            tooltip.style.top = `${e.pageY - 20}px`;
+            tooltip.style.top = `${e.pageY - 20}px`; // Adjust to position above hover image
         });
 
         area.addEventListener("mouseleave", () => {
-            hoverImage.style.display = "none";
-            tooltip.style.display = "none";
+            hoverImage.style.display = "none"; // Hide hover image
+            tooltip.style.display = "none"; // Hide tooltip
         });
     });
-
-    // Coordinate adjustment
+    document.addEventListener("DOMContentLoaded", () => {
     const mapImage = document.querySelector("img[usemap]");
+    const areas = document.querySelectorAll("area");
+    
+    // Store the original width and height of the image
     const originalWidth = mapImage.naturalWidth;
     const originalHeight = mapImage.naturalHeight;
 
+    // Function to adjust coordinates
     function adjustCoordinates() {
         const currentWidth = mapImage.offsetWidth;
         const currentHeight = mapImage.offsetHeight;
@@ -146,18 +128,24 @@ fetch('geo.json')
         const widthRatio = currentWidth / originalWidth;
         const heightRatio = currentHeight / originalHeight;
 
-        document.querySelectorAll("area").forEach(area => {
+        areas.forEach(area => {
             const originalCoords = area.getAttribute("data-original-coords").split(",").map(Number);
-            const adjustedCoords = originalCoords.map((coord, index) =>
+            const adjustedCoords = originalCoords.map((coord, index) => 
                 index % 2 === 0 ? coord * widthRatio : coord * heightRatio
             );
             area.coords = adjustedCoords.join(",");
         });
     }
 
+    // Store original coordinates in a data attribute
+    areas.forEach(area => {
+        area.setAttribute("data-original-coords", area.coords);
+    });
+
+    // Adjust coordinates on load and resize
     window.addEventListener("resize", adjustCoordinates);
     adjustCoordinates();
-}
+});
 
 </script>
 
