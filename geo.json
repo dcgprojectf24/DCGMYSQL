@@ -1,0 +1,74 @@
+[
+    {
+        "shape": "circle",
+        "coords": "297,106,31",
+        "href": "marianaislands.html",
+        "alt": "Mariana Islands",
+        "dataImage": "images/northern-marianas-islands-flag.png",
+        "dataTooltip": "Mariana Islands"
+    },
+    {
+        "shape": "circle",
+        "coords": "778,76,31",
+        "href": "./hawaii.html",
+        "alt": "Hawaii",
+        "dataImage": "images/hawaii-flag.png",
+        "dataTooltip": "Hawaii"
+    },
+    {
+        "shape": "circle",
+        "coords": "289,137,10",
+        "href": "./guam.html",
+        "alt": "Guam",
+        "dataImage": "images/Guam.png",
+        "dataTooltip": "Guam"
+    },
+    {
+        "shape": "circle",
+        "coords": "193,213,31",
+        "href": "./palau.html",
+        "alt": "Palau",
+        "dataImage": "images/Palau-flag.png",
+        "dataTooltip": "Palau"
+    },
+    {
+        "shape": "circle",
+        "coords": "243,182,25",
+        "href": "./yap.html",
+        "alt": "Yap",
+        "dataImage": "images/Yap-flag.png",
+        "dataTooltip": "Yap"
+    },
+    {
+        "shape": "circle",
+        "coords": "295,192,26",
+        "href": "./chuuk.html",
+        "alt": "Chuuk",
+        "dataImage": "images/Chuuk-flag.jfif",
+        "dataTooltip": "Chuuk"
+    },
+    {
+        "shape": "circle",
+        "coords": "380,217,36",
+        "href": "./pohnpei.html",
+        "alt": "Pohnpei",
+        "dataImage": "images/Pohnpei-flag.png",
+        "dataTooltip": "Pohnpei"
+    },
+    {
+        "shape": "circle",
+        "coords": "431,211,23",
+        "href": "./kosrae.html",
+        "alt": "Kosrae",
+        "dataImage": "images/Kosrae-flag.png",
+        "dataTooltip": "Kosrae"
+    },
+    {
+        "shape": "circle",
+        "coords": "489,174,51",
+        "href": "./marshallislands.html",
+        "alt": "Marshall Islands",
+        "dataImage": "images/Marshall-Islands-flag.png",
+        "dataTooltip": "Marshall Islands"
+    }
+]

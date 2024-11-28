@@ -62,18 +62,35 @@
     <img src="images/pacificisland.png" alt="Pacific Islands Map" usemap="#pacific-map">
     <img id="hoverImage" src="" alt="Hover Image">
     <div id="tooltip"></div>
-    <map name="pacific-map">
-        <area shape="circle" coords="297,106,31" href="marianaislands.html" alt="Mariana Islands" data-image="images/northern-marianas-islands-flag.png" data-tooltip="Mariana Islands">
-        <area shape="circle" coords="778,76,31" href="./hawaii.html" alt="Hawaii" data-image="images/hawaii-flag.png" data-tooltip="Hawaii">
-        <area shape="circle" coords="289,137,10" href="./guam.html" alt="Guam" data-image="images/Guam.png" data-tooltip="Guam">
-        <area shape="circle" coords="193,213,31" href="./palau.html" alt="Palau" data-image="images/Palau-flag.png" data-tooltip="Palau">
-        <area shape="circle" coords="243,182,25" href="./yap.html" alt="Yap" data-image="images/Yap-flag.png" data-tooltip="Yap">
-        <area shape="circle" coords="295,192,26" href="./chuuk.html" alt="Chuuk" data-image="images/Chuuk-flag.jfif" data-tooltip="Chuuk">
-        <area shape="circle" coords="380,217,36" href="./pohnpei.html" alt="Pohnpei" data-image="images/Pohnpei-flag.png" data-tooltip="Pohnpei">
-        <area shape="circle" coords="431,211,23" href="./kosrae.html" alt="Kosrae" data-image="images/Kosrae-flag.png" data-tooltip="Kosrae">
-        <area shape="circle" coords="489,174,51" href="./marshallislands.html" alt="Marshall Islands" data-image="images/Marshall-Islands-flag.png" data-tooltip="Marshall Islands">
-        
-    </map>
+    <script>
+        // Load the JSON file and create map areas
+        fetch('geo.JSON')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(jsonData => {
+                // Get the map element
+                const mapElement = document.getElementById('pacific-map');
+
+                // Loop through the JSON data and create <area> elements
+                jsonData.forEach(data => {
+                    const areaElement = document.createElement('area');
+                    areaElement.setAttribute('shape', data.shape);
+                    areaElement.setAttribute('coords', data.coords);
+                    areaElement.setAttribute('href', data.href);
+                    areaElement.setAttribute('alt', data.alt);
+                    areaElement.setAttribute('data-image', data.dataImage);
+                    areaElement.setAttribute('data-tooltip', data.dataTooltip);
+                    mapElement.appendChild(areaElement);
+                });
+            })
+            .catch(error => {
+                console.error('Error loading JSON:', error);
+            });
+    </script>
 </div>
 
 <script>
