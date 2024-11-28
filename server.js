@@ -157,3 +157,14 @@ app.all('*', function (request, response, next) {
 });
 
 app.listen(8080, () => console.log(`listening on port 8080`));
+
+// process the geo.json stuff into a js file
+const all_geo = require(__dirname + "/geo.json");
+app.get('/geo.js', function(request, response, next){// making a products array within the server
+   // the response will be js
+   response.type('.js');
+   // turning stuff into a string
+   let geo_str = `let all_geo = ${JSON.stringify(all_geo)}`;
+   // sends the string
+   response.send(geo_str);
+});

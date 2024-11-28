@@ -64,32 +64,19 @@
     <div id="tooltip"></div>
     <script>
         // Load the JSON file and create map areas
-        fetch('geo.JSON')
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                return response.json();
-            })
-            .then(jsonData => {
-                // Get the map element
-                const mapElement = document.getElementById('pacific-map');
 
                 // Loop through the JSON data and create <area> elements
-                jsonData.forEach(data => {
-                    const areaElement = document.createElement('area');
-                    areaElement.setAttribute('shape', data.shape);
-                    areaElement.setAttribute('coords', data.coords);
-                    areaElement.setAttribute('href', data.href);
-                    areaElement.setAttribute('alt', data.alt);
-                    areaElement.setAttribute('data-image', data.dataImage);
-                    areaElement.setAttribute('data-tooltip', data.dataTooltip);
-                    mapElement.appendChild(areaElement);
-                });
-            })
-            .catch(error => {
-                console.error('Error loading JSON:', error);
-            });
+        for (let i in geo) {
+        let area = geoData[i];
+        document.write(`
+            <area shape="${area.shape}" 
+            coords="${area.coords}" 
+            href="${area.href}" 
+            alt="${area.alt}" 
+            data-image="${area.dataImage}" 
+            data-tooltip="${area.dataTooltip}">
+        `);
+}
     </script>
 </div>
 
