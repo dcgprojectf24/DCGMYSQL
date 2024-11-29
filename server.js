@@ -20,6 +20,17 @@ const { type } = require('os');
 let user_reg_data = {};
 let user_data_filename = __dirname + '/user_data.json';
 
+
+// monitor all requests and make a reservation
+app.all('*', function (request, response, next){// this function also makes reservations
+  console.log(request.method + ' to ' + request.path);
+     // gives the user a cart if the user does not have one
+     if (typeof request.session.reservation == 'undefined'){
+       request.session.reservation = {};
+    }
+  next();
+});
+
 if (fs.existsSync(user_data_filename)){// if the user data file exists, read it and parse it
     // get the filesize and print it out
     console.log(`${user_data_filename} has ${fs.statSync(user_data_filename).size} characters.`);

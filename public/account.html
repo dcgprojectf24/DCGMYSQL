@@ -10,12 +10,45 @@
 <script src="./functions.js"></script>
 <style>
 body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", Arial, Helvetica, sans-serif}
+
 </style>
 </head>
-<body class="w3-light-grey">
+<body>
 <!---------------------------- Navigation Bar Start ---------------------------->
 <script>navBar();</script>
 <!---------------------------- Navigation Bar End ---------------------------->
-
+<div class="account-container">
+    <div class="account-details-box">
+        <h2>Account Details</h2>
+        <p><span>Name:</span> John Doe</p>
+        <p><span>Email:</span> john.doe@example.com</p>
+    </div>
+    <h2 class="account-reservations-title">Reservations</h2>
+    <table class="account-reservations-table">
+        <thead>
+            <tr>
+                <th>Reservation</th>
+                <th>Submitted</th>
+                <th>Filled</th>
+                <th>Returned</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Book A</td>
+                <td>2024-11-28 10:00 AM</td>
+                <td>2024-11-29 12:00 PM</td>
+                <td>2024-12-05 4:00 PM</td>
+            </tr>
+            <tr>
+                <td>Book B</td>
+                <td>2024-11-27 3:00 PM</td>
+                <td>2024-11-28 5:00 PM</td>
+                <td>2024-12-01 2:00 PM</td>
+            </tr>
+            <!-- Add more rows as needed -->
+        </tbody>
+    </table>
+</div>
 </body>
 </html>

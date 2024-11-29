@@ -862,3 +862,64 @@ select {
 }
 
 /* ==================================================== SEARCH BOX CSS end ==================================================== */
+
+
+/* Style for the account container */
+.account-container {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 800px;
+    width: 90%; /* Allows it to be responsive */
+    box-sizing: border-box; /* Includes padding in width */
+    text-align: center;
+}
+
+/* Account details section */
+.account-details-box {
+    margin-bottom: 20px;
+}
+
+.account-details-box h2 {
+    margin-bottom: 10px;
+    color: #0077b6;
+}
+
+.account-details-box p {
+    margin: 5px 0;
+    font-size: 1rem;
+    color: #333;
+}
+
+.account-details-box span {
+    font-weight: bold;
+    color: #555;
+}
+
+/* Reservations table styles */
+.account-reservations-title {
+    font-size: 1.5rem;
+    color: #0077b6;
+    margin-bottom: 10px;
+}
+
+.account-reservations-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.account-reservations-table th, .account-reservations-table td {
+    text-align: left;
+    padding: 12px;
+    border-bottom: 1px solid #ddd;
+}
+
+.account-reservations-table th {
+    background-color: #0077b6;
+    color: white;
+}
+
+.account-reservations-table tr:hover {
+    background-color: #f1f1f1;
+}
