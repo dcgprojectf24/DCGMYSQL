@@ -497,10 +497,12 @@ hr {
     height: 60vh;
     color: white;
     display: flex;
+    flex-direction: column; /* Ensure child elements stack vertically */
     align-items: center;
     justify-content: center;
     text-align: center;
     position: relative; /* For overlay */
+    padding: 20px; /* Add some padding to avoid content overlap */
 }
 
 .hero::after {
@@ -510,28 +512,26 @@ hr {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.4); /* Semi-transparent overlay for better text contrast */
-    z-index: 1;
+    background: rgba(0, 0, 0, 0.4); /* Semi-transparent overlay */
+    z-index: 1; /* Ensure overlay is below content */
 }
 
 .hero h1,
-.hero p {
-    position: relative; /* To ensure text is above overlay */
+.hero p,
+.hero .unique-form-container {
+    position: relative; /* Ensures these elements are above the overlay */
     z-index: 2;
 }
 
-.hero h1 {
-    font-size: 3.5rem; /* Increase font size */
-    font-weight: bold;
-    margin-bottom: 0.5em;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7); /* More prominent shadow */
+.hero .unique-form-container {
+    background: rgba(255, 255, 255, 0.95); /* Light background for contrast */
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Adds some depth */
+    max-width: 400px;
+    width: 100%;
 }
 
-.hero p {
-    font-size: 1.6rem; /* Slightly larger font for better visibility */
-    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
-    line-height: 1.5; /* Better spacing between lines */
-}
 @keyframes fadeIn {
     from {
         opacity: 0;
@@ -758,3 +758,93 @@ ul li {
         transform: translateX(0); /* End at normal position */
     }
 }
+
+/* ==================================================== SEARCH BOX CSS begin ==================================================== */
+.hero .unique-form-container {
+    position: static; /* Override position set by .hero */
+    z-index: 50; /* Ensure it stays above the overlay */
+    background: rgba(255, 255, 255, 0.9); /* Add a light background for visibility */
+    border-radius: 8px; /* Match existing form styles */
+    padding: 20px;
+    max-width: 400px;
+    margin: 20px auto; /* Center the form horizontally */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add a shadow for contrast */
+}
+
+.unique-form-container {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 20px auto;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    max-width: 400px;
+    width: 100%;
+    z-index: 2; /* Ensure it stays above the overlay */
+}
+
+.unique-form-container h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.unique-form-container .form-group {
+    margin-bottom: 15px;
+}
+
+.unique-form-container label {
+    display: block; /* Ensures each label takes its own line */
+    text-align: left; /* Aligns the label text to the left */
+    font-weight: bold; /* Keeps the text bold for visibility */
+    margin-bottom: 5px; /* Adds some spacing below the label */
+    color: #555; /* A softer color for the label text */
+}
+
+input[type="text"], 
+select {
+    width: 100%;
+    padding: 10px;
+    margin: 0;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+    box-sizing: border-box; /* Ensures padding doesn’t affect width */
+}
+
+.radio-group {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 15px;
+}
+
+.radio-group label {
+    font-weight: normal;
+    display: flex;
+    align-items: center;
+}
+
+.radio-group input {
+    margin-right: 5px;
+}
+
+.submit-btn {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    background-color: #0077b6;
+    color: white;
+    font-size: 1rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.submit-btn:hover {
+    background-color: #005fa3;
+    transform: scale(1.05);
+}
+
+/* ==================================================== SEARCH BOX CSS end ==================================================== */

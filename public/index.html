@@ -89,14 +89,45 @@ body, h1, h2, h3, h4, h5, h6 {
 <!---------------------------- Navigation Bar Start ---------------------------->
 <script>navBar();</script>
 <!---------------------------- Navigation Bar End ---------------------------->
-
+<!---------------------------- Input Form Start (who let Lui cook)---------------------------->
 <div class="hero">
-  <div>
-    <h1>The Hamilton Library's Hawaiian and Pacific Collection</h1>
-    <p>Your gateway to the history and culture of Hawaiʻi, Polynesia, Melanesia, and Micronesia.</p>
+  <h1>The Hamilton Library's Hawaiian and Pacific Collection</h1>
+  <p>Your gateway to the history and culture of Hawaiʻi, Polynesia, Melanesia, and Micronesia.</p>
+  <div class="unique-form-container">
+    <h2>Search Records</h2>
+    <form action="./executeSearch" method="post">
+        <!-- Text Input -->
+        <div class="form-group">
+            <label for="searchInput">Search</label>
+            <input type="text" id="searchInput" name="searchInput" placeholder="Enter your search term...">
+        </div>
+
+        <!-- Dropdown -->
+        <div class="form-group">
+            <label for="searchType">Search By</label>
+            <select id="searchType" name="searchType">
+                <option value="Title">Title</option>
+                <option value="Author_ID">Author</option>
+                <option value="Department_ID">Department</option>
+                <option value="Publisher_ID">Publisher</option>
+                <option value="Subject">Subject</option>
+            </select>
+        </div>
+
+        <!-- Radio Buttons -->
+        <div class="radio-group">
+            <label><input type="radio" id="avRadio" name="format" value="AV"> AV</label>
+            <label><input type="radio" id="mapsRadio" name="format" value="Map"> Maps</label>
+            <label><input type="radio" id="microfilmRadio" name="format" value="Record" checked> Microfilm</label>
+        </div>
+
+        <!-- Submit Button -->
+        <button type="submit" class="submit-btn">Search</button>
+    </form>
   </div>
 </div>
 
+<!---------------------------- Input Form Start (who let Lui cook)----------------------------> 
 <div class="w3-container w3-center w3-padding-10">
   <h2 class="w3-text-grey">About the Collection</h2>
 </div>
