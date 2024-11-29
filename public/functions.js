@@ -28,7 +28,7 @@ function navBar() {
         <a href="./index.html" class="w3-bar-item w3-button w3-green w3-mobile">Home</a>
         <a href="./about.html" class="w3-bar-item w3-button w3-mobile">About</a>
         <a href="./search.html" class="w3-bar-item w3-button w3-mobile">Search</a>
-        <a href="./search.html" class="w3-bar-item w3-button w3-mobile">Reports</a>
+        <a href="./reports.html" class="w3-bar-item w3-button w3-mobile">Reports</a>
         <a href="./maps.html" class="w3-bar-item w3-button w3-mobile">Maps</a>
         <a href="./team.html" class="w3-bar-item w3-button w3-mobile">Contact Us</a>
         <a href="./account.html" class="w3-bar-item w3-button w3-right w3-light-grey w3-mobile">Account</a>
@@ -44,7 +44,7 @@ function navBar() {
         <a href="./index.html" class="w3-bar-item w3-button w3-green w3-mobile">Home</a>
         <a href="./about.html" class="w3-bar-item w3-button w3-mobile">About</a>
         <a href="./search.html" class="w3-bar-item w3-button w3-mobile">Search</a>
-        <a href="./search.html" class="w3-bar-item w3-button w3-mobile">Reports</a>
+        <a href="./reports.html" class="w3-bar-item w3-button w3-mobile">Reports</a>
         <a href="./maps.html" class="w3-bar-item w3-button w3-mobile">Maps</a>
         <a href="./team.html" class="w3-bar-item w3-button w3-mobile">Contact Us</a>
         <a href="./login.html" class="w3-bar-item w3-button w3-right w3-light-grey w3-mobile">Login</a>

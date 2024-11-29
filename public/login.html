@@ -34,17 +34,6 @@ body, h1, h2, h3, h4, h5, h6 {
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
 }
 
-/* Form Container */
-.form-container {
-    max-width: 400px;
-    margin: 40px auto;
-    background: white;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    text-align: center;
-}
-
 /* Input Fields */
 input[type="email"], input[type="password"] {
     width: 100%;
@@ -54,38 +43,6 @@ input[type="email"], input[type="password"] {
     border-radius: 4px;
     box-sizing: border-box;
     font-size: 1rem;
-}
-
-/* Button Styles */
-button {
-    width: 100%;
-    padding: 10px 20px;
-    background-color: #4a7c89;
-    color: white;
-    font-size: 1rem;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.3s ease;
-}
-
-button:hover {
-    background-color: #628edc;
-    transform: scale(1.05);
-}
-
-/* Register Link */
-.register-link {
-    display: block;
-    margin-top: 15px;
-    color: #4a7c89;
-    font-size: 0.9rem;
-    text-decoration: none;
-    transition: color 0.3s ease;
-}
-
-.register-link:hover {
-    color: #628edc;
 }
 
 /* Error Message */
@@ -105,10 +62,8 @@ button:hover {
 <!-- Hero Section -->
 <div class="hero">
     <h1>Login to Your Account</h1>
-</div>
-
-<!-- Form Section -->
-<div class="form-container">
+<!---------------------------- Input Form Start (who let Lui cook)---------------------------->
+<div class="unique-form-container">
     <h2>Welcome Back!</h2>
     <p id="error_message"></p>
     <form action="./login" method="post">
@@ -119,15 +74,16 @@ button:hover {
         <label for="password">Password:</label>
         <input type="password" id="password" name="password" placeholder="Enter your password" required>
         <!-- Login Button -->
-        <button type="submit">Login</button>
+        <button type="submit" class="niceButton">Login</button>
         <script>
             let inCart = getCookie("totalIC");
             document.write(`<input type="hidden" name="total" value="${inCart}">`);
             loginError();
         </script>
     </form>
-    <a href="./register.html" class="register-link">Don't have an account? Register here</a>
+    <a href="./register.html" class="niceLink">Don't have an account? Register here</a>
 </div>
-
+<!---------------------------- Input Form End (who let Lui cook)----------------------------> 
+</div>
 </body>
 </html>

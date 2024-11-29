@@ -829,22 +829,36 @@ select {
     margin-right: 5px;
 }
 
-.submit-btn {
-    display: block;
+/* Button Styles */
+.niceButton {
     width: 100%;
-    padding: 10px;
-    background-color: #0077b6;
+    padding: 10px 20px;
+    background-color: #4a7c89;
     color: white;
     font-size: 1rem;
     border: none;
-    border-radius: 4px;
+    border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
-.submit-btn:hover {
-    background-color: #005fa3;
+.niceButton:hover {
+    background-color: #628edc;
     transform: scale(1.05);
+}
+
+/* Register Link */
+.niceLink {
+    display: block;
+    margin-top: 15px;
+    color: #4a7c89;
+    font-size: 0.9rem;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.niceLink:hover {
+    color: #628edc;
 }
 
 /* ==================================================== SEARCH BOX CSS end ==================================================== */
