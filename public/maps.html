@@ -81,7 +81,7 @@ fetch('geo.json')
         const areaElement = document.createElement('area');
         areaElement.setAttribute('shape', area.shape);
         areaElement.setAttribute('coords', area.coords);
-        areaElement.setAttribute('href', `geo.html?location=${encodeURIComponent(area.href)}`);
+        areaElement.setAttribute('href', `geo.html?search=${encodeURIComponent(area.href)}`);
         areaElement.setAttribute('alt', area.alt);
         areaElement.setAttribute('data-image', area.dataImage);
         areaElement.setAttribute('data-tooltip', area.dataTooltip);
@@ -96,8 +96,8 @@ fetch('geo.json')
         area.addEventListener("click", event => {
             event.preventDefault(); // Prevent default navigation
 
-            const location = area.getAttribute("data-tooltip"); // Or use another unique identifier
-            window.location.href = `/geo?location=${encodeURIComponent(location)}`;
+            const search = area.getAttribute("data-tooltip"); // Or use another unique identifier
+            window.location.href = `/geo?search=${encodeURIComponent(search)}`;
         });
     });
 

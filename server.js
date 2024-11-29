@@ -174,20 +174,20 @@ app.get('/logout', function (request, response){// Redirects user to home page a
 //  cookie: { secure: false } // Set to true if using HTTPS
 //}));
 
-app.get("/geo", (req, res) => {// Actual query
-  const location = req.query.location;
+app.get("/geo", (req, res) => {
+  const search = req.query.search; // Use 'search' for query parameter
   const page = parseInt(req.query.page) || 1; // Default to page 1
   const limit = parseInt(req.query.limit) || 10; // Default to 10 records per page
   const offset = (page - 1) * limit;
 
-  if (!location) {
-      return res.status(400).send("Location is required.");
+  if (!search) {
+      return res.status(400).send("Search term is required.");
   }
 
   const query = `
       SELECT Title, Department_Name, Year_Range, Subject, Description, Medium, Language 
       FROM RECORDS 
-      WHERE Geo_Location LIKE '%${location}%'
+      WHERE Geo_Location LIKE '%${search}%'
       LIMIT ${limit} OFFSET ${offset};
   `;
 
@@ -195,22 +195,22 @@ app.get("/geo", (req, res) => {// Actual query
       if (err) throw err;
 
       // Store results in session
-      req.session.geoResults = result;
-      req.session.geoLocation = location;
-
+      req.session.results = result;
+      req.session.search = search;
       // Redirect to geo.html with the query parameters
-      res.redirect(`/geo.html?location=${encodeURIComponent(location)}&page=${page}`);
+      res.redirect(`/results.html?search=${encodeURIComponent(search)}&page=${page}`);
   });
 });
 
 app.get("/get-session-data", (req, res) => {
-  if (!req.session.geoResults || !req.session.geoLocation) {
+  if (!req.session.results || !req.session.search) {
       return res.status(404).json({ error: "No session data available." });
   }
   res.json({
-      location: req.session.geoLocation,
-      results: req.session.geoResults
+      results: req.session.results, 
+      search: req.session.search
   });
+  console.log(req.session);
 });
 
 
@@ -241,7 +241,7 @@ app.post("/executeSearch", (req, res) => {
     console.log(result);
 
     // Redirect to results.html with the query parameters
-    res.redirect(`/geo.html?page=${page}`); // Defaulting page to 1 for the redirection
+    res.redirect(`/geo.html?page=${page}`); 
   });
 });
 

@@ -1,127 +1,191 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Search</title>
+<title>Geo Reports</title>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="./css/w3.css">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <script src="./functions.js"></script>
-<style>
-body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", Arial, Helvetica, sans-serif}
-.unique-form-container {
-            font-family: Arial, sans-serif;
+    <style>
+        body {
+            font-family: "Raleway", Arial, sans-serif;
             background-color: #f4f4f4;
-            margin: 20px auto;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #0077b6;
+            color: white;
             padding: 20px;
+            text-align: center;
+        }
+
+        .table-container {
+            background-color: white;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             border-radius: 8px;
-            max-width: 400px;
+            margin: 20px auto;
+            padding: 20px;
+            max-width: 1000px;
+        }
+
+        table {
             width: 100%;
-        }
-
-        .unique-form-container h2 {
-            text-align: center;
+            border-collapse: collapse;
             margin-bottom: 20px;
-            color: #333;
         }
 
-        .unique-form-container .form-group {
-            margin-bottom: 15px;
+        th, td {
+            text-align: left;
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
         }
 
-        label {
-            display: block;
-            font-weight: bold;
-            margin-bottom: 5px;
+        th {
+            background-color: #0077b6;
+            color: white;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 20px;
             color: #555;
         }
 
-        input[type="text"], 
-        select {
-            width: 100%;
-            padding: 10px;
-            margin: 0;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-size: 1rem;
-            box-sizing: border-box; /* Ensures padding doesn’t affect width */
-        }
-
-        .radio-group {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 15px;
-        }
-
-        .radio-group label {
-            font-weight: normal;
-            display: flex;
-            align-items: center;
-        }
-
-        .radio-group input {
-            margin-right: 5px;
-        }
-
-        .submit-btn {
-            display: block;
-            width: 100%;
-            padding: 10px;
+        button {
+            display: inline-block;
             background-color: #0077b6;
             color: white;
+            padding: 10px 20px;
             font-size: 1rem;
             border: none;
-            border-radius: 4px;
+            border-radius: 5px;
+            text-decoration: none;
             cursor: pointer;
             transition: background-color 0.3s ease, transform 0.3s ease;
         }
 
-        .submit-btn:hover {
+        button:hover {
             background-color: #005fa3;
             transform: scale(1.05);
         }
-</style>
+    </style>
 </head>
-<body class="w3-light-grey">
-<!---------------------------- Navigation Bar Start ---------------------------->
+<body>
+<!-- Navigation Bar -->
 <script>navBar();</script>
-<!---------------------------- Navigation Bar End ---------------------------->
 
-<div class="unique-form-container">
-    <h2>Search Records</h2>
-    <form action="./executeSearch" method="post">
-        <!-- Text Input -->
-        <div class="form-group">
-            <label for="searchInput">Search</label>
-            <input type="text" id="searchInput" name="searchInput" placeholder="Enter your search term...">
-        </div>
-
-        <!-- Dropdown -->
-        <div class="form-group">
-            <label for="searchType">Search By</label>
-            <select id="searchType" name="searchType">
-                <option value="Title">Title</option>
-                <option value="Author_ID">Author</option>
-                <option value="Department_ID">Department</option>
-                <option value="Publisher_ID">Publisher</option>
-                <option value="Subject">Subject</option>
-            </select>
-        </div>
-
-            <!-- Radio Buttons -->
-            <div class="radio-group">
-                <label><input type="radio" id="avRadio" name="format" value="AV"> AV</label>
-                <label><input type="radio" id="mapsRadio" name="format" value="Maps"> Maps</label>
-                <label><input type="radio" id="microfilmRadio" name="format" value="Microfilm" checked> Microfilm</label>
+    <main>
+        <div class="table-container">
+            <h2 id="location-title">Loading...</h2>
+            <table id="results-table">
+                <thead>
+                    <tr>
+                        <th colspan="2">Record Details</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Rows will be dynamically inserted here -->
+                </tbody>
+            </table>
+            <div class="no-results" id="no-results" style="display: none;">
+                No records found for this search.
             </div>
+            <button id="next-page" style="display: none;">Next Page</button>
+        </div>
+    </main>
+    <script>
+        // Function to fetch session data
+        async function fetchSessionData() {
+            try {
+                const response = await fetch('/get-session-data');
 
-        <!-- Submit Button -->
-        <button type="submit" class="submit-btn">Search</button>
-    </form>
-</div>
+                if (!response.ok) {
+                    throw new Error('Failed to fetch session data.');
+                }
 
+                const data = await response.json();
+                return data;
+            } catch (error) {
+                console.error('Error fetching session data:', error);
+                return null;
+            }
+        }
+
+        // Function to populate the table
+        async function populateTable() {
+            const data = await fetchSessionData();
+
+            const tableBody = document.getElementById("results-table").querySelector("tbody");
+            const noResultsDiv = document.getElementById("no-results");
+            const nextPageButton = document.getElementById("next-page");
+
+            // Update the page title
+            document.getElementById("location-title").textContent = `Results for: ${data.search}`;
+
+            // Clear the table body
+            tableBody.innerHTML = "";
+
+            if (data.results && data.results.length > 0) {
+                data.results.forEach(record => {
+                    // Add Title row
+                    const titleRow = `
+                        <tr>
+                            <td colspan="2"><strong>${record.Title}</strong></td>
+                        </tr>
+                    `;
+                    tableBody.innerHTML += titleRow;
+
+                    // Add details row
+                    const detailsRow = `
+                        <tr>
+                            <td><strong>Department:</strong> ${record.Department_Name}</td>
+                            <td><strong>Year Range:</strong> ${record.Year_Range}</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Subject:</strong> ${record.Subject}</td>
+                            <td><strong>Medium:</strong> ${record.Medium}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2"><strong>Language:</strong> ${record.Language}</td>
+                        </tr>
+                    `;
+                    tableBody.innerHTML += detailsRow;
+
+                    // Add Description row
+                    const descriptionRow = `
+                        <tr>
+                            <td colspan="2"><em>${record.Description}</em></td>
+                        </tr>
+                    `;
+                    tableBody.innerHTML += descriptionRow;
+
+                    // Optional separator
+                    const separatorRow = `
+                        <tr>
+                            <td colspan="2"><hr></td>
+                        </tr>
+                    `;
+                    tableBody.innerHTML += separatorRow;
+                });
+
+                noResultsDiv.style.display = "none";
+                nextPageButton.style.display = "block";
+            } else {
+                noResultsDiv.style.display = "block";
+                nextPageButton.style.display = "none";
+            }
+        }
+
+        // Load the table data on page load
+        populateTable();
+    </script>
 </body>
 </html>
