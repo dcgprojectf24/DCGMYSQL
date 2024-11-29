@@ -155,7 +155,7 @@ app.get('/logout', function (request, response){// Redirects user to home page a
 
 
 
-/*---------------------------------- SQL SHIT ----------------------------------*/
+/*---------------------------------- SQL SHIT FOR MAPS ----------------------------------*/
 // Configure the session middleware
 app.use(session({
   secret: 'your_secret_key', // Replace with a secure key
@@ -163,8 +163,6 @@ app.use(session({
   saveUninitialized: true,
   cookie: { secure: false } // Set to true if using HTTPS
 }));
-
-
 
 app.get("/geo", (req, res) => {
   const location = req.query.location;
@@ -195,14 +193,10 @@ app.get("/geo", (req, res) => {
   });
 });
 
-
-
-
 app.get("/get-session-data", (req, res) => {
   if (!req.session.geoResults || !req.session.geoLocation) {
       return res.status(404).json({ error: "No session data available." });
   }
-
   res.json({
       location: req.session.geoLocation,
       results: req.session.geoResults
@@ -210,6 +204,19 @@ app.get("/get-session-data", (req, res) => {
 });
 
 
+/*---------------------------------- SQL SHIT FOR SEARCH FUNCTION ----------------------------------*/
+
+app.post("/executeSearch", function (request, response) {
+  let input = request.body.searchInput;
+  let type = request.body.searchType;
+  let format = request.body.format;
+  console.log(format);
+  console.log(format[1]);
+  let query = "SELECT Title, Department_ID, Year_Range, Subject, Description, Medium, Language FROM RECORDS WHERE <dropdown> LIKE '%<input>%' AND Medium = 'AV';"
+  
+
+  res.redirect(`/index.html`);
+});
 
 
 
