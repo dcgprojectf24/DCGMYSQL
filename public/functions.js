@@ -1,6 +1,9 @@
-/*----------------------------- Created by Lui Rabideau, due on 12/15/2023 -----------------------------*/
+/*---------- Created by Lui Rabideau, Xin Lin, Tassia Cocoran, Emma Sharp, and Jessica Bandol ----------*/
 /* Incorporated into the design from W3schools: W3.CSS 4.15 December 2020 by Jan Egil and Borge Refsnes */
-/*--------------------------------------- UHM ITM352 Assignment 3 --------------------------------------*/
+/*------------------------- Lui Rabideau's F2023 ITM352 Assignment 3 Template --------------------------*/
+/*-------------------------------------- UHM ITM354 Final Project --------------------------------------*/
+
+
 
 /*---------------------------------- GENERAL FUNCTIONS USED EVERWHERE ----------------------------------*/
 function faviconInfo(){//contains favicon and css information
@@ -119,19 +122,6 @@ function updateFav(location, productIndex){
 });
 }
 
-/*---------------------------------------- TEAM PAGE FUNCTION ------------------------------------------*/
-function teamTable(){// Function that generates the professionals information on the our team/about page
-    for (let i in professionals) {
-        document.write(`    
-          <div class="w3-col l3 m6 w3-margin-bottom">
-          <img src="${professionals[i].pfp}" style="width:100%">
-          <h3>${professionals[i].name}</h3>
-          <p class="w3-opacity">${professionals[i].position}</p>
-          <p>${professionals[i].summary}</p>
-          </div>
-        `)
-    };
-}
 
 /*----------------------------------------- COOKIE FUNCTIONs -------------------------------------------*/
 
