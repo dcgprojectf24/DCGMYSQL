@@ -7,8 +7,8 @@ var express = require('express');
 var app = express();
 var myParser = require("body-parser");
 var mysql = require('mysql');
-
 const session = require('express-session');
+
 app.use(session({secret: "MySecretKey", resave: true, saveUninitialized: true}));
 
 let userLoggedin = {};
@@ -19,6 +19,9 @@ const { type } = require('os');
 //USER DATA STUFF
 let user_reg_data = {};
 let user_data_filename = __dirname + '/user_data.json';
+
+app.use(express.static('./public'));
+app.use(myParser.urlencoded({ extended: true }));
 
 
 // monitor all requests and make a reservation
@@ -41,9 +44,9 @@ if (fs.existsSync(user_data_filename)){// if the user data file exists, read it 
     console.log(`Error! ${user_data_filename} does not exist!`);
 }
 
-// Connects to Database
+/*---------------------------------- DATABASE CONNECTION ----------------------------------*/
 console.log("Connecting to localhost..."); 
-var con = mysql.createConnection({
+var con = mysql.createConnection({// Actual DB connection occurs here
   host: '127.0.0.1',
   user: "root",
   port: 3306,
@@ -51,13 +54,10 @@ var con = mysql.createConnection({
   password: ""
 });
 
-con.connect(function (err) {
+con.connect(function (err) {// Throws error or confirms connection
   if (err) throw err;
   console.log("Connected!");
 });
-
-app.use(express.static('./public'));
-app.use(myParser.urlencoded({ extended: true }));
 
 /*---------------------------------- FUNCTIONS ----------------------------------*/
 function isNonNegInt(stringToCheck, returnErrors = false) {
@@ -70,7 +70,7 @@ function isNonNegInt(stringToCheck, returnErrors = false) {
 }
 
 
-/*---------------------------------- SQL START ----------------------------------*/
+/*---------------------------------- KAZMAN SQL ----------------------------------*/
 function query_DB(POST, response) {
   if (isNonNegInt(POST['low_price']) && isNonNegInt(POST['high_price'])) {// Only query if we got a low and high price
     low = POST['low_price']; // Grab the parameters from the submitted form
@@ -104,7 +104,6 @@ function query_DB(POST, response) {
     response.send("Enter some prices doofus!");
   }
 }
-
 
 app.post("/process_query", function (request, response) {
   let POST = request.body;
@@ -166,21 +165,16 @@ app.get('/logout', function (request, response){// Redirects user to home page a
   response.redirect(`./index.html`)
 });
 
+/*---------------------------------- MAPS SQL ----------------------------------*/
 
+//app.use(session({// Configure the session middleware
+//  secret: 'your_secret_key', // Replace with a secure key
+//  resave: false,
+//  saveUninitialized: true,
+//  cookie: { secure: false } // Set to true if using HTTPS
+//}));
 
-
-
-
-/*---------------------------------- SQL SHIT FOR MAPS ----------------------------------*/
-// Configure the session middleware
-app.use(session({
-  secret: 'your_secret_key', // Replace with a secure key
-  resave: false,
-  saveUninitialized: true,
-  cookie: { secure: false } // Set to true if using HTTPS
-}));
-
-app.get("/geo", (req, res) => {
+app.get("/geo", (req, res) => {// Actual query
   const location = req.query.location;
   const page = parseInt(req.query.page) || 1; // Default to page 1
   const limit = parseInt(req.query.limit) || 10; // Default to 10 records per page
@@ -220,16 +214,24 @@ app.get("/get-session-data", (req, res) => {
 });
 
 
-/*---------------------------------- SQL SHIT FOR SEARCH FUNCTION ----------------------------------*/
+/*---------------------------------- SEARCH SQL ----------------------------------*/
 
 app.post("/executeSearch", (req, res) => {
-  let input = req.body.searchInput;
-  let type = req.body.searchType;
-  let format = req.body.format;
+  const input = req.body.searchInput;
+  const type = req.body.searchType;
+  const format = req.body.format;
+
+  const page = parseInt(req.query.page) || 1; // Default to page 1
+  const limit = parseInt(req.query.limit) || 10; // Default to 10 records per page
+  const offset = (page - 1) * limit;
 
   console.log(format);
 
-  const query = `SELECT Title, Department_Name, Year_Range, Subject, Description, Medium, Language FROM RECORDS WHERE ${type} LIKE '%${input}%' AND Medium = '${format}';`;
+  const query = `
+    SELECT Title, Department_Name, Year_Range, Subject, Description, Medium, Language 
+    FROM RECORDS WHERE ${type} LIKE '%${input}%' AND Medium = '${format}' 
+    LIMIT ${limit} OFFSET ${offset};
+  `;
 
   con.query(query, (err, result) => {
     if (err) throw err;
@@ -239,21 +241,12 @@ app.post("/executeSearch", (req, res) => {
     console.log(result);
 
     // Redirect to results.html with the query parameters
-    res.redirect(`/results.html?page=${1}`); // Defaulting page to 1 for the redirection
+    res.redirect(`/geo.html?page=${page}`); // Defaulting page to 1 for the redirection
   });
 });
 
-
-
-
-
-
-
-
-
-
 /*----------------------------------- ROUTING -----------------------------------*/
-app.all('*', function (request, response, next) {
+app.all('*', function (request, response, next) {// This must be at the end!
   console.log(request.method + ' to ' + request.path);
   next();
 });
