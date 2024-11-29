@@ -193,7 +193,6 @@ app.get("/geo", (req, res) => {
 
   con.query(query, (err, result) => {
       if (err) throw err;
-
       // Store results in session
       req.session.results = result;
       req.session.search = search;
@@ -217,7 +216,7 @@ app.get("/get-session-data", (req, res) => {
 /*---------------------------------- SEARCH SQL ----------------------------------*/
 
 app.post("/executeSearch", (req, res) => {
-  const input = req.body.searchInput;
+  const search = req.body.searchInput;
   const type = req.body.searchType;
   const format = req.body.format;
 
@@ -229,19 +228,17 @@ app.post("/executeSearch", (req, res) => {
 
   const query = `
     SELECT Title, Department_Name, Year_Range, Subject, Description, Medium, Language 
-    FROM RECORDS WHERE ${type} LIKE '%${input}%' AND Medium = '${format}' 
+    FROM RECORDS WHERE ${type} LIKE '%${search}%' AND Medium = '${format}' 
     LIMIT ${limit} OFFSET ${offset};
   `;
 
   con.query(query, (err, result) => {
     if (err) throw err;
-
     // Store results in session
-    req.session.geoResults = result;
-    console.log(result);
-
+    req.session.results = result;
+    req.session.search = search;
     // Redirect to results.html with the query parameters
-    res.redirect(`/geo.html?page=${page}`); 
+    res.redirect(`/results.html?search=${encodeURIComponent(search)}&page=${page}`);
   });
 });
 
