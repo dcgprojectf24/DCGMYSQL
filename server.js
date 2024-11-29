@@ -206,17 +206,27 @@ app.get("/get-session-data", (req, res) => {
 
 /*---------------------------------- SQL SHIT FOR SEARCH FUNCTION ----------------------------------*/
 
-app.post("/executeSearch", function (request, response) {
-  let input = request.body.searchInput;
-  let type = request.body.searchType;
-  let format = request.body.format;
-  console.log(format);
-  console.log(format[1]);
-  let query = "SELECT Title, Department_ID, Year_Range, Subject, Description, Medium, Language FROM RECORDS WHERE <dropdown> LIKE '%<input>%' AND Medium = 'AV';"
-  
+app.post("/executeSearch", (req, res) => {
+  let input = req.body.searchInput;
+  let type = req.body.searchType;
+  let format = req.body.format;
 
-  res.redirect(`/index.html`);
+  console.log(format);
+
+  const query = `SELECT Title, Department_Name, Year_Range, Subject, Description, Medium, Language FROM RECORDS WHERE ${type} LIKE '%${input}%' AND Medium = '${format}';`;
+
+  con.query(query, (err, result) => {
+    if (err) throw err;
+
+    // Store results in session
+    req.session.geoResults = result;
+    console.log(result);
+
+    // Redirect to results.html with the query parameters
+    res.redirect(`/results.html?page=${1}`); // Defaulting page to 1 for the redirection
+  });
 });
+
 
 
 
