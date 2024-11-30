@@ -550,6 +550,13 @@ hr {
 /* ALL THIS UPCOMING CODE EFFECTS THE INDEX.HTML PAGE */
 /*PUTS THE CARDS ALL ON ONE LINE AND MAKES THEM LOOK NICE */
 /* General styling for all screens */
+p, h1, h2, h3, h4, h5, h6 {
+    margin: 30px; /* Adds margin around all text elements */
+}
+.text-content {
+    margin: 20px; /* Adds margin around text inside the container */
+}
+
 .w3-row-padding {
     display: flex; /* Enables flexbox layout */
     flex-wrap: nowrap; /* Prevents wrapping to the next row */
