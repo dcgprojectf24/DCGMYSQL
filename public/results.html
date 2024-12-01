@@ -32,25 +32,55 @@
             max-width: 1000px;
         }
 
+        .results-info {
+            font-size: 1rem;
+            color: #555;
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .record-group {
+            margin-bottom: 20px; /* Spacing between records */
+            padding: 10px;
+            border: 1px solid #ddd; /* Optional border for clarity */
+            border-radius: 6px;
+            background-color: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Shadow underneath each record */
+        }
+
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 20px;
         }
 
         th, td {
             text-align: left;
             padding: 12px;
-            border-bottom: 1px solid #ddd;
         }
 
-        th {
+        tr.header-row {
             background-color: #0077b6;
             color: white;
+            font-weight: bold;
+            border-radius: 6px 6px 0 0;
         }
 
-        tr:hover {
-            background-color: #f1f1f1;
+        tr.header-row td {
+            font-size: 1.2rem;
+            text-align: left;
+            padding: 14px;
+        }
+
+        tr.details-row {
+            background-color: white;
+        }
+
+        tr.details-row:hover {
+            background-color: #f9f9f9;
+        }
+
+        tr.description-row {
+            background-color: #fefefe;
         }
 
         .no-results {
@@ -85,16 +115,10 @@
     <main>
         <div class="table-container">
             <h2 id="location-title">Loading...</h2>
-            <table id="results-table">
-                <thead>
-                    <tr>
-                        <th colspan="2">Record Details</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- Rows will be dynamically inserted here -->
-                </tbody>
-            </table>
+            <div class="results-info" id="results-info"></div>
+            <div id="results-container">
+                <!-- Records will be dynamically inserted here -->
+            </div>
             <div class="no-results" id="no-results" style="display: none;">
                 No records found for this search.
             </div>
@@ -120,72 +144,69 @@
         }
 
         // Function to populate the table
-        async function populateTable() {
+        async function populateRecords() {
             const data = await fetchSessionData();
 
-            const tableBody = document.getElementById("results-table").querySelector("tbody");
+            const resultsContainer = document.getElementById("results-container");
             const noResultsDiv = document.getElementById("no-results");
             const nextPageButton = document.getElementById("next-page");
+            const resultsInfo = document.getElementById("results-info");
 
             // Update the page title
             document.getElementById("location-title").textContent = `Results for '${data.search}'`;
 
-            // Clear the table body
-            tableBody.innerHTML = "";
+            // Clear the results container
+            resultsContainer.innerHTML = "";
 
             if (data.results && data.results.length > 0) {
+                // Display the number of results
+                resultsInfo.textContent = `Showing ${data.results.length} result(s).`;
+
                 data.results.forEach(record => {
+                    // Create record group container
+                    const recordGroup = document.createElement("div");
+                    recordGroup.classList.add("record-group");
+
                     // Add Title row
                     const titleRow = `
-                        <tr>
-                            <td colspan="2"><strong>${record.Title}</strong></td>
-                        </tr>
+                        <table>
+                            <tr class="header-row">
+                                <td colspan="2">${record.Title}</td>
+                            </tr>
+                            <tr class="details-row">
+                                <td><strong>Department:</strong> ${record.Department_Name}</td>
+                                <td><strong>Year Range:</strong> ${record.Year_Range}</td>
+                            </tr>
+                            <tr class="details-row">
+                                <td><strong>Subject:</strong> ${record.Subject}</td>
+                                <td><strong>Medium:</strong> ${record.Medium}</td>
+                            </tr>
+                            <tr class="details-row">
+                                <td colspan="2"><strong>Language:</strong> ${record.Language}</td>
+                            </tr>
+                            <tr class="description-row">
+                                <td colspan="2"><em>${record.Description}</em></td>
+                            </tr>
+                        </table>
                     `;
-                    tableBody.innerHTML += titleRow;
+                    recordGroup.innerHTML += titleRow;
 
-                    // Add details row
-                    const detailsRow = `
-                        <tr>
-                            <td><strong>Department:</strong> ${record.Department_Name}</td>
-                            <td><strong>Year Range:</strong> ${record.Year_Range}</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Subject:</strong> ${record.Subject}</td>
-                            <td><strong>Medium:</strong> ${record.Medium}</td>
-                        </tr>
-                        <tr>
-                            <td colspan="2"><strong>Language:</strong> ${record.Language}</td>
-                        </tr>
-                    `;
-                    tableBody.innerHTML += detailsRow;
-
-                    // Add Description row
-                    const descriptionRow = `
-                        <tr>
-                            <td colspan="2"><em>${record.Description}</em></td>
-                        </tr>
-                    `;
-                    tableBody.innerHTML += descriptionRow;
-
-                    // Optional separator
-                    const separatorRow = `
-                        <tr>
-                            <td colspan="2"><hr></td>
-                        </tr>
-                    `;
-                    tableBody.innerHTML += separatorRow;
+                    // Append to results container
+                    resultsContainer.appendChild(recordGroup);
                 });
 
                 noResultsDiv.style.display = "none";
                 nextPageButton.style.display = "block";
             } else {
+                // Update results info to indicate no results
+                resultsInfo.textContent = "";
                 noResultsDiv.style.display = "block";
                 nextPageButton.style.display = "none";
             }
         }
 
-        // Load the table data on page load
-        populateTable();
+        // Load the records data on page load
+        populateRecords();
     </script>
 </body>
 </html>

@@ -214,7 +214,6 @@ app.get("/get-session-data", (req, res) => {
 
 
 /*---------------------------------- SEARCH SQL ----------------------------------*/
-
 app.post("/executeSearch", (req, res) => {
   const search = req.body.searchInput;
   const type = req.body.searchType;
@@ -241,7 +240,6 @@ app.post("/executeSearch", (req, res) => {
     res.redirect(`/results.html?search=${encodeURIComponent(search)}&page=${page}`);
   });
 });
-
 /*----------------------------------- ROUTING -----------------------------------*/
 app.all('*', function (request, response, next) {// This must be at the end!
   console.log(request.method + ' to ' + request.path);
