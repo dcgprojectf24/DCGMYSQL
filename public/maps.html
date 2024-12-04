@@ -9,9 +9,14 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <script src="./functions.js"></script>
     <style>
-        body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", Arial, Helvetica, sans-serif;
-    text-align:center;}
-        
+            body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", Arial, Helvetica, sans-serif;
+        text-align:center;}
+            .section-divider {
+            width: 50px;
+            height: 3px;
+            background-color: #389cda;
+            margin: 10px auto;
+        }
 
         .map-container {
             position: relative;
@@ -55,7 +60,10 @@
 <header>
     &nbsp;
     <h1>Interactive Pacific Islands Map</h1>
+    <div class="section-divider"></div>
     &nbsp;
+    
+    
 </header>
 
 <div class="map-container">
@@ -63,6 +71,7 @@
     <img id="hoverImage" src="" alt="Hover Image">
     <div id="tooltip"></div>
 </div>
+<div class="section-divider"></div>
 <!---------------------------- So much JavaScript it should be in another file ---------------------------->
 <script>
 fetch('geo.json')
