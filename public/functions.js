@@ -6,16 +6,15 @@
 
 
 /*---------------------------------- GENERAL FUNCTIONS USED EVERWHERE ----------------------------------*/
-function faviconInfo(){//contains favicon and css information
+function faviconInfo(){ //contains favicon and css information
     document.write(`
       <link rel="stylesheet" href="./css/home.css">
       <link rel="icon" href="./images/letterR.ico" type="image/x-icon">
       <link rel="shortcut icon" href="./images/letterR.png" type="image/png">
     `)
 }
-//nav bar - upated by Tassia for styling and adding a logo 
-//xin updated logo again and also adjusted order and name
-function navBar() {
+
+function navBar() { // the function that generates the nav bar
   let isloggedin = getCookie("loggedIn");
   let nameCookie = getCookie("name");
   let total = getCookie("totalIC");
@@ -53,9 +52,7 @@ function navBar() {
   }
 }
 
-
-// from ChatGPT, modified by Lui Rabideau under prompt "function that gets current date"
-function getCurrentDate() {// Function to get the current date in the format YYYY-MM-DD
+function getCurrentDate() { // Function to get the current date in the format YYYY-MM-DD
     // Function from ChatGPT using the "make me a function that gets todays date using javascript" prompt
     const today = new Date();
     const year = today.getFullYear();
@@ -64,7 +61,7 @@ function getCurrentDate() {// Function to get the current date in the format YYY
     return `${year}-${month}-${day}`;
 }
 
-function logout() {// deletes the logged in cookie and reloads the page
+function logout() { // deletes the logged in cookie and reloads the page
   // Deletes all cookies
   document.cookie = "username=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
   document.cookie = "name=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
@@ -75,8 +72,7 @@ function logout() {// deletes the logged in cookie and reloads the page
   location.reload();
 }
 
-// This function asks the server for a "service" and converts the response to text. 
-function loadJSON(service, callback) {   
+function loadJSON(service, callback) { // This function asks the server for a "service" and converts the response to text.
   let xobj = new XMLHttpRequest();
   xobj.overrideMimeType("application/json");
   xobj.open('POST', service, false);
@@ -89,7 +85,6 @@ function loadJSON(service, callback) {
   xobj.send(null);  
 }
 
-// from ChatGPT, modified by Lui Rabideau under prompt "function to reload the page every second for 5 seconds"
 function reloadPageFor1Seconds() {
   let seconds = 0;
   const reloadInterval = setInterval(function () {
@@ -122,10 +117,8 @@ function updateFav(location, productIndex){
 });
 }
 
-
 /*----------------------------------------- COOKIE FUNCTIONs -------------------------------------------*/
 
-// from ChatGPT, modified by Lui Rabideau under prompt "make me a function that makes cookies that last for 30 minutes"
 function setCookie(name, value, minutesToExpire) {// Function to set a cookie with a specified expiration time
   const expirationDate = new Date();
   expirationDate.setTime(expirationDate.getTime() + (minutesToExpire * 60 * 1000));
@@ -133,7 +126,6 @@ function setCookie(name, value, minutesToExpire) {// Function to set a cookie wi
   document.cookie = cookieString;
 }
 
-// from ChatGPT, modified by Lui Rabideau under prompt "function to get the value of cookie"
 function getCookie(name){// Function to get the value of a cookie by name
     let cookies = document.cookie.split(';');
     for (var i = 0; i < cookies.length; i++) {
@@ -145,7 +137,6 @@ function getCookie(name){// Function to get the value of a cookie by name
     return null;
 }
 
-// from ChatGPT, modified by Lui Rabideau under prompt "function to check if cookie exists"
 function checkCookie(cookieName) {// Function to check if a cookie exists
   var cookies = document.cookie.split(';');
   for (var i = 0; i < cookies.length; i++) {
