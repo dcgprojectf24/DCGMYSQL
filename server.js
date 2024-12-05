@@ -45,7 +45,7 @@ if (fs.existsSync(user_data_filename)){// if the user data file exists, read it 
 }
 
 /*---------------------------------- DATABASE CONNECTION ----------------------------------*/
-console.log("Connecting to localhost..."); 
+/*console.log("Connecting to localhost..."); 
 var con = mysql.createConnection({// Actual DB connection occurs here
   host: '127.0.0.1',
   user: "root",
@@ -57,7 +57,7 @@ var con = mysql.createConnection({// Actual DB connection occurs here
 con.connect(function (err) {// Throws error or confirms connection
   if (err) throw err;
  console.log("Connected!");
-});
+});*/
 
 /*---------------------------------- FUNCTIONS ----------------------------------*/
 function isNonNegInt(stringToCheck, returnErrors = false) {
