@@ -185,7 +185,7 @@ app.get("/geo", (req, res) => {
   }
 
   const query = `
-      SELECT Title, Department_Name, Year_Range, Subject, Description, Medium, Language 
+      SELECT Record_ID, Title, Department_Name, Year_Range, Subject, Description, Medium, Language 
       FROM RECORDS 
       WHERE Geo_Location LIKE '%${search}%'
       LIMIT ${limit} OFFSET ${offset};

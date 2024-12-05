@@ -188,6 +188,7 @@
                                 <td colspan="2"><em>${record.Description}</em></td>
                             </tr>
                         </table>
+                         <lable>Favorite:</lable><input type="checkbox" id="checkbox${prod_key}_${i}" name="favorite${i}" onchange="updateFav('${prod_key}',${i});"> 
                     `;
                     recordGroup.innerHTML += titleRow;
 
