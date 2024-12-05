@@ -56,7 +56,7 @@ var con = mysql.createConnection({// Actual DB connection occurs here
 
 con.connect(function (err) {// Throws error or confirms connection
   if (err) throw err;
-  console.log("Connected!");
+ console.log("Connected!");
 });
 
 /*---------------------------------- FUNCTIONS ----------------------------------*/
