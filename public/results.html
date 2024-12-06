@@ -111,21 +111,35 @@
 <body>
 <!-- Navigation Bar -->
 <script>navBar();</script>
-
     <main>
         <div class="table-container">
             <h2 id="location-title">Loading...</h2>
             <div class="results-info" id="results-info"></div>
+            <form action="./requestAndNextPage" method="post">
             <div id="results-container">
                 <!-- Records will be dynamically inserted here -->
             </div>
             <div class="no-results" id="no-results" style="display: none;">
                 No records found for this search.
             </div>
-            <button id="next-page" style="display: none;">Next Page</button>
+                <input type="hidden" name="page" id="page-input" value=""> 
+                <button id="next-page" style="display: none;">Next Page</button>
+            </form>
         </div>
     </main>
+ 
     <script>
+    // Get the query string from the URL
+    const params = new URLSearchParams(window.location.search);
+
+    // Extract the "page" value from the query string
+    const page = params.get('page');
+
+    // Set the "page" input field value
+    if (page) {
+        document.getElementById('page-input').value = page;
+    }
+
         // Function to fetch session data
         async function fetchSessionData() {
             try {
@@ -142,6 +156,7 @@
                 return null;
             }
         }
+        
 
         // Function to populate the table
         async function populateRecords() {
@@ -166,7 +181,6 @@
                     // Create record group container
                     const recordGroup = document.createElement("div");
                     recordGroup.classList.add("record-group");
-
                     // Add Title row
                     const titleRow = `
                         <table>
@@ -182,13 +196,13 @@
                                 <td><strong>Medium:</strong> ${record.Medium}</td>
                             </tr>
                             <tr class="details-row">
-                                <td colspan="2"><strong>Language:</strong> ${record.Language}</td>
+                                <td colspan="1"><strong>Language:</strong> ${record.Language}</td>
+                                <td colspan="1"><lable><strong>Request </strong></lable><input type="checkbox" name="${record.Record_ID}"></td>
                             </tr>
                             <tr class="description-row">
                                 <td colspan="2"><em>${record.Description}</em></td>
                             </tr>
                         </table>
-                         <lable>Favorite:</lable><input type="checkbox" id="checkbox${prod_key}_${i}" name="favorite${i}" onchange="updateFav('${prod_key}',${i});"> 
                     `;
                     recordGroup.innerHTML += titleRow;
 
@@ -205,7 +219,6 @@
                 nextPageButton.style.display = "none";
             }
         }
-
         // Load the records data on page load
         populateRecords();
     </script>

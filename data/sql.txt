@@ -1,0 +1,26 @@
+-- Drop the tables if they already exist
+DROP TABLE IF EXISTS Users;
+DROP TABLE IF EXISTS Account;
+
+-- Create the Account table
+CREATE TABLE Account (
+    Account_ID VARCHAR(255) NOT NULL,
+    Account_Email VARCHAR(255) NOT NULL UNIQUE,
+    Account_Name VARCHAR(255) NOT NULL,
+    PRIMARY KEY (Account_ID)
+) ENGINE=InnoDB;
+
+-- Create the Users table
+CREATE TABLE Users (
+    User_ID VARCHAR(255) NOT NULL,
+    User_Password VARCHAR(255) NOT NULL,
+    Account_ID VARCHAR(255),
+    PRIMARY KEY (User_ID),
+    FOREIGN KEY (Account_ID) REFERENCES Account(Account_ID)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE
+) ENGINE=InnoDB;
+
+-- Verify the structure
+DESCRIBE Account;
+DESCRIBE Users;

@@ -112,7 +112,7 @@ app.post("/process_query", function (request, response) {
 
 /*---------------------------------- LOGIN/LOGOUT/REGISTER ----------------------------------*/
 
-app.post('/betterLogin', function (request, response) {
+app.post('/login', function (request, response) {
   let the_username = request.body.username.toLowerCase();
   let the_password = request.body.password;
   // Query
@@ -130,24 +130,58 @@ app.post('/betterLogin', function (request, response) {
   });
 });
 
-app.post('/register', function (request, response){// Makes a new user 
+const generatedAccountIDs = new Set(); // To ensure unique Account_IDs
+
+// Function to generate a unique random Account_ID
+function generateUniqueAccountID() {
+  let accountID;
+  do {
+    accountID = `A${Math.floor(100000 + Math.random() * 900000)}`; // e.g., "A123456"
+  } while (generatedAccountIDs.has(accountID)); // Ensure it's not a duplicate
+  generatedAccountIDs.add(accountID); // Add to the set
+  return accountID;
+}
+
+app.post('/register', function (request, response) { // Makes a new user
   let the_username = request.body.username.toLowerCase();
   let the_password = request.body.password;
   let lname = request.body.lastname;
   let fname = request.body.firstname;
   let fullname = fname + ' ' + lname;
-  // Query 
+
+  // Generate a unique Account_ID
+  let accountID = generateUniqueAccountID();
+
+  // Query to insert data into the `account` table
   const query = `
-  INSERT INTO users (User_ID, User_Password, Name) VALUES
-  ('${the_username}', '${the_password}', '${fullname}');
+    INSERT INTO account (Account_ID, Account_Email, Account_Name) VALUES
+    ('${accountID}', '${the_username}', '${fullname}');
   `;
-  con.query(query, (err) => { // Execute the query
+
+  // Query to insert data into the `users` table
+  const query1 = `
+    INSERT INTO users (User_ID, User_Password, Account_ID) VALUES
+    ('${the_username}', '${the_password}', '${accountID}');
+  `;
+
+  // Execute the first query
+  con.query(query, (err) => {
     if (err) {
-      console.error('Database error:', err); // Log error for debugging
-      return response.redirect('/register.html'); // Redirect to login if there's an error
+      console.error('Database error in account table:', err); // Log error for debugging
+      return response.redirect('/register.html'); // Redirect to register if there's an error
     }
-      return response.redirect('/account.html'); // Redirect to account page
-});
+
+    // Execute the second query only if the first one is successful
+    con.query(query1, (err) => {
+      if (err) {
+        console.error('Database error in users table:', err); // Log error for debugging
+        return response.redirect('/register.html'); // Redirect to register if there's an error
+      }
+
+      // Redirect to account page if both queries are successful
+      return response.redirect('/account.html');
+    });
+  });
 });
 
 app.get('/logout', function (request, response){// Redirects user to home page after logging out
@@ -185,6 +219,7 @@ app.get("/geo", (req, res) => {
       // Store results in session
       req.session.results = result;
       req.session.search = search;
+      req.session.what = 'geo';
       // Redirect to geo.html with the query parameters
       res.redirect(`/results.html?search=${encodeURIComponent(search)}&page=${page}`);
   });
@@ -215,7 +250,7 @@ app.post("/executeSearch", (req, res) => {
   console.log(format);
 
   const query = `
-    SELECT Title, Department_Name, Year_Range, Subject, Description, Medium, Language 
+    SELECT Record_ID, Title, Department_Name, Year_Range, Subject, Description, Medium, Language 
     FROM RECORDS WHERE ${type} LIKE '%${search}%' AND Medium = '${format}' 
     LIMIT ${limit} OFFSET ${offset};
   `;
@@ -225,10 +260,61 @@ app.post("/executeSearch", (req, res) => {
     // Store results in session
     req.session.results = result;
     req.session.search = search;
+    req.session.type = type;
+    req.session.format = format;
+    req.session.what = 'ser';
     // Redirect to results.html with the query parameters
     res.redirect(`/results.html?search=${encodeURIComponent(search)}&page=${page}`);
   });
 });
+
+/*----------------------------------- REQUESTING -----------------------------------*/
+
+app.post("/requestAndNextPage", (req, res) => {
+  const search = req.session.search;
+  const what = req.session.what;
+  let page = parseInt(req.body.page) || 1; // Parse the page number as an integer, default to 1
+  page += 1; // Correct increment
+
+  const limit = 10; // Default to 10 records per page
+  const offset = (page - 1) * limit; // Calculate offset for SQL query
+
+  let query; // Declare the query variable in a broader scope
+
+  if (what === 'geo') {
+    query = `
+      SELECT Record_ID, Title, Department_Name, Year_Range, Subject, Description, Medium, Language 
+      FROM RECORDS 
+      WHERE Geo_Location LIKE '%${search}%'
+      LIMIT ${limit} OFFSET ${offset};
+    `;
+  } else {
+    const type = req.session.type;
+    const format = req.session.format;
+    query = `
+      SELECT Record_ID, Title, Department_Name, Year_Range, Subject, Description, Medium, Language 
+      FROM RECORDS 
+      WHERE ${type} LIKE '%${search}%' AND Medium = '${format}' 
+      LIMIT ${limit} OFFSET ${offset};
+    `;
+  }
+
+  // Execute the query
+  con.query(query, (err, result) => {
+    if (err) {
+      console.error("Database error:", err);
+      return res.status(500).send("Internal Server Error");
+    }
+
+    // Store results in session
+    req.session.results = result;
+
+    // Redirect to results.html with updated query parameters
+    res.redirect(`/results.html?search=${encodeURIComponent(search)}&page=${page}`);
+  });
+});
+
+
 /*----------------------------------- ROUTING -----------------------------------*/
 app.all('*', function (request, response, next) {// This must be at the end!
   console.log(request.method + ' to ' + request.path);
