@@ -45,7 +45,7 @@ if (fs.existsSync(user_data_filename)){// if the user data file exists, read it 
 }
 
 /*---------------------------------- DATABASE CONNECTION ----------------------------------*/
-/*console.log("Connecting to localhost..."); 
+console.log("Connecting to localhost..."); 
 var con = mysql.createConnection({// Actual DB connection occurs here
   host: '127.0.0.1',
   user: "root",
@@ -57,7 +57,7 @@ var con = mysql.createConnection({// Actual DB connection occurs here
 con.connect(function (err) {// Throws error or confirms connection
   if (err) throw err;
  console.log("Connected!");
-});*/
+});
 
 /*---------------------------------- FUNCTIONS ----------------------------------*/
 function isNonNegInt(stringToCheck, returnErrors = false) {
@@ -111,55 +111,44 @@ app.post("/process_query", function (request, response) {
 });
 
 /*---------------------------------- LOGIN/LOGOUT/REGISTER ----------------------------------*/
-app.post('/login', function (request, response){// Validates a users login, and redirects page to the page if invalid and to cart if valid
-  // Process login form POST and redirect to logged in page if ok, back to login page if not
+
+app.post('/betterLogin', function (request, response) {
   let the_username = request.body.username.toLowerCase();
   let the_password = request.body.password;
-  if(typeof user_reg_data[the_username] !== 'undefined'){// check if username is in user_data
-     if(user_reg_data[the_username].password === the_password){// check if the password matches the password in user_reg_data
-        console.log(`${the_username} is logged in!`);
-        response.cookie("username", the_username, {expire: Date.now() + 30 * 60 * 1000});// send a username cookie to indicate logged in
-        response.cookie("name", user_reg_data[the_username].name, {expire: Date.now() + 30 * 60 * 1000});// make a name cookie
-        response.cookie("loggedIn", 1, {expire: Date.now() + 30 * 60 * 1000});// make a logged in cookie
-        userLoggedin[the_username] = true;
-        let cartCookie = Number(request.body.total);
-        if(cartCookie == 0) {
-          response.redirect(`./index.html`)
-        } else {
-          response.redirect(`./account.html`);
-        }
-     } else {
-        response.redirect(`./login.html?error=pass`)
-     }
-  } else { // else the user does not exist 
-     response.redirect(`./login.html?error=user`);
-  }
+  // Query
+  const query = `
+    SELECT User_ID, User_Password 
+    FROM users 
+    WHERE User_ID = '${the_username}' AND User_Password = '${the_password}';
+  `;
+  con.query(query, (err) => { // Execute the query
+    if (err) {
+      console.error('Database error:', err); // Log error for debugging
+      return response.redirect('/login.html'); // Redirect to login if there's an error
+    }
+      return response.redirect('/account.html'); // Redirect to account page
+  });
 });
 
-app.post('/register', function (request, response){// Makes a new user while validating that info, then sends the new user to the shopping cart
-  let username = request.body.username.toLowerCase();
-  user_reg_data[username] = {};
-  user_reg_data[username].password = request.body.password;
-  user_reg_data[username].username = request.body.username;  
-  user_reg_data[username].name = request.body.firstname + ' ' + request.body.lastname;
-  // add it to the user_data.json
-  fs.writeFileSync(user_data_filename, JSON.stringify(user_reg_data));
-  if(typeof user_reg_data[username] !== 'undefined' && typeof user_reg_data[username].password !== 'undefined' && typeof user_reg_data[username].username !== 'undefined'){
-     // add new logged in user, place above the redirect
-     userLoggedin[username] = true; 
-     response.cookie("username", username, {expire: Date.now() + 30 * 60 * 1000});// send a username cookie to indicate logged in
-     response.cookie("name", user_reg_data[username].name, {expire: Date.now() + 30 * 60 * 1000});// make a name cookie
-     response.cookie("loggedIn", 1, {expire: Date.now() + 30 * 60 * 1000});// make a logged in cookie
-     let cartCookie = Number(request.body.total);
-        if(cartCookie == 0) {
-          response.redirect(`./index.html`)
-        } else {
-          response.redirect(`./account.html`);
-        }  
-  } else {
-    response.redirect(`./register.html`)
-  }
-});  
+app.post('/register', function (request, response){// Makes a new user 
+  let the_username = request.body.username.toLowerCase();
+  let the_password = request.body.password;
+  let lname = request.body.lastname;
+  let fname = request.body.firstname;
+  let fullname = fname + ' ' + lname;
+  // Query 
+  const query = `
+  INSERT INTO users (User_ID, User_Password, Name) VALUES
+  ('${the_username}', '${the_password}', '${fullname}');
+  `;
+  con.query(query, (err) => { // Execute the query
+    if (err) {
+      console.error('Database error:', err); // Log error for debugging
+      return response.redirect('/register.html'); // Redirect to login if there's an error
+    }
+      return response.redirect('/account.html'); // Redirect to account page
+});
+});
 
 app.get('/logout', function (request, response){// Redirects user to home page after logging out
   response.redirect(`./index.html`)
@@ -247,18 +236,3 @@ app.all('*', function (request, response, next) {// This must be at the end!
 });
 
 app.listen(8080, () => console.log(`listening on port 8080`));
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
