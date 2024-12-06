@@ -111,22 +111,30 @@
 <body>
 <!-- Navigation Bar -->
 <script>navBar();</script>
-    <main>
-        <div class="table-container">
-            <h2 id="location-title">Loading...</h2>
-            <div class="results-info" id="results-info"></div>
-            <form action="./requestAndNextPage" method="post">
+<main>
+    <div class="table-container">
+        <h2 id="location-title">Loading...</h2>
+        <div class="results-info" id="results-info"></div>
+        
+        <!-- Request Form -->
+        <form action="./request" id="requestForm" method="post">
+            <!-- Submit button correctly linked to the form -->
+            <button type="submit" class="niceButton" form="requestForm">Request Checked</button>
+        </form>
+        
+        <!-- Next Page Form -->
+        <form action="./nextPage" method="post">
             <div id="results-container">
                 <!-- Records will be dynamically inserted here -->
             </div>
             <div class="no-results" id="no-results" style="display: none;">
                 No records found for this search.
             </div>
-                <input type="hidden" name="page" id="page-input" value=""> 
-                <button id="next-page" style="display: none;">Next Page</button>
-            </form>
-        </div>
-    </main>
+            <input type="hidden" name="page" id="page-input" value=""> 
+            <button id="next-page" style="display: none;">Next Page</button>
+        </form>
+    </div>
+</main>
  
     <script>
     // Get the query string from the URL
@@ -197,7 +205,7 @@
                             </tr>
                             <tr class="details-row">
                                 <td colspan="1"><strong>Language:</strong> ${record.Language}</td>
-                                <td colspan="1"><lable><strong>Request </strong></lable><input type="checkbox" name="${record.Record_ID}"></td>
+                                <td colspan="1"><lable><strong>Request </strong></lable><input type="checkbox" name="${record.Record_ID}" form="requestForm"></td>
                             </tr>
                             <tr class="description-row">
                                 <td colspan="2"><em>${record.Description}</em></td>

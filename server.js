@@ -16,10 +16,6 @@ let userLoggedin = {};
 const fs = require('fs');
 const { type } = require('os');
 
-//USER DATA STUFF
-let user_reg_data = {};
-let user_data_filename = __dirname + '/user_data.json';
-
 app.use(express.static('./public'));
 app.use(myParser.urlencoded({ extended: true }));
 
@@ -33,16 +29,6 @@ app.all('*', function (request, response, next){// this function also makes rese
     }
   next();
 });
-
-if (fs.existsSync(user_data_filename)){// if the user data file exists, read it and parse it
-    // get the filesize and print it out
-    console.log(`${user_data_filename} has ${fs.statSync(user_data_filename).size} characters.`);
-    // let user_reg_data = require('./user_data.json');
-    let user_reg_data_JSON = fs.readFileSync(user_data_filename, 'utf-8');
-    user_reg_data = JSON.parse(user_reg_data_JSON);
-} else {
-    console.log(`Error! ${user_data_filename} does not exist!`);
-}
 
 /*---------------------------------- DATABASE CONNECTION ----------------------------------*/
 console.log("Connecting to localhost..."); 
@@ -270,7 +256,7 @@ app.post("/executeSearch", (req, res) => {
 
 /*----------------------------------- REQUESTING -----------------------------------*/
 
-app.post("/requestAndNextPage", (req, res) => {
+app.post("/nextPage", (req, res) => {
   const search = req.session.search;
   const what = req.session.what;
   let page = parseInt(req.body.page) || 1; // Parse the page number as an integer, default to 1
@@ -305,14 +291,24 @@ app.post("/requestAndNextPage", (req, res) => {
       console.error("Database error:", err);
       return res.status(500).send("Internal Server Error");
     }
-
-    // Store results in session
-    req.session.results = result;
-
+    req.session.results = result;// Store results in session
     // Redirect to results.html with updated query parameters
     res.redirect(`/results.html?search=${encodeURIComponent(search)}&page=${page}`);
   });
 });
+
+app.post("/request", (req, res) => {
+  let data = req.body;
+
+  // Add or update the reservation with the RecordID as the key
+  req.session.reservation[data.RecordID] = data;
+
+  console.log("Received Data:", data);
+  console.log("Updated Reservation Session:", req.session.reservation);
+
+  //res.send("Request successfully added to the reservation session.");
+});
+
 
 
 /*----------------------------------- ROUTING -----------------------------------*/
