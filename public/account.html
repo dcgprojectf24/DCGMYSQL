@@ -10,45 +10,135 @@
 <script src="./functions.js"></script>
 <style>
 body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", Arial, Helvetica, sans-serif}
-
 </style>
 </head>
 <body>
+
 <!---------------------------- Navigation Bar Start ---------------------------->
 <script>navBar();</script>
-<!---------------------------- Navigation Bar End ---------------------------->
+<!----------------------------- Navigation Bar End ----------------------------->
+
 <div class="account-container">
     <div class="account-details-box">
         <h2>Account Details</h2>
         <p><span>Name:</span> John Doe</p>
-        <p><span>Email:</span> john.doe@example.com</p>
+        <p><span>Account Number:</span> <span id="account-number">Loading...</span></p>
     </div>
-    <h2 class="account-reservations-title">Reservations</h2>
-    <table class="account-reservations-table">
-        <thead>
-            <tr>
-                <th>Reservation</th>
-                <th>Submitted</th>
-                <th>Filled</th>
-                <th>Returned</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>Book A</td>
-                <td>2024-11-28 10:00 AM</td>
-                <td>2024-11-29 12:00 PM</td>
-                <td>2024-12-05 4:00 PM</td>
-            </tr>
-            <tr>
-                <td>Book B</td>
-                <td>2024-11-27 3:00 PM</td>
-                <td>2024-11-28 5:00 PM</td>
-                <td>2024-12-01 2:00 PM</td>
-            </tr>
-            <!-- Add more rows as needed -->
-        </tbody>
-    </table>
+
+    <h2 class="account-reservations-title">Unsubmitted Reservations</h2>
+    <div id="accounts-container">
+        <!-- Records will be dynamically inserted here -->
+    </div>
+
+    <form action="./finalizeRequest" id="finalize" method="post">
+        <button>Submit Request</button>
+    </form>
 </div>
+
+<script>
+    async function fetchSessionDetails() {
+        try {
+            // Fetch session details from the server
+            const response = await fetch('/get-session-details');
+    
+            if (!response.ok) {
+                throw new Error('Failed to fetch session data.');
+            }
+    
+            const sessionData = await response.json();
+    
+            // Extract accountNumber from session data
+            const accountNumber = sessionData.Account_ID;
+    
+            // Display account number on the page
+            document.getElementById('account-number').textContent = accountNumber;
+    
+            // Dynamically create a hidden input field for the form
+            let hiddenInput = document.getElementById('hidden-account-number');
+            if (!hiddenInput) {
+                hiddenInput = document.createElement('input');
+                hiddenInput.type = 'hidden';
+                hiddenInput.id = 'hidden-account-number';
+                hiddenInput.name = 'accountNumber';
+                document.getElementById('finalize').appendChild(hiddenInput);
+            }
+            hiddenInput.value = accountNumber; // Set the value dynamically
+        } catch (error) {
+            console.error('Error fetching session details:', error);
+        }
+    }
+    
+    async function fetchEmptyReservations() {
+        try {
+            const response = await fetch('/get-empty-reservations');
+    
+            if (!response.ok) {
+                throw new Error('Failed to fetch records.');
+            }
+    
+            const data = await response.json();
+    
+            console.log('Fetched Records:', data.records);
+    
+            // Get the container where the table will be inserted
+            const container = document.getElementById("accounts-container");
+    
+            // Clear the container before adding new content
+            container.innerHTML = "";
+    
+            // Dynamically create the table
+            const table = document.createElement("table");
+            table.className = "w3-table w3-striped";
+            table.border = "1";
+    
+            // Add table header
+            table.innerHTML = `
+                <thead>
+                    <tr>
+                        <th>Record ID</th>
+                        <th>Title</th>
+                        <th>Department</th>
+                        <th>Year Range</th>
+                        <th>Subject</th>
+                        <th>Description</th>
+                        <th>Medium</th>
+                        <th>Language</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            `;
+    
+            // Get the table body for appending rows
+            const tableBody = table.querySelector("tbody");
+    
+            // Populate the table with data
+            data.records.forEach(record => {
+                const row = `
+                    <tr>
+                        <td>${record.Record_ID}</td>
+                        <td>${record.Title}</td>
+                        <td>${record.Department_Name}</td>
+                        <td>${record.Year_Range}</td>
+                        <td>${record.Subject}</td>
+                        <td>${record.Description}</td>
+                        <td>${record.Medium}</td>
+                        <td>${record.Language}</td>
+                    </tr>
+                `;
+                tableBody.innerHTML += row;
+            });
+    
+            // Append the complete table to the container
+            container.appendChild(table);
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    }
+    
+    // Call the functions on page load
+    fetchSessionDetails();
+    fetchEmptyReservations();
+    </script>
+    
 </body>
 </html>

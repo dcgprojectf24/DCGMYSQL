@@ -16,8 +16,6 @@ function faviconInfo(){ //contains favicon and css information
 
 function navBar() { // the function that generates the nav bar
   let isloggedin = getCookie("loggedIn");
-  let nameCookie = getCookie("name");
-  let total = getCookie("totalIC");
   if (isloggedin == 1) {
     document.write(`
       <div class="w3-bar w3-white w3-large">
