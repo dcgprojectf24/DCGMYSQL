@@ -16,6 +16,55 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", Arial, Helvetica, sans-serif}
 <!---------------------------- Navigation Bar Start ---------------------------->
 <script>navBar();</script>
 <!---------------------------- Navigation Bar End ---------------------------->
+    <h1>Submitted Reservations</h1>
+    <table id="reservations-table">
+        <thead>
+            <tr>
+                <th>Reservation ID</th>
+                <th>Account ID</th>
+                <th>Start Date</th>
+                <th>Status</th>
+                <th>Fulfilled Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Table rows will be dynamically added here -->
+        </tbody>
+    </table>
 
+    <script>
+        // Fetch pending reservations from the server
+        async function fetchSubmittedReservations() {
+            try {
+                const response = await fetch('/get-submitted-reservations');
+                if (!response.ok) {
+                    throw new Error('Failed to fetch reservations');
+                }
+
+                const data = await response.json();
+                const tableBody = document.querySelector('#reservations-table tbody');
+                tableBody.innerHTML = ''; // Clear any existing rows
+
+                // Add rows to the table
+                data.reservations.forEach(reservation => {
+                    const row = `
+                        <tr>
+                            <td>${reservation.Reservation_ID}</td>
+                            <td>${reservation.Account_ID}</td>
+                            <td>${reservation.Reservation_Start_Date}</td>
+                            <td>${reservation.Reservation_Status}</td>
+                            <td>${reservation.Reservation_Fulfilled_Date || 'N/A'}</td>
+                        </tr>
+                    `;
+                    tableBody.innerHTML += row;
+                });
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+
+        // Call the function on page load
+        fetchSubmittedReservations();
+    </script>
 </body>
 </html>

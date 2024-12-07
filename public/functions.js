@@ -16,7 +16,29 @@ function faviconInfo(){ //contains favicon and css information
 
 function navBar() { // the function that generates the nav bar
   let isloggedin = getCookie("loggedIn");
+  let librarianC = getCookie("librarianC");
   if (isloggedin == 1) {
+    if (librarianC == 1) {
+      document.write(`
+        <div class="w3-bar w3-white w3-large">
+          <div class="w3-bar-item w3-left" style="display: flex; align-items: center;">
+            <img src="./images/HAPClogo.png" alt="Logo" style="height: 40px;">
+          </div>
+          <a href="./index.html" class="w3-bar-item w3-button w3-green w3-mobile">Home</a>
+          <a href="./about.html" class="w3-bar-item w3-button w3-mobile">About</a>
+          <a href="./search.html" class="w3-bar-item w3-button w3-mobile">Search</a>
+          <a href="./reports.html" class="w3-bar-item w3-button w3-mobile">Reports</a>
+          <a href="./maps.html" class="w3-bar-item w3-button w3-mobile">Maps</a>
+          <a href="./team.html" class="w3-bar-item w3-button w3-mobile">Contact Us</a>
+          <a href="./advanced.html" class="w3-bar-item w3-button w3-right w3-light-grey w3-mobile">Reservations</a>
+          <a href="./modify.html" class="w3-bar-item w3-button w3-right w3-light-grey w3-mobile">Modify Records</a>
+          <a href="./logout" class="w3-bar-item w3-button w3-mobile" onclick="logout()">Log Out</a>
+        </div>
+      `);
+      document.write(`
+        <div class="secondary-nav"> Librarian View</div>
+      `);
+      } else {
     document.write(`
       <div class="w3-bar w3-white w3-large">
         <div class="w3-bar-item w3-left" style="display: flex; align-items: center;">
@@ -31,8 +53,9 @@ function navBar() { // the function that generates the nav bar
         <a href="./account.html" class="w3-bar-item w3-button w3-right w3-light-grey w3-mobile">Account</a>
         <a href="./logout" class="w3-bar-item w3-button w3-mobile" onclick="logout()">Log Out</a>
       </div>
-    `);
-  } else {
+      `);
+    };
+    } else {
     document.write(`
       <div class="w3-bar w3-white w3-large">
         <div class="w3-bar-item w3-left" style="display: flex; align-items: center;">

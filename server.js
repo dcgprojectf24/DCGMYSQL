@@ -58,7 +58,6 @@ function isNonNegInt(stringToCheck, returnErrors = false) {
   return returnErrors ? errors : (errors.length == 0);
 }
 
-
 /*---------------------------------- KAZMAN SQL ----------------------------------*/
 function query_DB(POST, response) {
   if (isNonNegInt(POST['low_price']) && isNonNegInt(POST['high_price'])) {// Only query if we got a low and high price
@@ -101,8 +100,7 @@ app.post("/process_query", function (request, response) {
 
 /*---------------------------------- LOGIN/LOGOUT/REGISTER ----------------------------------*/
 
-// Login route
-app.post('/login', (request, response) => {
+app.post('/login', (request, response) => {// Login route
   const the_username = request.body.username.toLowerCase();
   const the_password = request.body.password;
 
@@ -209,6 +207,67 @@ app.post('/register', function (request, response) { // Makes a new user
 
 app.get('/logout', function (request, response){// Redirects user to home page after logging out
   response.redirect(`./index.html`)
+});
+
+app.post('/loginLibrarian', (request, response) => {// Login route
+  const the_username = request.body.username.toLowerCase();
+  const the_password = request.body.password;
+
+  // Secure query to validate user credentials
+  const query = `
+    SELECT Librarian_Email, Librarian_Password 
+    FROM librarian 
+    WHERE Librarian_Email = ?;
+  `;
+
+  con.query(query, [the_username], (err, results) => {
+    if (err) {
+      console.error('Database error:', err);
+      return response.status(500).send('Internal Server Error');
+    }
+
+    // Check if user exists
+    if (results.length === 0) {
+      return response.status(401).send('User does not exist');
+    }
+
+    const user = results[0];
+
+    // Password validation (replace with bcrypt.compare for hashed passwords)
+    if (user.Librarian_Password !== the_password) {
+      return response.status(401).send('Invalid username or password');
+    }
+
+    // Fetch Account_ID for the user
+    const query1 = `
+      SELECT Librarian_ID 
+      FROM librarian 
+      WHERE Librarian_Email = '${the_username}';
+    `;
+
+    con.query(query1, [the_username], (err, accountResults) => {
+      if (err) {
+        console.error('Database error:', err);
+        return response.status(500).send('Internal Server Error');
+      }
+
+      if (accountResults.length > 0) {
+        const accountID = accountResults[0].Account_ID;
+
+        // Store Account_ID in the session
+        request.session.Account_ID = accountID;
+
+        console.log(`Account_ID ${accountID} stored in session.`);
+
+        // Redirect to account page
+        response.cookie("loggedIn", 1, {expire: Date.now() + 30 * 60 * 1000});// make a logged in cookie
+        response.cookie("librarianC", 1, {expire: Date.now() + 30 * 60 * 1000});// make a librarian cookie
+        response.redirect('/advanced.html');
+      } else {
+        response.status(404).send('Account not found.');
+      }
+    });
+  });
 });
 
 /*---------------------------------- MAPS SQL ----------------------------------*/
@@ -427,6 +486,27 @@ app.post('/finalizeRequest', (req, res) => {
     });
   });
 });
+
+
+
+/*----------------------------------- LIBRARIAN VIEW -----------------------------------*/
+
+app.get('/get-submitted-reservations', (req, res) => {// API endpoint to get submitted reservations
+  const query = `
+    SELECT Reservation_ID, Account_ID, Reservation_Start_Date, Reservation_Status, Reservation_Fulfilled_Date 
+    FROM Reservation 
+    WHERE Reservation_Status = 'Submitted';
+  `;
+
+  con.query(query, (err, results) => {
+    if (err) {
+      console.error('Error fetching submitted reservations:', err.message);
+      return res.status(500).send('Failed to fetch reservations');
+    }
+    res.json({ reservations: results }); // Send results as JSON
+  });
+});
+
 
 
 /*----------------------------------- Unique ID Generation and Date -----------------------------------*/

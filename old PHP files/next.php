@@ -12,7 +12,7 @@
   $server = "localhost";
   $user="root";
   $password="";
-  $database="TestTravel";
+  $database="hpc";
 
   $link = mysqli_connect($server, $user, $password, $database) ;
 

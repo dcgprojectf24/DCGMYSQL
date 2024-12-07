@@ -975,3 +975,17 @@ select {
     border-radius: 4px; /* Round edges on hover */
 }
 /*-------RECORDS.HTML CODE --------*/
+
+/*-------SECOND NAV --------*/
+        /* Secondary Banner/Nav Bar */
+        .secondary-nav {
+            background-color: #ffd8d8; /* Light gray for distinction */
+            color: #333;
+            text-align: center;
+            padding: 10px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .secondary-nav a:hover {
+            text-decoration: underline;
+        }
