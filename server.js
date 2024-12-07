@@ -575,7 +575,6 @@ app.post('/modifyRecords', (req, res) => {// API endpoint to modify records data
   res.redirect('/modify.html');
 });
 
-
 /*----------------------------------- Unique ID Generation and Date -----------------------------------*/
 
 const generatedAccountIDs = new Set(); // To ensure unique Account_IDs
