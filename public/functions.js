@@ -87,6 +87,7 @@ function logout() { // deletes the logged in cookie and reloads the page
   document.cookie = "username=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
   document.cookie = "name=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
   document.cookie = "loggedIn=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+  document.cookie = "librarianC=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
   document.cookie = "totalIC=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
   document.cookie =  "address=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
   // Reload the current page

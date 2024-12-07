@@ -487,8 +487,6 @@ app.post('/finalizeRequest', (req, res) => {
   });
 });
 
-
-
 /*----------------------------------- LIBRARIAN VIEW -----------------------------------*/
 
 app.get('/get-submitted-reservations', (req, res) => {// API endpoint to get submitted reservations
@@ -507,6 +505,75 @@ app.get('/get-submitted-reservations', (req, res) => {// API endpoint to get sub
   });
 });
 
+app.post('/modifyRecords', (req, res) => {// API endpoint to modify records data
+  const action = req.body.action; // Access the dropdown value
+  const Record_ID = req.body.Record_ID;
+  const Department_Name = req.body.Department_Name;
+  const Digital_File_Name = req.body.Digital_File_Name;
+  const Location = req.body.Location;
+  const Rights = req.body.Rights;
+  const Title = req.body.Title;
+  const Alt_Title = req.body.Alt_Title;
+  const Creator = req.body.Creator;
+  const Description = req.body.Description;
+  const Language = req.body.Language;
+  const Geo_Location = req.body.Geo_Location;
+  const Year_Range = req.body.Year_Range;
+  const Containers_Info = req.body.Containers_Info;
+  const Cabinet = req.body.Cabinet;
+  const File_Folder = req.body.File_Folder;
+  const Map_num = req.body.Map_num;
+  const Reel_Format = req.body.Reel_Format;
+  const Medium = req.body.Medium;
+  const Subject = req.body.Subject;
+  let query; //define query 
+  // Handle based on action
+  if (action === 'add') { // Logic to add a record
+    console.log("Adding new record...");
+    query = `
+      INSERT INTO your_table_name (
+        Record_ID, Department_Name, Digital_File_Name, Location, Rights, Title, 
+        Alt_Title, Creator, Description, Language, Geo_Location, Year_Range, 
+        Containers_Info, Cabinet, File_Folder, Map_num, Reel_Format, Medium, Subject
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+    `;
+
+    const values = [
+        Record_ID, Department_Name, Digital_File_Name, Location, Rights, Title, 
+        Alt_Title, Creator, Description, Language, Geo_Location, Year_Range, 
+        Containers_Info, Cabinet, File_Folder, Map_num, Reel_Format, Medium, Subject
+    ];
+
+    con.query(query, values, (err, results) => {
+        if (err) {
+            console.error('Error adding record:', err.message);
+            return res.status(500).send('Failed to add record.');
+        }
+        console.log("Record added successfully!");
+        res.redirect('/modify.html'); // Send response only here on success
+    });
+  } else if (action === 'modify') {// Logic to modify a record
+    console.log("Modifying existing record..."); 
+    query = `
+      SELECT Reservation_ID, Account_ID, Reservation_Start_Date, Reservation_Status, Reservation_Fulfilled_Date 
+      FROM Reservation 
+      WHERE Reservation_Status = 'Submitted';
+    `;
+  } else if (action === 'delete') {// Logic to delete a record
+    console.log("Deleting record...");
+    query = `
+      SELECT Reservation_ID, Account_ID, Reservation_Start_Date, Reservation_Status, Reservation_Fulfilled_Date 
+      FROM Reservation 
+      WHERE Reservation_Status = 'Submitted';
+    `;
+  } else {
+    console.log("Unknown action received.");
+    res.status(400).send("Invalid action specified.");
+    return;
+  }
+  // Redirect to account.html after success
+  res.redirect('/modify.html');
+});
 
 
 /*----------------------------------- Unique ID Generation and Date -----------------------------------*/
