@@ -505,74 +505,60 @@ app.get('/get-submitted-reservations', (req, res) => {// API endpoint to get sub
   });
 });
 
-app.post('/modifyRecords', (req, res) => {// API endpoint to modify records data
-  const action = req.body.action; // Access the dropdown value
-  const Record_ID = req.body.Record_ID;
-  const Department_Name = req.body.Department_Name;
-  const Digital_File_Name = req.body.Digital_File_Name;
-  const Location = req.body.Location;
-  const Rights = req.body.Rights;
-  const Title = req.body.Title;
-  const Alt_Title = req.body.Alt_Title;
-  const Creator = req.body.Creator;
-  const Description = req.body.Description;
-  const Language = req.body.Language;
-  const Geo_Location = req.body.Geo_Location;
-  const Year_Range = req.body.Year_Range;
-  const Containers_Info = req.body.Containers_Info;
-  const Cabinet = req.body.Cabinet;
-  const File_Folder = req.body.File_Folder;
-  const Map_num = req.body.Map_num;
-  const Reel_Format = req.body.Reel_Format;
-  const Medium = req.body.Medium;
-  const Subject = req.body.Subject;
-  let query; //define query 
+app.post('/modifyRecords', (req, res) => {
+  const action = req.body.action || null; // the dropdown
+  const Record_ID = req.body.Record_ID || null;
+  const Department_Name = req.body.Department_Name || null;
+  const Digital_File_Name = req.body.Digital_File_Name || null;
+  const Location = req.body.Location || null;
+  const Rights = req.body.Rights || null;
+  const Title = req.body.Title || null;
+  const Alt_Title = req.body.Alt_Title || null;
+  const Creator = req.body.Creator || null;
+  const Description = req.body.Description || null;
+  const Language = req.body.Language || null;
+  const Geo_Location = req.body.Geo_Location || null;
+  const Year_Range = req.body.Year_Range || null;
+  const Containers_Info = req.body.Containers_Info || null;
+  const Cabinet = req.body.Cabinet || null;
+  const File_Folder = req.body.File_Folder || null;
+  const Map_num = req.body.Map_num || null;
+  const Reel_Format = req.body.Reel_Format || null;
+  const Medium = req.body.Medium || null;
+  const Subject = req.body.Subject || null;
+
   // Handle based on action
   if (action === 'add') { // Logic to add a record
     console.log("Adding new record...");
-    query = `
-      INSERT INTO your_table_name (
-        Record_ID, Department_Name, Digital_File_Name, Location, Rights, Title, 
-        Alt_Title, Creator, Description, Language, Geo_Location, Year_Range, 
-        Containers_Info, Cabinet, File_Folder, Map_num, Reel_Format, Medium, Subject
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+    const query = `
+      INSERT INTO records (Record_ID, Department_Name, Digital_File_Name, Location, Rights, Title, Alt_Title, Creator, Description, Language, Geo_Location, Year_Range, Containers_Info, Cabinet, File_Folder, Map_num, Reel_Format, Medium, Subject) 
+      VALUES ('${Record_ID}', '${Department_Name}', '${Digital_File_Name}', '${Location}', '${Rights}', '${Title}', '${Alt_Title}', '${Creator}', '${Description}', '${Language}', '${Geo_Location}', '${Year_Range}', '${Containers_Info}', '${Cabinet}', '${File_Folder}', '${Map_num}', '${Reel_Format}', '${Medium}', '${Subject}');
     `;
 
-    const values = [
-        Record_ID, Department_Name, Digital_File_Name, Location, Rights, Title, 
-        Alt_Title, Creator, Description, Language, Geo_Location, Year_Range, 
-        Containers_Info, Cabinet, File_Folder, Map_num, Reel_Format, Medium, Subject
-    ];
-
-    con.query(query, values, (err, results) => {
-        if (err) {
-            console.error('Error adding record:', err.message);
-            return res.status(500).send('Failed to add record.');
-        }
-        console.log("Record added successfully!");
-        res.redirect('/modify.html'); // Send response only here on success
+    con.query(query, (err) => {
+      if (err) {
+        console.error('Error adding record:', err.message);
+        return res.status(500).send('Failed to add record.'); // Exit here
+      }
+      console.log("Record added successfully!");
+      return res.redirect('/modify.html'); // Send only one response
     });
-  } else if (action === 'modify') {// Logic to modify a record
-    console.log("Modifying existing record..."); 
-    query = `
-      SELECT Reservation_ID, Account_ID, Reservation_Start_Date, Reservation_Status, Reservation_Fulfilled_Date 
-      FROM Reservation 
-      WHERE Reservation_Status = 'Submitted';
-    `;
-  } else if (action === 'delete') {// Logic to delete a record
+  } else if (action === 'delete') { // Logic to delete a record
     console.log("Deleting record...");
-    query = `
-      SELECT Reservation_ID, Account_ID, Reservation_Start_Date, Reservation_Status, Reservation_Fulfilled_Date 
-      FROM Reservation 
-      WHERE Reservation_Status = 'Submitted';
-    `;
+    const query = `DELETE FROM records WHERE Record_ID = '${Record_ID}';`;
+
+    con.query(query, (err) => {
+      if (err) {
+        console.error('Error deleting record:', err.message);
+        return res.status(500).send('Failed to delete record.'); // Exit here
+      }
+      console.log("Record deleted successfully!");
+      return res.redirect('/modify.html'); // Send only one response
+    });
   } else {
     console.log("Unknown action received.");
-    res.status(400).send("Invalid action specified.");
-    return;
+    return res.status(400).send("Invalid action specified.");
   }
-  // Redirect to account.html after success
-  res.redirect('/modify.html');
 });
 
 /*----------------------------------- Unique ID Generation and Date -----------------------------------*/
