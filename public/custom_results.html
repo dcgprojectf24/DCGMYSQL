@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Custom Results</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="./css/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<script src="./functions.js"></script>
+<style>
+body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", Arial, Helvetica, sans-serif}
+</style>
+</head>
+<body class="w3-light-grey">
+<!---------------------------- Navigation Bar Start ---------------------------->
+<script>navBar();</script>
+<!---------------------------- Navigation Bar End ---------------------------->
+    <h1>Custom Query Results</h1>
+    <p>Below are the results of your SQL query:</p>
+
+    <!-- Table to display query results -->
+    <table border="1" id="resultsTable">
+        <thead id="tableHeader">
+            <!-- Column headers will be generated dynamically -->
+        </thead>
+        <tbody id="tableBody">
+            <!-- Rows and columns will be generated dynamically -->
+        </tbody>
+    </table>
+
+    <script>
+        // Function to get SQL query from URL params
+        function getSQLQueryFromURL() {
+            const params = new URLSearchParams(window.location.search);
+            return params.get("sqlCode");
+        }
+
+        // Function to fetch query results from the server and render them
+        async function fetchQueryResults() {
+            const sqlQuery = getSQLQueryFromURL();
+
+            try {
+                const response = await fetch(`/api/run-query?sqlCode=${encodeURIComponent(sqlQuery)}`);
+                const data = await response.json();
+
+                if (data.error) {
+                    document.body.innerHTML += `<p style="color:red;">Error: ${data.error}</p>`;
+                    return;
+                }
+
+                renderTable(data);
+            } catch (error) {
+                console.error("Error fetching query results:", error);
+                document.body.innerHTML += `<p style="color:red;">An unexpected error occurred.</p>`;
+            }
+        }
+
+        // Function to render the table dynamically
+        function renderTable(data) {
+            const tableHeader = document.getElementById("tableHeader");
+            const tableBody = document.getElementById("tableBody");
+
+            // Clear previous table data
+            tableHeader.innerHTML = "";
+            tableBody.innerHTML = "";
+
+            if (data.length === 0) {
+                tableBody.innerHTML = "<tr><td colspan='100%'>No results found.</td></tr>";
+                return;
+            }
+
+            // Generate table headers dynamically
+            const headers = Object.keys(data[0]);
+            const headerRow = document.createElement("tr");
+            headers.forEach(header => {
+                const th = document.createElement("th");
+                th.textContent = header;
+                headerRow.appendChild(th);
+            });
+            tableHeader.appendChild(headerRow);
+
+            // Generate table rows dynamically
+            data.forEach(row => {
+                const tr = document.createElement("tr");
+                headers.forEach(header => {
+                    const td = document.createElement("td");
+                    td.textContent = row[header] !== null ? row[header] : "N/A";
+                    tr.appendChild(td);
+                });
+                tableBody.appendChild(tr);
+            });
+        }
+
+        // Fetch and display the query results
+        fetchQueryResults();
+    </script>
+</body>
+</html>

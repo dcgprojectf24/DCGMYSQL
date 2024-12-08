@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Reports</title>
+<title>Custom Query</title>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="./css/w3.css">
@@ -16,17 +16,14 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", Arial, Helvetica, sans-serif}
 <!---------------------------- Navigation Bar Start ---------------------------->
 <script>navBar();</script>
 <!---------------------------- Navigation Bar End ---------------------------->
-<h1>Location Frequency Report</h1>
-<p>Fill out the form below to generate the location frequency report.</p>
+    <h1>Run a Custom SQL Query</h1>
+    <p>Enter your SQL code below to query the database:</p>
 
-<!-- Form to submit report generation -->
-<form id="reportForm" action="report_results.html" method="get">
-    <label for="reportType">Report Type:</label>
-    <select name="reportType" id="reportType" required>
-        <option value="location_frequency">Location Frequency</option>
-    </select>
-    <br><br>
-    <button type="submit">Generate Report</button>
-</form>
+    <!-- Form to accept SQL code -->
+    <form id="sqlForm" action="custom_results.html" method="GET">
+        <label for="sqlCode">SQL Code:</label><br>
+        <textarea id="sqlCode" name="sqlCode" rows="6" cols="50" placeholder="Enter your SQL query here..." required></textarea><br><br>
+        <button type="submit">Run Query</button>
+    </form>
 </body>
 </html>

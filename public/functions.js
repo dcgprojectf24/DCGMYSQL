@@ -30,6 +30,7 @@ function navBar() { // the function that generates the nav bar
           <a href="./reports.html" class="w3-bar-item w3-button w3-mobile">Reports</a>
           <a href="./maps.html" class="w3-bar-item w3-button w3-mobile">Maps</a>
           <a href="./team.html" class="w3-bar-item w3-button w3-mobile">Contact Us</a>
+          <a href="./custom.html" class="w3-bar-item w3-button w3-right w3-light-grey w3-mobile">Custom</a>
           <a href="./advanced.html" class="w3-bar-item w3-button w3-right w3-light-grey w3-mobile">Reservations</a>
           <a href="./modify.html" class="w3-bar-item w3-button w3-right w3-light-grey w3-mobile">Modify Records</a>
           <a href="./logout" class="w3-bar-item w3-button w3-mobile" onclick="logout()">Log Out</a>

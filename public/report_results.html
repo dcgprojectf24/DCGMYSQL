@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Report Results</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="./css/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<script src="./functions.js"></script>
+<style>
+body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", Arial, Helvetica, sans-serif}
+</style>
+</head>
+<body class="w3-light-grey">
+<!---------------------------- Navigation Bar Start ---------------------------->
+<script>navBar();</script>
+<!---------------------------- Navigation Bar End ---------------------------->
+    <h1>Top 10 Most Frequent Locations</h1>
+    <p>Below are the top 10 most frequent Geo_Locations from the database.</p>
+
+    <!-- Table to display report data -->
+    <table border="1" id="reportTable">
+        <thead>
+            <tr>
+                <th>Geo Location</th>
+                <th>Frequency</th>
+            </tr>
+        </thead>
+        <tbody id="reportTableBody">
+            <!-- Data will be dynamically inserted here -->
+        </tbody>
+    </table>
+
+    <script>
+        // Function to fetch data from the API and populate the table
+        async function fetchReportData() {
+            try {
+                const response = await fetch("/api/location-frequency");
+                const data = await response.json();
+
+                const tableBody = document.getElementById("reportTableBody");
+                tableBody.innerHTML = ""; // Clear existing data
+
+                // Loop through each row and add to the table
+                data.forEach(row => {
+                    const tr = document.createElement("tr");
+
+                    const locationNameTd = document.createElement("td");
+                    locationNameTd.textContent = row.Location_Name || "N/A"; // Handle missing names
+
+                    const frequencyTd = document.createElement("td");
+                    frequencyTd.textContent = row.Frequency;
+
+                    tr.appendChild(locationNameTd);
+                    tr.appendChild(frequencyTd);
+                    tableBody.appendChild(tr);
+                });
+            } catch (error) {
+                console.error("Error fetching report data:", error);
+            }
+        }
+
+        // Fetch the report data when the page loads
+        fetchReportData();
+    </script>
+</body>
+</html>

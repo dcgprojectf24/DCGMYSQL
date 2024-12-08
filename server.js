@@ -487,6 +487,46 @@ app.post('/finalizeRequest', (req, res) => {
   });
 });
 
+/*----------------------------------- REPORTS -----------------------------------*/
+
+// API endpoint to get location frequency report
+app.get("/api/location-frequency", (req, res) => {
+  const query = `
+  SELECT Geo_Location AS Location_Name, COUNT(*) AS Frequency
+  FROM Records
+  GROUP BY Geo_Location
+  ORDER BY Frequency DESC
+  LIMIT 10;
+`;
+
+  con.query(query, (err, results) => {
+      if (err) {
+          console.error("Error querying the database:", err);
+          return res.status(500).send("Internal Server Error");
+      }
+      res.json(results); // Send JSON response with results
+  });
+});
+
+// API endpoint to execute custom SQL
+app.get("/api/run-query", (req, res) => {
+  const sqlQuery = req.query.sqlCode;
+
+  // Basic validation to prevent dangerous queries
+  if (!sqlQuery || sqlQuery.toLowerCase().includes("drop") || sqlQuery.toLowerCase().includes("delete")) {
+      return res.status(400).json({ error: "Unsafe SQL query detected!" });
+  }
+
+  con.query(sqlQuery, (err, results) => {
+      if (err) {
+          console.error("SQL Query Error:", err);
+          return res.status(500).json({ error: err.message });
+      }
+
+      res.json(results);
+  });
+});
+
 /*----------------------------------- LIBRARIAN VIEW -----------------------------------*/
 
 app.get('/get-submitted-reservations', (req, res) => {// API endpoint to get submitted reservations
