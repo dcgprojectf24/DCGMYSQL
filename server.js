@@ -100,7 +100,7 @@ app.post("/process_query", function (request, response) {
 
 /*---------------------------------- LOGIN/LOGOUT/REGISTER ----------------------------------*/
 
-app.post('/login', (request, response) => {// Login route
+app.post('/login', (request, response) => { // Login route
   const the_username = request.body.username.toLowerCase();
   const the_password = request.body.password;
 
@@ -124,45 +124,70 @@ app.post('/login', (request, response) => {// Login route
 
     const user = results[0];
 
-    // Password validation (replace with bcrypt.compare for hashed passwords)
+    // Password validation
     if (user.User_Password !== the_password) {
       return response.status(401).send('Invalid username or password');
     }
 
-    // Fetch Account_ID for the user
-    const query1 = `
-      SELECT Account_ID 
+    // Fetch Account_Name for the user
+    const query2 = `
+      SELECT Account_Name 
       FROM account 
       WHERE Account_ID IN (
         SELECT Account_ID FROM users WHERE User_ID = ?
       );
     `;
 
-    con.query(query1, [the_username], (err, accountResults) => {
+    con.query(query2, [the_username], (err, nameResults) => {
       if (err) {
         console.error('Database error:', err);
-        return response.status(500).send('Internal Server Error');
+        return response.status(500).send('Internal Server Error 2');
       }
 
-      if (accountResults.length > 0) {
-        const accountID = accountResults[0].Account_ID;
+      if (nameResults.length > 0) {
+        const accountName = nameResults[0].Account_Name; // Extract the name
+        request.session.Account_Name = accountName; // Store clean name in session
+        console.log(`Account_Name ${accountName} stored in session.`);
 
-        // Store Account_ID in the session
-        request.session.Account_ID = accountID;
+        // Fetch Account_ID for the user
+        const query1 = `
+          SELECT Account_ID 
+          FROM account 
+          WHERE Account_ID IN (
+            SELECT Account_ID FROM users WHERE User_ID = ?
+          );
+        `;
 
-        console.log(`Account_ID ${accountID} stored in session.`);
+        con.query(query1, [the_username], (err, accountResults) => {
+          if (err) {
+            console.error('Database error:', err);
+            return response.status(500).send('Internal Server Error 1');
+          }
 
-        // Redirect to account page
-        response.cookie("loggedIn", 1, {expire: Date.now() + 30 * 60 * 1000});// make a logged in cookie
-        response.redirect('/account.html');
+          if (accountResults.length > 0) {
+            const accountID = accountResults[0].Account_ID;
+
+            // Store Account_ID in the session
+            request.session.Account_ID = accountID;
+
+            console.log(`Account_ID ${accountID} stored in session.`);
+
+            // Redirect to account page
+            response.cookie("loggedIn", 1, { expire: Date.now() + 30 * 60 * 1000 }); // make a logged in cookie
+            return response.redirect('/account.html');
+          } else {
+            return response.status(404).send('Account not found.');
+          }
+        });
       } else {
-        response.status(404).send('Account not found.');
+        return response.status(404).send('Account name not found.');
       }
     });
   });
 });
 
-app.post('/register', function (request, response) { // Makes a new user
+
+app.post('/register', function (request, response) { 
   let the_username = request.body.username.toLowerCase();
   let the_password = request.body.password;
   let lname = request.body.lastname;
@@ -175,35 +200,39 @@ app.post('/register', function (request, response) { // Makes a new user
   // Query to insert data into the `account` table
   const query = `
     INSERT INTO account (Account_ID, Account_Email, Account_Name) VALUES
-    ('${accountID}', '${the_username}', '${fullname}');
+    (?, ?, ?);
   `;
 
   // Query to insert data into the `users` table
   const query1 = `
     INSERT INTO users (User_ID, User_Password, Account_ID) VALUES
-    ('${the_username}', '${the_password}', '${accountID}');
+    (?, ?, ?);
   `;
 
-  // Execute the first query
-  con.query(query, (err) => {
+  // Execute the first query to insert into the account table
+  con.query(query, [accountID, the_username, fullname], (err) => {
     if (err) {
-      console.error('Database error in account table:', err); // Log error for debugging
-      return response.redirect('/register.html'); // Redirect to register if there's an error
+      console.error('Database error in account table:', err); 
+      return response.status(500).send('Error creating account.');
     }
 
-    // Execute the second query only if the first one is successful
-    con.query(query1, (err) => {
+    // Execute the second query to insert into the users table
+    con.query(query1, [the_username, the_password, accountID], (err) => {
       if (err) {
-        console.error('Database error in users table:', err); // Log error for debugging
-        return response.redirect('/register.html'); // Redirect to register if there's an error
+        console.error('Database error in users table:', err);
+        return response.status(500).send('Error creating user.');
       }
-
+// Store Account_ID and Name in the session
+request.session.Name = fullname;
+request.session.Account_ID = accountID;
       // Redirect to account page if both queries are successful
-      response.cookie("loggedIn", 1, {expire: Date.now() + 30 * 60 * 1000});// make a logged in cookie
+      response.cookie("loggedIn", 1, { expire: Date.now() + 30 * 60 * 1000 });
+      console.log(`Account created successfully with Account_ID: ${accountID}`);
       return response.redirect('/account.html');
     });
   });
 });
+
 
 app.get('/logout', function (request, response){// Redirects user to home page after logging out
   response.redirect(`./index.html`)
@@ -272,13 +301,6 @@ app.post('/loginLibrarian', (request, response) => {// Login route
 
 /*---------------------------------- MAPS SQL ----------------------------------*/
 
-//app.use(session({// Configure the session middleware
-//  secret: 'your_secret_key', // Replace with a secure key
-//  resave: false,
-//  saveUninitialized: true,
-//  cookie: { secure: false } // Set to true if using HTTPS
-//}));
-
 app.get("/geo", (req, res) => {
   const search = req.query.search; // Use 'search' for query parameter
   const page = parseInt(req.query.page) || 1; // Default to page 1
@@ -320,13 +342,14 @@ app.get("/get-session-data", (req, res) => {
 
 app.get('/get-session-details', (req, res) => {
   if (req.session.Account_ID) {
-      res.json({ Account_ID: req.session.Account_ID });
+      res.json({ Account_ID: req.session.Account_ID, Account_Name: req.session.Account_Name });
   } else {
       res.status(401).json({ error: "Account number not found in session." });
   }
 });
-
+//      res.json({ Account_Name: req.session.Account_Name });
 /*---------------------------------- SEARCH SQL ----------------------------------*/
+
 app.post("/executeSearch", (req, res) => {
   const search = req.body.searchInput;
   const type = req.body.searchType;
