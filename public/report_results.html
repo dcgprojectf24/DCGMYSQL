@@ -16,53 +16,68 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", Arial, Helvetica, sans-serif}
 <!---------------------------- Navigation Bar Start ---------------------------->
 <script>navBar();</script>
 <!---------------------------- Navigation Bar End ---------------------------->
-    <h1>Top 10 Most Frequent Locations</h1>
-    <p>Below are the top 10 most frequent Geo_Locations from the database.</p>
-
-    <!-- Table to display report data -->
-    <table border="1" id="reportTable">
-        <thead>
-            <tr>
-                <th>Geo Location</th>
-                <th>Frequency</th>
-            </tr>
-        </thead>
-        <tbody id="reportTableBody">
-            <!-- Data will be dynamically inserted here -->
-        </tbody>
-    </table>
-
-    <script>
-        // Function to fetch data from the API and populate the table
-        async function fetchReportData() {
-            try {
-                const response = await fetch("/api/location-frequency");
-                const data = await response.json();
-
-                const tableBody = document.getElementById("reportTableBody");
-                tableBody.innerHTML = ""; // Clear existing data
-
-                // Loop through each row and add to the table
-                data.forEach(row => {
-                    const tr = document.createElement("tr");
-
-                    const locationNameTd = document.createElement("td");
-                    locationNameTd.textContent = row.Location_Name || "N/A"; // Handle missing names
-
-                    const frequencyTd = document.createElement("td");
-                    frequencyTd.textContent = row.Frequency;
-
-                    tr.appendChild(locationNameTd);
-                    tr.appendChild(frequencyTd);
-                    tableBody.appendChild(tr);
-                });
-            } catch (error) {
-                console.error("Error fetching report data:", error);
+   <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const params = new URLSearchParams(window.location.search);
+            const reportType = params.get("reportType");
+        
+            if (reportType) {
+                fetch(`/api/reports?reportType=${reportType}`)
+                    .then(response => response.json())
+                    .then(data => displayReportAsTable(data, reportType))
+                    .catch(error => console.error("Error fetching report:", error));
             }
+        });
+        
+        function displayReportAsTable(data, reportType) {
+            const container = document.createElement("div");
+            document.body.appendChild(container);
+        
+            let title = "";
+            switch (reportType) {
+                case "1": title = "Location Frequency Report"; break;
+                case "2": title = "Government Agency Report"; break;
+                case "3": title = "Distribution Report"; break;
+                case "4": title = "Monthly Document Report"; break;
+            }
+        
+            // Create table
+            const table = document.createElement("table");
+            table.border = "1";
+            table.style.borderCollapse = "collapse";
+            table.style.width = "80%";
+            table.style.margin = "20px auto";
+            table.style.textAlign = "left";
+        
+            // Add table header
+            const headerRow = document.createElement("tr");
+            Object.keys(data[0]).forEach(key => {
+                const th = document.createElement("th");
+                th.textContent = key.replace(/_/g, " "); // Clean up column names
+                th.style.padding = "8px";
+                th.style.backgroundColor = "#f2f2f2";
+                headerRow.appendChild(th);
+            });
+            table.appendChild(headerRow);
+        
+            // Add table rows
+            data.forEach(row => {
+                const tr = document.createElement("tr");
+                Object.values(row).forEach(value => {
+                    const td = document.createElement("td");
+                    td.textContent = value;
+                    td.style.padding = "8px";
+                    tr.appendChild(td);
+                });
+                table.appendChild(tr);
+            });
+        
+            // Add title and table to container
+            container.innerHTML = `<h2 style="text-align:center;">${title}</h2>`;
+            container.appendChild(table);
         }
-
-        // Fetch the report data when the page loads
-        fetchReportData();
-    </script>
+        </script>
+        
+        
 </body>
 </html>

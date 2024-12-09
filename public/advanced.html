@@ -10,14 +10,18 @@
 <script src="./functions.js"></script>
 <style>
 body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", Arial, Helvetica, sans-serif}
+button {margin-top: 10px;}
 </style>
 </head>
 <body class="w3-light-grey">
 <!---------------------------- Navigation Bar Start ---------------------------->
 <script>navBar();</script>
 <!---------------------------- Navigation Bar End ---------------------------->
-    <h1>Submitted Reservations</h1>
-    <table id="reservations-table">
+
+<h1>Reservations</h1>
+
+<form id="reservations-form">
+    <table id="reservations-table" class="w3-table w3-striped w3-bordered">
         <thead>
             <tr>
                 <th>Reservation ID</th>
@@ -25,6 +29,7 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", Arial, Helvetica, sans-serif}
                 <th>Start Date</th>
                 <th>Status</th>
                 <th>Fulfilled Date</th>
+                <th>Change Status</th>
             </tr>
         </thead>
         <tbody>
@@ -32,39 +37,81 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", Arial, Helvetica, sans-serif}
         </tbody>
     </table>
 
-    <script>
-        // Fetch pending reservations from the server
-        async function fetchSubmittedReservations() {
-            try {
-                const response = await fetch('/get-submitted-reservations');
-                if (!response.ok) {
-                    throw new Error('Failed to fetch reservations');
-                }
+    <button type="button" onclick="saveChanges()">Save Changes</button>
+</form>
 
-                const data = await response.json();
-                const tableBody = document.querySelector('#reservations-table tbody');
-                tableBody.innerHTML = ''; // Clear any existing rows
+<script>
+    let reservationsData = []; // To keep track of the reservations locally
 
-                // Add rows to the table
-                data.reservations.forEach(reservation => {
-                    const row = `
-                        <tr>
-                            <td>${reservation.Reservation_ID}</td>
-                            <td>${reservation.Account_ID}</td>
-                            <td>${reservation.Reservation_Start_Date}</td>
-                            <td>${reservation.Reservation_Status}</td>
-                            <td>${reservation.Reservation_Fulfilled_Date || 'N/A'}</td>
-                        </tr>
-                    `;
-                    tableBody.innerHTML += row;
-                });
-            } catch (error) {
-                console.error('Error:', error);
+    // Fetch submitted reservations from the server
+    async function fetchSubmittedReservations() {
+        try {
+            const response = await fetch('/get-submitted-reservations');
+            if (!response.ok) {
+                throw new Error('Failed to fetch reservations');
             }
-        }
 
-        // Call the function on page load
-        fetchSubmittedReservations();
-    </script>
+            const data = await response.json();
+            reservationsData = data.reservations; // Store data locally
+
+            const tableBody = document.querySelector('#reservations-table tbody');
+            tableBody.innerHTML = ''; // Clear any existing rows
+
+            // Populate the table
+            data.reservations.forEach((reservation, index) => {
+                const row = `
+                    <tr>
+                        <td>${reservation.Reservation_ID}</td>
+                        <td>${reservation.Account_ID}</td>
+                        <td>${reservation.Reservation_Start_Date}</td>
+                        <td>${reservation.Reservation_Status}</td>
+                        <td>${reservation.Reservation_Fulfilled_Date || 'N/A'}</td>
+                        <td>
+                            <select id="status-${index}">
+                                <option value="Submitted" ${reservation.Reservation_Status === 'Submitted' ? 'selected' : ''}>Submitted</option>
+                                <option value="Pending" ${reservation.Reservation_Status === 'Pending' ? 'selected' : ''}>Pending</option>
+                                <option value="Completed" ${reservation.Reservation_Status === 'Completed' ? 'selected' : ''}>Completed</option>
+                            </select>
+                        </td>
+                    </tr>
+                `;
+                tableBody.innerHTML += row;
+            });
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    }
+
+    // Save changes to the server
+    async function saveChanges() {
+        const updatedReservations = reservationsData.map((reservation, index) => {
+            const newStatus = document.getElementById(`status-${index}`).value;
+            return {
+                Reservation_ID: reservation.Reservation_ID,
+                New_Status: newStatus
+            };
+        });
+
+        try {
+            const response = await fetch('/update-reservation-status', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ reservations: updatedReservations })
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to save changes.');
+            }
+
+            alert('Changes saved successfully!');
+        } catch (error) {
+            console.error('Error saving changes:', error);
+            alert('Failed to save changes.');
+        }
+    }
+
+    // Call the function on page load
+    fetchSubmittedReservations();
+</script>
 </body>
 </html>

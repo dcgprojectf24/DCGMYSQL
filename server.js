@@ -347,7 +347,7 @@ app.get('/get-session-details', (req, res) => {
       res.status(401).json({ error: "Account number not found in session." });
   }
 });
-//      res.json({ Account_Name: req.session.Account_Name });
+
 /*---------------------------------- SEARCH SQL ----------------------------------*/
 
 app.post("/executeSearch", (req, res) => {
@@ -510,26 +510,88 @@ app.post('/finalizeRequest', (req, res) => {
   });
 });
 
+app.post('/update2-reservation-status', (req, res) => {
+  const updatedReservations = req.body.reservations;
+
+  // Loop through and update each reservation in the database
+  updatedReservations.forEach(reservation => {
+      const query = `
+          UPDATE reservations 
+          SET Reservation_Status = ? 
+          WHERE Reservation_ID = ?;
+      `;
+      con.query(query, [reservation.New_Status, reservation.Reservation_ID], (err) => {
+          if (err) {
+              console.error('Database error:', err);
+          }
+      });
+  });
+
+  res.json({ message: 'Reservations updated successfully.' });
+});
+
+
+
 /*----------------------------------- REPORTS -----------------------------------*/
 
-// API endpoint to get location frequency report
-app.get("/api/location-frequency", (req, res) => {
-  const query = `
-  SELECT Geo_Location AS Location_Name, COUNT(*) AS Frequency
-  FROM Records
-  GROUP BY Geo_Location
-  ORDER BY Frequency DESC
-  LIMIT 10;
-`;
+// API endpoint for dynamic report generation
+app.get("/api/reports", (req, res) => {
+  const { reportType } = req.query; // Get reportType from query params
 
+  let query = "";
+
+  // Determine the SQL query to run based on reportType
+  switch (reportType) {
+    case "1": // Location Frequency Report
+      query = `
+        SELECT Geo_Location AS Location_Name, COUNT(*) AS Frequency
+        FROM Records
+        GROUP BY Geo_Location
+        ORDER BY Frequency DESC
+        LIMIT 10;
+      `;
+      break;
+    case "2": // Government Agency Report
+      query = `
+        SELECT Creator, Subject, COUNT(Record_ID) AS Record_Count
+        FROM Records
+        WHERE Subject LIKE '%government%'
+           OR Creator LIKE '%agency%'
+        GROUP BY Creator, Subject
+        ORDER BY Creator, Subject;
+      `;
+      break;
+    case "3": // Distribution Report
+      query = `
+        SELECT Geo_Location, Language, COUNT(Record_ID) AS Record_Count
+        FROM Records
+        GROUP BY Geo_Location, Language
+        ORDER BY Geo_Location, Language;
+      `;
+      break;
+    case "4": // Monthly Document Report
+      query = `
+        SELECT Year_Range, COUNT(Record_ID) AS Document_Count
+        FROM Records
+        WHERE Year_Range BETWEEN '2024-01' AND '2024-12' -- Adjust timeframe as needed
+        GROUP BY Year_Range
+        ORDER BY Year_Range;
+      `;
+      break;
+    default:
+      return res.status(400).send("Invalid report type");
+  }
+
+  // Execute the selected query
   con.query(query, (err, results) => {
-      if (err) {
-          console.error("Error querying the database:", err);
-          return res.status(500).send("Internal Server Error");
-      }
-      res.json(results); // Send JSON response with results
+    if (err) {
+      console.error("Error querying the database:", err);
+      return res.status(500).send("Internal Server Error");
+    }
+    res.json(results); // Send JSON response
   });
 });
+
 
 // API endpoint to execute custom SQL
 app.get("/api/run-query", (req, res) => {

@@ -71,28 +71,40 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", Arial, Helvetica, sans-serif}
     }
     
     async function fetchEmptyReservations() {
-        try {
-            const response = await fetch('/get-empty-reservations');
-    
-            if (!response.ok) {
-                throw new Error('Failed to fetch records.');
-            }
-    
-            const data = await response.json();
-    
-            console.log('Fetched Records:', data.records);
-    
-            // Get the container where the table will be inserted
-            const container = document.getElementById("accounts-container");
-    
-            // Clear the container before adding new content
-            container.innerHTML = "";
-    
+    try {
+        const response = await fetch('/get-empty-reservations');
+
+        if (!response.ok) {
+            throw new Error('Failed to fetch records.');
+        }
+
+        const data = await response.json();
+
+        console.log('Fetched Records:', data.records);
+
+        // Get the container and related elements
+        const container = document.getElementById("accounts-container");
+        const reservationsTitle = document.querySelector('.account-reservations-title');
+        const finalizeForm = document.getElementById('finalize');
+
+        // Clear the container before adding new content
+        container.innerHTML = "";
+
+        // Hide the reservations title and finalize form by default
+        reservationsTitle.style.display = "none";
+        finalizeForm.style.display = "none";
+
+        // Check if there are records
+        if (data.records && data.records.length > 0) {
+            // Show the reservations title and finalize form
+            reservationsTitle.style.display = "block";
+            finalizeForm.style.display = "block";
+
             // Dynamically create the table
             const table = document.createElement("table");
             table.className = "w3-table w3-striped";
             table.border = "1";
-    
+
             // Add table header
             table.innerHTML = `
                 <thead>
@@ -109,10 +121,10 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", Arial, Helvetica, sans-serif}
                 </thead>
                 <tbody></tbody>
             `;
-    
+
             // Get the table body for appending rows
             const tableBody = table.querySelector("tbody");
-    
+
             // Populate the table with data
             data.records.forEach(record => {
                 const row = `
@@ -129,13 +141,18 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", Arial, Helvetica, sans-serif}
                 `;
                 tableBody.innerHTML += row;
             });
-    
+
             // Append the complete table to the container
             container.appendChild(table);
-        } catch (error) {
-            console.error('Error:', error);
+        } else {
+            console.log("No records found. Table, title, and button will not be displayed.");
         }
+    } catch (error) {
+        console.error('Error:', error);
     }
+}
+
+
     
     // Call the functions on page load
     fetchSessionDetails();
