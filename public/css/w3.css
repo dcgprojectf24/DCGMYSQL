@@ -989,3 +989,11 @@ select {
         .secondary-nav a:hover {
             text-decoration: underline;
         }
+
+
+
+
+        .centered-box {
+            text-align: center; /* Center the text inside the box */
+            border-radius: 10px; /* Rounded corners */
+        }

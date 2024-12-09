@@ -16,14 +16,16 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", Arial, Helvetica, sans-serif}
 <!---------------------------- Navigation Bar Start ---------------------------->
 <script>navBar();</script>
 <!---------------------------- Navigation Bar End ---------------------------->
+    <!-- Centered Div Box -->
+    <div class="centered-box"> 
     <h1>Run a Custom SQL Query</h1>
     <p>Enter your SQL code below to query the database:</p>
 
     <!-- Form to accept SQL code -->
     <form id="sqlForm" action="custom_results.html" method="GET">
-        <label for="sqlCode">SQL Code:</label><br>
         <textarea id="sqlCode" name="sqlCode" rows="6" cols="50" placeholder="Enter your SQL query here..." required></textarea><br><br>
         <button type="submit">Run Query</button>
     </form>
+     </div> 
 </body>
 </html>
