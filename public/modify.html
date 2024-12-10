@@ -8,20 +8,145 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="./functions.js"></script>
+    <style>
+        /* General styling */
+        body, h1, h2, h3, h4, h5, h6 {
+            font-family: "Raleway", Arial, Helvetica, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        /* Page container */
+        .container {
+            width: 150%;
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background-color: white;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        /* Heading */
+        h2 {
+            font-size: 28px;
+            text-align: center;
+            color: #0077b6;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Form styling */
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        label {
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        select, input[type="text"], button {
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        select {
+            background-color: white;
+            width: 100%;
+        }
+
+        input[type="text"] {
+            width: 100%;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        table th, table td {
+            padding: 12px 15px;
+            text-align: left;
+            border: 1px solid #ddd;
+            font-size: 14px;
+        }
+
+        table th {
+            background-color: #0077b6;
+            color: white;
+        }
+
+        table tbody tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        table tbody tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        button {
+            background-color: #0077b6;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+            align-self: center;
+        }
+
+        button:hover {
+            background-color: #005fa3;
+        }
+
+        /* Responsive Design */
+        @media screen and (max-width: 768px) {
+            .container {
+                width: 95%;
+                padding: 1rem;
+            }
+
+            table th, table td {
+                padding: 10px;
+                font-size: 12px;
+            }
+
+            input[type="text"], select {
+                font-size: 14px;
+            }
+
+            button {
+                padding: 10px 18px;
+            }
+        }
+    </style>
 </head>
 <body>
+
 <!---------------------------- Navigation Bar Start ---------------------------->
     <script>navBar();</script>
-<!----------------------------- Navigation Bar End ----------------------------->
+<!----------------------------- Navigation Bar End ---------------------------->
+
+<div class="container">
     <h2>Modify Records</h2>
     <form action="./modifyRecords" method="post">
         <!-- Action Selector -->
-        <label for="action"><strong>Select Action:</strong></label>
-        <select name="action" id="action" required>
-            <option value="" disabled selected>Select an action</option>
-            <option value="add">Add</option>
-            <option value="delete">Delete</option>
-        </select>
+        <div>
+            <label for="action"><strong>Select Action:</strong></label>
+            <select name="action" id="action" required>
+                <option value="" disabled selected>Select an action</option>
+                <option value="add">Add</option>
+                <option value="delete">Delete</option>
+            </select>
+        </div>
+
         <!-- Input Fields in Table Format -->
         <table>
             <tr>
@@ -42,7 +167,7 @@
                 <th>Description</th>
                 <td><input type="text" name="Description" id="Description" placeholder="NULL"></td>
             </tr>
-            <tr>            
+            <tr>
                 <th>Medium</th>
                 <td><select name="Medium" id="Medium" required>
                     <option value="" disabled selected>Select Medium</option>
@@ -82,5 +207,7 @@
         <!-- Submit Button -->
         <button type="submit">Submit</button>
     </form>
+</div>
+
 </body>
 </html>

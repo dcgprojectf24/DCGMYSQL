@@ -1,117 +1,206 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Advanced</title>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="./css/w3.css">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<script src="./functions.js"></script>
-<style>
-body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", Arial, Helvetica, sans-serif}
-button {margin-top: 10px;}
-</style>
+    <title>Advanced</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="./css/w3.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="./functions.js"></script>
+    <style>
+        /* General Body Styling */
+        body {
+            font-family: "Raleway", Arial, Helvetica, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+
+        /* Page Header */
+        h1 {
+            font-size: 2.5em;
+            color: #0077b6;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        /* Table Styling */
+        #reservations-table {
+            width: 90%;
+            margin: 20px auto;
+            border-collapse: collapse;
+            background-color: #fff;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        #reservations-table th, #reservations-table td {
+            padding: 12px;
+            text-align: left;
+            font-size: 1em;
+            border: 1px solid #0077b6;
+        }
+
+        #reservations-table th {
+            background-color: #0077b6;
+            color: white;
+        }
+
+        #reservations-table td:nth-child(even) {
+            background-color: #e9f1f7;
+        }
+
+        #reservations-table td {
+            background-color: #f9f9f9;
+        }
+
+        /* Select Dropdown Styling */
+        select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1em;
+        }
+
+        select:focus {
+            outline: none;
+            border-color: #0077b6;
+            box-shadow: 0 0 5px rgba(0, 119, 182, 0.5);
+        }
+
+        /* Button Styling */
+        button {
+            background-color: #0077b6;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            margin: 20px auto;
+            display: block;
+            text-align: center;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        button:hover {
+            background-color: #005fa3;
+            transform: scale(1.05);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            #reservations-table {
+                font-size: 0.9em;
+            }
+
+            button {
+                font-size: 0.9em;
+            }
+        }
+    </style>
 </head>
 <body class="w3-light-grey">
-<!---------------------------- Navigation Bar Start ---------------------------->
-<script>navBar();</script>
-<!---------------------------- Navigation Bar End ---------------------------->
+    <!---------------------------- Navigation Bar Start ---------------------------->
+    <script>navBar();</script>
+    <!---------------------------- Navigation Bar End ---------------------------->
 
-<h1>Reservations</h1>
+    <h1>Reservations</h1>
 
-<form id="reservations-form">
-    <table id="reservations-table" class="w3-table w3-striped w3-bordered">
-        <thead>
-            <tr>
-                <th>Reservation ID</th>
-                <th>Account ID</th>
-                <th>Start Date</th>
-                <th>Status</th>
-                <th>Fulfilled Date</th>
-                <th>Change Status</th>
-            </tr>
-        </thead>
-        <tbody>
-            <!-- Table rows will be dynamically added here -->
-        </tbody>
-    </table>
+    <form id="reservations-form">
+        <table id="reservations-table" class="w3-table w3-striped w3-bordered">
+            <thead>
+                <tr>
+                    <th>Reservation ID</th>
+                    <th>Account ID</th>
+                    <th>Start Date</th>
+                    <th>Status</th>
+                    <th>Fulfilled Date</th>
+                    <th>Change Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Table rows will be dynamically added here -->
+            </tbody>
+        </table>
 
-    <button type="button" onclick="saveChanges()">Save Changes</button>
-</form>
+        <button type="button" onclick="saveChanges()">Save Changes</button>
+    </form>
 
-<script>
-    let reservationsData = []; // To keep track of the reservations locally
+    <script>
+        let reservationsData = []; // To keep track of the reservations locally
 
-    // Fetch submitted reservations from the server
-    async function fetchSubmittedReservations() {
-        try {
-            const response = await fetch('/get-submitted-reservations');
-            if (!response.ok) {
-                throw new Error('Failed to fetch reservations');
+        // Fetch submitted reservations from the server
+        async function fetchSubmittedReservations() {
+            try {
+                const response = await fetch('/get-submitted-reservations');
+                if (!response.ok) {
+                    throw new Error('Failed to fetch reservations');
+                }
+
+                const data = await response.json();
+                reservationsData = data.reservations; // Store data locally
+
+                const tableBody = document.querySelector('#reservations-table tbody');
+                tableBody.innerHTML = ''; // Clear any existing rows
+
+                // Populate the table
+                data.reservations.forEach((reservation, index) => {
+                    const row = `
+                        <tr>
+                            <td>${reservation.Reservation_ID}</td>
+                            <td>${reservation.Account_ID}</td>
+                            <td>${reservation.Reservation_Start_Date}</td>
+                            <td>${reservation.Reservation_Status}</td>
+                            <td>${reservation.Reservation_Fulfilled_Date || 'N/A'}</td>
+                            <td>
+                                <select id="status-${index}">
+                                    <option value="Submitted" ${reservation.Reservation_Status === 'Submitted' ? 'selected' : ''}>Submitted</option>
+                                    <option value="Pending" ${reservation.Reservation_Status === 'Pending' ? 'selected' : ''}>Pending</option>
+                                    <option value="Completed" ${reservation.Reservation_Status === 'Completed' ? 'selected' : ''}>Completed</option>
+                                </select>
+                            </td>
+                        </tr>
+                    `;
+                    tableBody.innerHTML += row;
+                });
+            } catch (error) {
+                console.error('Error:', error);
             }
-
-            const data = await response.json();
-            reservationsData = data.reservations; // Store data locally
-
-            const tableBody = document.querySelector('#reservations-table tbody');
-            tableBody.innerHTML = ''; // Clear any existing rows
-
-            // Populate the table
-            data.reservations.forEach((reservation, index) => {
-                const row = `
-                    <tr>
-                        <td>${reservation.Reservation_ID}</td>
-                        <td>${reservation.Account_ID}</td>
-                        <td>${reservation.Reservation_Start_Date}</td>
-                        <td>${reservation.Reservation_Status}</td>
-                        <td>${reservation.Reservation_Fulfilled_Date || 'N/A'}</td>
-                        <td>
-                            <select id="status-${index}">
-                                <option value="Submitted" ${reservation.Reservation_Status === 'Submitted' ? 'selected' : ''}>Submitted</option>
-                                <option value="Pending" ${reservation.Reservation_Status === 'Pending' ? 'selected' : ''}>Pending</option>
-                                <option value="Completed" ${reservation.Reservation_Status === 'Completed' ? 'selected' : ''}>Completed</option>
-                            </select>
-                        </td>
-                    </tr>
-                `;
-                tableBody.innerHTML += row;
-            });
-        } catch (error) {
-            console.error('Error:', error);
         }
-    }
 
-    // Save changes to the server
-    async function saveChanges() {
-        const updatedReservations = reservationsData.map((reservation, index) => {
-            const newStatus = document.getElementById(`status-${index}`).value;
-            return {
-                Reservation_ID: reservation.Reservation_ID,
-                New_Status: newStatus
-            };
-        });
-
-        try {
-            const response = await fetch('/update-reservation-status', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ reservations: updatedReservations })
+        // Save changes to the server
+        async function saveChanges() {
+            const updatedReservations = reservationsData.map((reservation, index) => {
+                const newStatus = document.getElementById(`status-${index}`).value;
+                return {
+                    Reservation_ID: reservation.Reservation_ID,
+                    New_Status: newStatus
+                };
             });
 
-            if (!response.ok) {
-                throw new Error('Failed to save changes.');
+            try {
+                const response = await fetch('/update-reservation-status', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ reservations: updatedReservations })
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to save changes.');
+                }
+
+                alert('Changes saved successfully!');
+            } catch (error) {
+                console.error('Error saving changes:', error);
+                alert('Failed to save changes.');
             }
-
-            alert('Changes saved successfully!');
-        } catch (error) {
-            console.error('Error saving changes:', error);
-            alert('Failed to save changes.');
         }
-    }
 
-    // Call the function on page load
-    fetchSubmittedReservations();
-</script>
+        // Call the function on page load
+        fetchSubmittedReservations();
+    </script>
 </body>
 </html>

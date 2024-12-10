@@ -230,5 +230,58 @@
         // Load the records data on page load
         populateRecords();
     </script>
+
+<!-- trying to add a popup notification, currently not working :( )
+<style>
+    /* Pop-up Notification Style */
+    .notification {
+        display: none; /* Make sure it's hidden initially */
+        position: fixed;
+        top: 100px;
+        right: 20px;
+        background-color: #0077b6;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 5px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        z-index: 1000;
+        opacity: 1;
+        transition: opacity 2s ease-out, transform 2s ease-out;
+    }
+
+    /* Animation for moving up and fading out */
+    @keyframes slideUpFadeOut {
+        0% {
+            top: 100px;
+            opacity: 1;
+        }
+        100% {
+            top: 50px; /* Moves up */
+            opacity: 0; /* Fades out */
+        }
+    }
+</style>
+
+<script>
+    // Function to show the notification with animation
+    function showNotification(message) {
+        const notification = document.getElementById('notification');
+        notification.textContent = message;
+        notification.style.display = 'block';
+
+        // Add animation for moving up and fading out
+        notification.style.animation = 'slideUpFadeOut 5s forwards';  // Increase duration to 5s
+        
+        // Hide the notification after animation
+        setTimeout(() => {
+            notification.style.display = 'none';
+        }, 5000); // Adjust timeout to match animation duration
+    }
+
+    // Add event listener to the "Request Checked" button
+   
+</script>
+-->
+
 </body>
 </html>
