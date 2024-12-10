@@ -511,38 +511,36 @@ app.post('/finalizeRequest', (req, res) => {
 });
 
 app.post('/update-reservation-status', (req, res) => {
-  const updatedReservations = req.body.reservations;
+  const input = req.body;
+  console.log(input);
 
-  // Validate input
-  if (!updatedReservations || !Array.isArray(updatedReservations)) {
-      return res.status(400).json({ error: 'Invalid request: reservations data is missing or invalid.' });
-  }
+    // Normalize input: ensure it's always an array
+    const reservations = Array.isArray(input) ? input : [input];
 
-  // Use Promise.all to wait for all queries to finish
-  const updatePromises = updatedReservations.map(reservation => {
-      return new Promise((resolve, reject) => {
-          const query = `
-              UPDATE reservations 
-              SET Reservation_Status = ? 
-              WHERE Reservation_ID = ?;
-          `;
-          con.query(query, [reservation.New_Status, reservation.Reservation_ID], (err) => {
-              if (err) {
-                  console.error('Database error:', err);
-                  reject(err);
-              } else {
-                  resolve();
-              }
-          });
-      });
-  });
+    // Loop through each reservation
+    reservations.forEach(reservation => {
+        const reservationNum = reservation.reservation_id;
+        const reservationStat = reservation.status;
 
-  Promise.all(updatePromises)
-      .then(() => res.json({ message: 'Reservations updated successfully.' }))
-      .catch((error) => {
-          console.error('Error updating reservations:', error);
-          res.status(500).json({ error: 'Failed to update reservations.' });
-      });
+        console.log(`Updating Reservation ID: ${reservationNum} with Status: ${reservationStat}`);
+
+        const query = `
+            UPDATE reservation
+            SET Reservation_Status = ? 
+            WHERE Reservation_ID = ?;
+        `;
+
+        // Execute the query for each reservation
+        con.query(query, [reservationStat, reservationNum], (err) => {
+            if (err) {
+                console.error(`Error updating Reservation ID ${reservationNum}:`, err);
+            } else {
+                console.log(`Successfully updated Reservation ID: ${reservationNum}`);
+            }
+        });
+    });
+    // Redirect back to advanced.html
+    res.redirect('/advanced.html');
 });
 
 
@@ -628,11 +626,10 @@ app.get("/api/run-query", (req, res) => {
 
 /*----------------------------------- LIBRARIAN VIEW -----------------------------------*/
 
-app.get('/get-submitted-reservations', (req, res) => {// API endpoint to get submitted reservations
+app.get('/get-submitted-reservations', (req, res) => {// API endpoint to get submitted reservations. i changed this because we want to see all reservations, not just submitted ones
   const query = `
-    SELECT Reservation_ID, Account_ID, Reservation_Start_Date, Reservation_Status, Reservation_Fulfilled_Date 
-    FROM Reservation 
-    WHERE Reservation_Status = 'Submitted';
+    SELECT Reservation_ID, Reservation_Start_Date, Reservation_Status, Reservation_Fulfilled_Date 
+    FROM Reservation;
   `;
 
   con.query(query, (err, results) => {
