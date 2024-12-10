@@ -510,26 +510,40 @@ app.post('/finalizeRequest', (req, res) => {
   });
 });
 
-app.post('/update2-reservation-status', (req, res) => {
+app.post('/update-reservation-status', (req, res) => {
   const updatedReservations = req.body.reservations;
 
-  // Loop through and update each reservation in the database
-  updatedReservations.forEach(reservation => {
-      const query = `
-          UPDATE reservations 
-          SET Reservation_Status = ? 
-          WHERE Reservation_ID = ?;
-      `;
-      con.query(query, [reservation.New_Status, reservation.Reservation_ID], (err) => {
-          if (err) {
-              console.error('Database error:', err);
-          }
+  // Validate input
+  if (!updatedReservations || !Array.isArray(updatedReservations)) {
+      return res.status(400).json({ error: 'Invalid request: reservations data is missing or invalid.' });
+  }
+
+  // Use Promise.all to wait for all queries to finish
+  const updatePromises = updatedReservations.map(reservation => {
+      return new Promise((resolve, reject) => {
+          const query = `
+              UPDATE reservations 
+              SET Reservation_Status = ? 
+              WHERE Reservation_ID = ?;
+          `;
+          con.query(query, [reservation.New_Status, reservation.Reservation_ID], (err) => {
+              if (err) {
+                  console.error('Database error:', err);
+                  reject(err);
+              } else {
+                  resolve();
+              }
+          });
       });
   });
 
-  res.json({ message: 'Reservations updated successfully.' });
+  Promise.all(updatePromises)
+      .then(() => res.json({ message: 'Reservations updated successfully.' }))
+      .catch((error) => {
+          console.error('Error updating reservations:', error);
+          res.status(500).json({ error: 'Failed to update reservations.' });
+      });
 });
-
 
 
 /*----------------------------------- REPORTS -----------------------------------*/
