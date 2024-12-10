@@ -510,26 +510,38 @@ app.post('/finalizeRequest', (req, res) => {
   });
 });
 
-app.post('/update2-reservation-status', (req, res) => {
-  const updatedReservations = req.body.reservations;
+app.post('/update-reservation-status', (req, res) => {
+  const input = req.body;
+  console.log(input);
 
-  // Loop through and update each reservation in the database
-  updatedReservations.forEach(reservation => {
-      const query = `
-          UPDATE reservations 
-          SET Reservation_Status = ? 
-          WHERE Reservation_ID = ?;
-      `;
-      con.query(query, [reservation.New_Status, reservation.Reservation_ID], (err) => {
-          if (err) {
-              console.error('Database error:', err);
-          }
-      });
-  });
+    // Normalize input: ensure it's always an array
+    const reservations = Array.isArray(input) ? input : [input];
 
-  res.json({ message: 'Reservations updated successfully.' });
+    // Loop through each reservation
+    reservations.forEach(reservation => {
+        const reservationNum = reservation.reservation_id;
+        const reservationStat = reservation.status;
+
+        console.log(`Updating Reservation ID: ${reservationNum} with Status: ${reservationStat}`);
+
+        const query = `
+            UPDATE reservation
+            SET Reservation_Status = ? 
+            WHERE Reservation_ID = ?;
+        `;
+
+        // Execute the query for each reservation
+        con.query(query, [reservationStat, reservationNum], (err) => {
+            if (err) {
+                console.error(`Error updating Reservation ID ${reservationNum}:`, err);
+            } else {
+                console.log(`Successfully updated Reservation ID: ${reservationNum}`);
+            }
+        });
+    });
+    // Redirect back to advanced.html
+    res.redirect('/advanced.html');
 });
-
 
 
 /*----------------------------------- REPORTS -----------------------------------*/
@@ -614,11 +626,10 @@ app.get("/api/run-query", (req, res) => {
 
 /*----------------------------------- LIBRARIAN VIEW -----------------------------------*/
 
-app.get('/get-submitted-reservations', (req, res) => {// API endpoint to get submitted reservations
+app.get('/get-submitted-reservations', (req, res) => {// API endpoint to get submitted reservations. i changed this because we want to see all reservations, not just submitted ones
   const query = `
-    SELECT Reservation_ID, Account_ID, Reservation_Start_Date, Reservation_Status, Reservation_Fulfilled_Date 
-    FROM Reservation 
-    WHERE Reservation_Status = 'Submitted';
+    SELECT Reservation_ID, Reservation_Start_Date, Reservation_Status, Reservation_Fulfilled_Date 
+    FROM Reservation;
   `;
 
   con.query(query, (err, results) => {
