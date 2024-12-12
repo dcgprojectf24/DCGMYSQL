@@ -355,16 +355,12 @@ app.post("/executeSearch", (req, res) => {
   const type = req.body.searchType;
   const format = req.body.format;
 
-  const page = parseInt(req.query.page) || 1; // Default to page 1
-  const limit = parseInt(req.query.limit) || 10; // Default to 10 records per page
-  const offset = (page - 1) * limit;
-
   console.log(format);
 
   const query = `
     SELECT Record_ID, Title, Department_Name, Year_Range, Subject, Description, Medium, Language 
-    FROM RECORDS WHERE ${type} LIKE '%${search}%' AND Medium = '${format}' 
-    LIMIT ${limit} OFFSET ${offset};
+    FROM records 
+    WHERE ${type} LIKE '%${search}%' AND Medium = '${format}';
   `;
 
   con.query(query, (err, result) => {
@@ -376,7 +372,7 @@ app.post("/executeSearch", (req, res) => {
     req.session.format = format;
     req.session.what = 'ser';
     // Redirect to results.html with the query parameters
-    res.redirect(`/results.html?search=${encodeURIComponent(search)}&page=${page}`);
+    res.redirect(`/results.html?search=${encodeURIComponent(search)}`);
   });
 });
 
@@ -446,16 +442,26 @@ app.post("/request", (req) => {
   });
 });
 
-app.get('/get-empty-reservations', (req, res) => {// API endpoint to fetch records with Reservation_ID empty
+app.get('/get-user-reservations', (req, res) => {
+  // Retrieve Account_Name or Account_ID from the user session
+  const accountId = req.session.Account_ID;
+
+  if (!accountId) {
+    return res.status(401).json({ error: 'User not authenticated' });
+  }
+
+  // Query to fetch records linked to the user's Account_ID
   const query = `
-    SELECT Record_ID, Title, Department_Name, Year_Range, Subject, Description, Medium, Language
-    FROM records
-    WHERE Record_ID IN (SELECT Record_ID
-                        FROM contains
-                        WHERE Reservation_ID IS NULL OR Reservation_ID = '');
+    SELECT r.Record_ID, r.Title, r.Department_Name, r.Year_Range, 
+           r.Subject, r.Description, r.Medium, r.Language
+    FROM Records r
+    JOIN Contains c ON r.Record_ID = c.Record_ID
+    JOIN Reservation res ON c.Reservation_ID = res.Reservation_ID
+    WHERE res.Account_ID = ?;
   `;
 
-  con.query(query, (err, results) => {
+  // Execute the query with Account_ID as a parameter
+  con.query(query, [accountId], (err, results) => {
     if (err) {
       console.error('Error fetching data:', err.message);
       return res.status(500).json({ error: 'Failed to fetch data' });
@@ -465,6 +471,7 @@ app.get('/get-empty-reservations', (req, res) => {// API endpoint to fetch recor
     res.json({ records: results });
   });
 });
+
 
 // Endpoint to finalize the request
 app.post('/finalizeRequest', (req, res) => {

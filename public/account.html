@@ -157,7 +157,7 @@
     
     async function fetchEmptyReservations() {
     try {
-        const response = await fetch('/get-empty-reservations');
+        const response = await fetch('/get-user-reservations');
 
         if (!response.ok) {
             throw new Error('Failed to fetch records.');
