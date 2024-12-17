@@ -50,15 +50,16 @@ con.connect(function (err) {// Throws error or confirms connection
 
 /*---------------------------------- LOGIN/LOGOUT/REGISTER ----------------------------------*/
 
-app.post('/login', (request, response) => { // Login route
+app.post('/login', (request, response) => {
   const the_username = request.body.username.toLowerCase();
   const the_password = request.body.password;
 
   // Secure query to validate user credentials
   const query = `
-    SELECT User_ID, User_Password 
-    FROM users 
-    WHERE User_ID = ?;
+    SELECT a.Account_Email, a.Account_Password, u.User_ID, u.User_Name
+    FROM account a
+    INNER JOIN user u ON a.Account_Email = u.Account_Email
+    WHERE a.Account_Email = ?;
   `;
 
   con.query(query, [the_username], (err, results) => {
@@ -75,67 +76,22 @@ app.post('/login', (request, response) => { // Login route
     const user = results[0];
 
     // Password validation
-    if (user.User_Password !== the_password) {
+    if (user.Account_Password !== the_password) {
       return response.status(401).send('Invalid username or password');
     }
 
-    // Fetch Account_Name for the user
-    const query2 = `
-      SELECT Account_Name 
-      FROM account 
-      WHERE Account_ID IN (
-        SELECT Account_ID FROM users WHERE User_ID = ?
-      );
-    `;
+    // Store User_ID and User_Name in session
+    request.session.Account_Name = user.User_Name; // User_Name
+    request.session.Account_ID = user.User_ID;     // User_ID
 
-    con.query(query2, [the_username], (err, nameResults) => {
-      if (err) {
-        console.error('Database error:', err);
-        return response.status(500).send('Internal Server Error 2');
-      }
+    console.log(`User_Name ${user.User_Name} stored in session.`);
+    console.log(`User_ID ${user.User_ID} stored in session.`);
 
-      if (nameResults.length > 0) {
-        const accountName = nameResults[0].Account_Name; // Extract the name
-        request.session.Account_Name = accountName; // Store clean name in session
-        console.log(`Account_Name ${accountName} stored in session.`);
-
-        // Fetch Account_ID for the user
-        const query1 = `
-          SELECT Account_ID 
-          FROM account 
-          WHERE Account_ID IN (
-            SELECT Account_ID FROM users WHERE User_ID = ?
-          );
-        `;
-
-        con.query(query1, [the_username], (err, accountResults) => {
-          if (err) {
-            console.error('Database error:', err);
-            return response.status(500).send('Internal Server Error 1');
-          }
-
-          if (accountResults.length > 0) {
-            const accountID = accountResults[0].Account_ID;
-
-            // Store Account_ID in the session
-            request.session.Account_ID = accountID;
-
-            console.log(`Account_ID ${accountID} stored in session.`);
-
-            // Redirect to account page
-            response.cookie("loggedIn", 1, { expire: Date.now() + 30 * 60 * 1000 }); // make a logged in cookie
-            return response.redirect('/account.html');
-          } else {
-            return response.status(404).send('Account not found.');
-          }
-        });
-      } else {
-        return response.status(404).send('Account name not found.');
-      }
-    });
+    // Set logged-in cookie and redirect
+    response.cookie("loggedIn", 1, { expire: Date.now() + 30 * 60 * 1000 }); // 30 min cookie
+    return response.redirect('/account.html');
   });
 });
-
 
 app.post('/register', function (request, response) { 
   let the_username = request.body.username.toLowerCase();
@@ -559,7 +515,6 @@ app.get("/api/reports", (req, res) => {
     res.json(results); // Send JSON response
   });
 });
-
 
 // API endpoint to execute custom SQL
 app.get("/api/run-query", (req, res) => {
