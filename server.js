@@ -452,38 +452,36 @@ app.get("/api/reports", (req, res) => {
   switch (reportType) {
     case "1": // Location Frequency Report
       query = `
-        SELECT Geo_Location AS Location_Name, COUNT(*) AS Frequency
-        FROM Records
-        GROUP BY Geo_Location
-        ORDER BY Frequency DESC
-        LIMIT 10;
+SELECT Location, COUNT(*) AS Record_Count
+FROM record
+GROUP BY Location
+ORDER BY Record_Count DESC;
       `;
       break;
     case "2": // Government Agency Report
       query = `
-        SELECT Creator, Subject, COUNT(Record_ID) AS Record_Count
-        FROM Records
-        WHERE Subject LIKE '%government%'
-           OR Creator LIKE '%agency%'
-        GROUP BY Creator, Subject
-        ORDER BY Creator, Subject;
+SELECT d.D_name AS Department_Name, r.Title AS Record_Title, r.Subject
+FROM record r
+JOIN department d ON r.Department_ID = d.Department_ID
+WHERE d.D_name LIKE '%Department%'
+ORDER BY d.D_name, r.Title;
+
       `;
       break;
     case "3": // Distribution Report
       query = `
-        SELECT Geo_Location, Language, COUNT(Record_ID) AS Record_Count
-        FROM Records
-        GROUP BY Geo_Location, Language
-        ORDER BY Geo_Location, Language;
+SELECT Medium, COUNT(*) AS Record_Count
+FROM record
+GROUP BY Medium
+ORDER BY Record_Count DESC;
       `;
       break;
     case "4": // Monthly Document Report
       query = `
-        SELECT Year_Range, COUNT(Record_ID) AS Document_Count
-        FROM Records
-        WHERE Year_Range BETWEEN '2024-01' AND '2024-12' -- Adjust timeframe as needed
-        GROUP BY Year_Range
-        ORDER BY Year_Range;
+SELECT Record_ID, Title, Date, Subject, Medium
+FROM record
+WHERE Date LIKE '2024-01%' 
+ORDER BY Date ASC;
       `;
       break;
     default:
@@ -523,8 +521,8 @@ app.get("/api/run-query", (req, res) => {
 
 app.get('/get-submitted-reservations', (req, res) => {// API endpoint to get submitted reservations. i changed this because we want to see all reservations, not just submitted ones
   const query = `
-    SELECT Reservation_ID, Reservation_Start_Date, Reservation_Status, Reservation_Fulfilled_Date 
-    FROM Reservation;
+    SELECT User_ID, Record_ID, Librarian_ID, Reservation_Start_Date, Reservation_Status, Returned_Time 
+    FROM reserves;
   `;
 
   con.query(query, (err, results) => {
@@ -539,22 +537,18 @@ app.get('/get-submitted-reservations', (req, res) => {// API endpoint to get sub
 app.post('/modifyRecords', (req, res) => {
   const action = req.body.action || null; // the dropdown
   const Record_ID = req.body.Record_ID || null;
-  const Department_Name = req.body.Department_Name || null;
-  const Digital_File_Name = req.body.Digital_File_Name || null;
+  const Author_ID = req.body.Author_ID || null;
+  const Publisher_ID = req.body.Publisher_ID || null;
+  const Department_ID = req.body.Department_ID || null;
+  const ISBN = req.body.ISBN || null;
   const Location = req.body.Location || null;
   const Rights = req.body.Rights || null;
   const Title = req.body.Title || null;
-  const Alt_Title = req.body.Alt_Title || null;
-  const Creator = req.body.Creator || null;
   const Description = req.body.Description || null;
   const Language = req.body.Language || null;
   const Geo_Location = req.body.Geo_Location || null;
-  const Year_Range = req.body.Year_Range || null;
-  const Containers_Info = req.body.Containers_Info || null;
-  const Cabinet = req.body.Cabinet || null;
-  const File_Folder = req.body.File_Folder || null;
-  const Map_num = req.body.Map_num || null;
-  const Reel_Format = req.body.Reel_Format || null;
+  const Date = req.body.Date || null;
+  const Metadata = req.body.Metadata || null;
   const Medium = req.body.Medium || null;
   const Subject = req.body.Subject || null;
 
@@ -562,29 +556,36 @@ app.post('/modifyRecords', (req, res) => {
   if (action === 'add') { // Logic to add a record
     console.log("Adding new record...");
     const query = `
-      INSERT INTO records (Record_ID, Department_Name, Digital_File_Name, Location, Rights, Title, Alt_Title, Creator, Description, Language, Geo_Location, Year_Range, Containers_Info, Cabinet, File_Folder, Map_num, Reel_Format, Medium, Subject) 
-      VALUES ('${Record_ID}', '${Department_Name}', '${Digital_File_Name}', '${Location}', '${Rights}', '${Title}', '${Alt_Title}', '${Creator}', '${Description}', '${Language}', '${Geo_Location}', '${Year_Range}', '${Containers_Info}', '${Cabinet}', '${File_Folder}', '${Map_num}', '${Reel_Format}', '${Medium}', '${Subject}');
+      INSERT INTO record (Record_ID, Author_ID, Publisher_ID, Department_ID, ISBN, Location, Rights, Title, Description, Language, Geo_Location, Date, Metadata, Medium, Subject) 
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
     `;
 
-    con.query(query, (err) => {
-      if (err) {
-        console.error('Error adding record:', err.message);
-        return res.status(500).send('Failed to add record.'); // Exit here
+    con.query(
+      query,
+      [
+        Record_ID, Author_ID, Publisher_ID, Department_ID, ISBN, Location, Rights, 
+        Title, Description, Language, Geo_Location, Date, Metadata, Medium, Subject
+      ],
+      (err) => {
+        if (err) {
+          console.error('Error adding record:', err.message);
+          return res.status(500).send('Failed to add record.');
+        }
+        console.log("Record added successfully!");
+        return res.redirect('/modify.html');
       }
-      console.log("Record added successfully!");
-      return res.redirect('/modify.html'); // Send only one response
-    });
+    );
   } else if (action === 'delete') { // Logic to delete a record
     console.log("Deleting record...");
-    const query = `DELETE FROM records WHERE Record_ID = '${Record_ID}';`;
+    const query = `DELETE FROM record WHERE Record_ID = ?;`;
 
-    con.query(query, (err) => {
+    con.query(query, [Record_ID], (err) => {
       if (err) {
         console.error('Error deleting record:', err.message);
-        return res.status(500).send('Failed to delete record.'); // Exit here
+        return res.status(500).send('Failed to delete record.');
       }
       console.log("Record deleted successfully!");
-      return res.redirect('/modify.html'); // Send only one response
+      return res.redirect('/modify.html');
     });
   } else {
     console.log("Unknown action received.");
