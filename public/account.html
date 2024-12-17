@@ -197,11 +197,12 @@
                         <th>Record ID</th>
                         <th>Title</th>
                         <th>Department</th>
-                        <th>Year Range</th>
+                        <th>Date</th>
                         <th>Subject</th>
                         <th>Description</th>
                         <th>Medium</th>
                         <th>Language</th>
+                        <th>Status</th>
                     </tr>
                 </thead>
                 <tbody></tbody>
@@ -216,12 +217,13 @@
                     <tr>
                         <td>${record.Record_ID}</td>
                         <td>${record.Title}</td>
-                        <td>${record.Department_Name}</td>
-                        <td>${record.Year_Range}</td>
+                        <td>${record.D_name}</td>
+                        <td>${record.Date}</td>
                         <td>${record.Subject}</td>
                         <td>${record.Description}</td>
                         <td>${record.Medium}</td>
                         <td>${record.Language}</td>
+                        <td>${record.Reservation_Status}</td>
                     </tr>
                 `;
                 tableBody.innerHTML += row;

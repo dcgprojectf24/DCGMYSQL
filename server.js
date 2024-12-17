@@ -94,51 +94,52 @@ app.post('/login', (request, response) => {
 });
 
 app.post('/register', function (request, response) { 
-  let the_username = request.body.username.toLowerCase();
-  let the_password = request.body.password;
-  let lname = request.body.lastname;
-  let fname = request.body.firstname;
-  let fullname = fname + ' ' + lname;
-
-  // Generate a unique Account_ID
-  let accountID = generateUniqueAccountID();
+  let the_username = request.body.username.toLowerCase(); // Account_Email
+  let the_password = request.body.password;              // Account_Password
+  let lname = request.body.lastname;                     // Last name
+  let fname = request.body.firstname;                    // First name
+  let fullname = fname + ' ' + lname;                    // User_Name
 
   // Query to insert data into the `account` table
-  const query = `
-    INSERT INTO account (Account_ID, Account_Email, Account_Name) VALUES
-    (?, ?, ?);
+  const queryAccount = `
+    INSERT INTO account (Account_Email, Account_Password) 
+    VALUES (?, ?);
   `;
 
-  // Query to insert data into the `users` table
-  const query1 = `
-    INSERT INTO users (User_ID, User_Password, Account_ID) VALUES
-    (?, ?, ?);
+  // Query to insert data into the `user` table
+  const queryUser = `
+    INSERT INTO user (User_ID, User_Name, Account_Email) 
+    VALUES (?, ?, ?);
   `;
 
-  // Execute the first query to insert into the account table
-  con.query(query, [accountID, the_username, fullname], (err) => {
+  // Generate a unique User_ID
+  let userID = generateUniqueUserID();
+
+  // Insert into the `account` table
+  con.query(queryAccount, [the_username, the_password], (err) => {
     if (err) {
       console.error('Database error in account table:', err); 
       return response.status(500).send('Error creating account.');
     }
 
-    // Execute the second query to insert into the users table
-    con.query(query1, [the_username, the_password, accountID], (err) => {
+    // Insert into the `user` table
+    con.query(queryUser, [userID, fullname, the_username], (err) => {
       if (err) {
-        console.error('Database error in users table:', err);
+        console.error('Database error in user table:', err);
         return response.status(500).send('Error creating user.');
       }
-// Store Account_ID and Name in the session
-request.session.Name = fullname;
-request.session.Account_ID = accountID;
-      // Redirect to account page if both queries are successful
+      // Store Account_ID and Name in the session
+      request.session.Name = fullname;
+      request.session.Account_ID = userID;
+
+      console.log(`User created successfully with User_ID: ${userID}`);
+
+      // Set logged-in cookie and redirect
       response.cookie("loggedIn", 1, { expire: Date.now() + 30 * 60 * 1000 });
-      console.log(`Account created successfully with Account_ID: ${accountID}`);
       return response.redirect('/account.html');
     });
   });
 });
-
 
 app.get('/logout', function (request, response){// Redirects user to home page after logging out
   response.redirect(`./index.html`)
@@ -150,9 +151,10 @@ app.post('/loginLibrarian', (request, response) => {// Login route
 
   // Secure query to validate user credentials
   const query = `
-    SELECT Librarian_Email, Librarian_Password 
-    FROM librarian 
-    WHERE Librarian_Email = ?;
+    SELECT a.Account_Email, a.Account_Password, u.User_ID, u.User_Name
+    FROM account a
+    INNER JOIN user u ON a.Account_Email = u.Account_Email
+    WHERE a.Account_Email = ?;
   `;
 
   con.query(query, [the_username], (err, results) => {
@@ -163,45 +165,28 @@ app.post('/loginLibrarian', (request, response) => {// Login route
 
     // Check if user exists
     if (results.length === 0) {
-      return response.status(401).send('User does not exist');
+      return response.status(401).send('Invalid username or password');
     }
 
     const user = results[0];
 
-    // Password validation (replace with bcrypt.compare for hashed passwords)
-    if (user.Librarian_Password !== the_password) {
+    // Password validation
+    if (user.Account_Password !== the_password) {
       return response.status(401).send('Invalid username or password');
     }
 
-    // Fetch Account_ID for the user
-    const query1 = `
-      SELECT Librarian_ID 
-      FROM librarian 
-      WHERE Librarian_Email = '${the_username}';
-    `;
+    // Store User_ID and User_Name in session
+    request.session.Account_Name = user.User_Name; // User_Name
+    request.session.Account_ID = user.User_ID;     // User_ID
 
-    con.query(query1, [the_username], (err, accountResults) => {
-      if (err) {
-        console.error('Database error:', err);
-        return response.status(500).send('Internal Server Error');
-      }
+    console.log(`User_Name ${user.User_Name} stored in session.`);
+    console.log(`User_ID ${user.User_ID} stored in session.`);
 
-      if (accountResults.length > 0) {
-        const accountID = accountResults[0].Account_ID;
-
-        // Store Account_ID in the session
-        request.session.Account_ID = accountID;
-
-        console.log(`Account_ID ${accountID} stored in session.`);
-
-        // Redirect to account page
-        response.cookie("loggedIn", 1, {expire: Date.now() + 30 * 60 * 1000});// make a logged in cookie
-        response.cookie("librarianC", 1, {expire: Date.now() + 30 * 60 * 1000});// make a librarian cookie
-        response.redirect('/advanced.html');
-      } else {
-        response.status(404).send('Account not found.');
-      }
-    });
+    // Set logged-in cookie and redirect
+    response.cookie("loggedIn", 1, { expire: Date.now() + 30 * 60 * 1000 }); // 30 min cookie
+    response.cookie("loggedIn", 1, {expire: Date.now() + 30 * 60 * 1000});// make a logged in cookie
+    response.cookie("librarianC", 1, {expire: Date.now() + 30 * 60 * 1000});// make a librarian cookie
+    return response.redirect('/advanced.html');
   });
 });
 
@@ -357,12 +342,11 @@ app.get('/get-user-reservations', (req, res) => {
 
   // Query to fetch records linked to the user's Account_ID
   const query = `
-    SELECT r.Record_ID, r.Title, r.Department_Name, r.Year_Range, 
-           r.Subject, r.Description, r.Medium, r.Language
-    FROM Records r
-    JOIN Contains c ON r.Record_ID = c.Record_ID
-    JOIN Reservation res ON c.Reservation_ID = res.Reservation_ID
-    WHERE res.Account_ID = ?;
+    SELECT r.Record_ID, r.Title, d.D_name, r.Date, r.Subject, r.Description, r.Medium, r.Language, res.Reservation_Status 
+    FROM record r
+    JOIN department d ON r.Department_ID = d.Department_ID
+    JOIN reserves res ON r.Record_ID = res.Record_ID
+    WHERE res.User_ID = '${accountId}';
   `;
 
   // Execute the query with Account_ID as a parameter
@@ -376,7 +360,6 @@ app.get('/get-user-reservations', (req, res) => {
     res.json({ records: results });
   });
 });
-
 
 // Endpoint to finalize the request
 app.post('/finalizeRequest', (req, res) => {
@@ -426,35 +409,36 @@ app.post('/update-reservation-status', (req, res) => {
   const input = req.body;
   console.log(input);
 
-    // Normalize input: ensure it's always an array
-    const reservations = Array.isArray(input) ? input : [input];
+  // Normalize input: ensure it's always an array
+  const reservations = Array.isArray(input) ? input : [input];
 
-    // Loop through each reservation
-    reservations.forEach(reservation => {
-        const reservationNum = reservation.reservation_id;
-        const reservationStat = reservation.status;
+  // Loop through each reservation
+  reservations.forEach(reservation => {
+    const userID = reservation.user_id;          // Updated to User_ID
+    const recordID = reservation.record_id;      // Updated to Record_ID
+    const reservationStat = reservation.status;  // Updated to Reservation_Status
 
-        console.log(`Updating Reservation ID: ${reservationNum} with Status: ${reservationStat}`);
+    console.log(`Updating User_ID: ${userID}, Record_ID: ${recordID} with Status: ${reservationStat}`);
 
-        const query = `
-            UPDATE reservation
-            SET Reservation_Status = ? 
-            WHERE Reservation_ID = ?;
-        `;
+    const query = `
+        UPDATE reserves
+        SET Reservation_Status = ?
+        WHERE User_ID = ? AND Record_ID = ?;
+    `;
 
-        // Execute the query for each reservation
-        con.query(query, [reservationStat, reservationNum], (err) => {
-            if (err) {
-                console.error(`Error updating Reservation ID ${reservationNum}:`, err);
-            } else {
-                console.log(`Successfully updated Reservation ID: ${reservationNum}`);
-            }
-        });
+    // Execute the query for each reservation
+    con.query(query, [reservationStat, userID, recordID], (err) => {
+      if (err) {
+        console.error(`Error updating User_ID ${userID}, Record_ID ${recordID}:`, err);
+      } else {
+        console.log(`Successfully updated User_ID: ${userID}, Record_ID: ${recordID}`);
+      }
     });
-    // Redirect back to advanced.html
-    res.redirect('/advanced.html');
-});
+  });
 
+  // Redirect back to advanced.html
+  res.redirect('/advanced.html');
+});
 
 /*----------------------------------- REPORTS -----------------------------------*/
 
@@ -611,10 +595,10 @@ app.post('/modifyRecords', (req, res) => {
 /*----------------------------------- Unique ID Generation and Date -----------------------------------*/
 
 const generatedAccountIDs = new Set(); // To ensure unique Account_IDs
-function generateUniqueAccountID() {// Function to generate a unique random Account_ID
+function generateUniqueUserID() {// Function to generate a unique random Account_ID
   let accountID;
   do {
-    accountID = `A${Math.floor(100000 + Math.random() * 900000)}`; // e.g., "A123456"
+    accountID = `U${Math.floor(100000 + Math.random() * 900000)}`; // e.g., "A123456"
   } while (generatedAccountIDs.has(accountID)); // Ensure it's not a duplicate
   generatedAccountIDs.add(accountID); // Add to the set
   return accountID;
