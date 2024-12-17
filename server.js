@@ -48,56 +48,6 @@ con.connect(function (err) {// Throws error or confirms connection
  console.log("Connected!");
 });
 
-/*---------------------------------- FUNCTIONS ----------------------------------*/
-function isNonNegInt(stringToCheck, returnErrors = false) {
-  errors = []; // assume no errors at first
-  if (Number(stringToCheck) != stringToCheck) errors.push('Not a number!'); // Check if string is a number value
-  if (stringToCheck < 0) errors.push('Negative value!'); // Check if it is non-negative
-  if (parseInt(stringToCheck) != stringToCheck) errors.push('Not an integer!'); // Check that it is an integer
-
-  return returnErrors ? errors : (errors.length == 0);
-}
-
-/*---------------------------------- KAZMAN SQL ----------------------------------*/
-function query_DB(POST, response) {
-  if (isNonNegInt(POST['low_price']) && isNonNegInt(POST['high_price'])) {// Only query if we got a low and high price
-    low = POST['low_price']; // Grab the parameters from the submitted form
-    high = POST['high_price'];
-    /*---------------------------------- QUERY ----------------------------------*/
-    query = "SELECT * FROM Room where price > " + low + " and price < " + high; // Build the query string
-    con.query(query, function (err, result, fields) {   // Run the query
-      if (err) throw err;
-      console.log(result);
-      var res_string = JSON.stringify(result);
-      var res_json = JSON.parse(res_string);
-      console.log(res_json);
-    /*---------------------------------- QUERY ----------------------------------*/
-    /*---------------------------------- DISPLAY ----------------------------------*/
-      // Now build the response: table of results and form to do another query
-      response_form = `<form action="homeSQL.html" method="GET">`;
-      response_form += `<table border="3" cellpadding="5" cellspacing="5">`;
-      response_form += `<td><B>Room#</td><td><B>Hotel#</td><td><B>Type</td><td><B>Price</td></b>`;
-      for (i in res_json) {
-        response_form += `<tr><td> ${res_json[i].roomNo}</td>`;
-        response_form += `<td> ${res_json[i].hotelNo}</td>`;
-        response_form += `<td> ${res_json[i].type}</td>`;
-        response_form += `<td> ${res_json[i].price}</td></tr>`;
-      }
-      response_form += "</table>";
-      response_form += `<input type="submit" value="Another Query?"> </form>`;
-      response.send(response_form);
-    });
-    /*---------------------------------- DISPLAY ----------------------------------*/
-  } else { // If any errors occur
-    response.send("Enter some prices doofus!");
-  }
-}
-
-app.post("/process_query", function (request, response) {
-  let POST = request.body;
-  query_DB(POST, response);
-});
-
 /*---------------------------------- LOGIN/LOGOUT/REGISTER ----------------------------------*/
 
 app.post('/login', (request, response) => { // Login route
@@ -304,18 +254,16 @@ app.post('/loginLibrarian', (request, response) => {// Login route
 app.get("/geo", (req, res) => {
   const search = req.query.search; // Use 'search' for query parameter
   const page = parseInt(req.query.page) || 1; // Default to page 1
-  const limit = parseInt(req.query.limit) || 10; // Default to 10 records per page
-  const offset = (page - 1) * limit;
 
   if (!search) {
       return res.status(400).send("Search term is required.");
   }
 
   const query = `
-      SELECT Record_ID, Title, Department_Name, Year_Range, Subject, Description, Medium, Language 
-      FROM RECORDS 
-      WHERE Geo_Location LIKE '%${search}%'
-      LIMIT ${limit} OFFSET ${offset};
+      SELECT Record_ID, Title, D_name, Date, Subject, Description, Medium, Language 
+      FROM record r 
+      INNER JOIN Department d ON r.Department_ID = d.Department_ID
+      WHERE Geo_Location LIKE '%${search}%';
   `;
 
   con.query(query, (err, result) => {
@@ -358,10 +306,11 @@ app.post("/executeSearch", (req, res) => {
   console.log(format);
 
   const query = `
-    SELECT Record_ID, Title, Department_Name, Year_Range, Subject, Description, Medium, Language 
-    FROM records 
+    SELECT Record_ID, Title, D_name, Date, Subject, Description, Medium, Language 
+    FROM record r 
+    INNER JOIN Department d ON r.Department_ID = d.Department_ID
     WHERE ${type} LIKE '%${search}%' AND Medium = '${format}';
-  `;
+    `;
 
   con.query(query, (err, result) => {
     if (err) throw err;
