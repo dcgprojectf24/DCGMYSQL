@@ -29,7 +29,6 @@ app.use((req, res, next) => {
 // monitor all requests and make a reservation
 app.all('*', function (request, response, next){// this function also makes reservations
   console.log(request.method + ' to ' + request.path);
-
   next();
 });
 
@@ -54,12 +53,10 @@ app.post('/login', (request, response) => {
   const the_username = request.body.username.toLowerCase();
   const the_password = request.body.password;
 
-  // Secure query to validate user credentials
+  // Define query to validate user credentials
   const query = `
-    SELECT a.Account_Email, a.Account_Password, u.User_ID, u.User_Name
-    FROM account a
-    INNER JOIN user u ON a.Account_Email = u.Account_Email
-    WHERE a.Account_Email = ?;
+    SELECT g.Email, g.Password 
+    FROM guest g;
   `;
 
   con.query(query, [the_username], (err, results) => {
@@ -68,28 +65,28 @@ app.post('/login', (request, response) => {
       return response.status(500).send('Internal Server Error');
     }
 
-    // Check if user exists
+    // Check if email exists
     if (results.length === 0) {
       return response.status(401).send('Invalid username or password');
     }
 
     const user = results[0];
 
-    // Password validation
+    // Check if password exists
     if (user.Account_Password !== the_password) {
       return response.status(401).send('Invalid username or password');
     }
 
     // Store User_ID and User_Name in session
-    request.session.Account_Name = user.User_Name; // User_Name
-    request.session.Account_ID = user.User_ID;     // User_ID
+//    request.session.Account_Name = user.User_Name; // User_Name
+//    request.session.Account_ID = user.User_ID;     // User_ID
 
-    console.log(`User_Name ${user.User_Name} stored in session.`);
-    console.log(`User_ID ${user.User_ID} stored in session.`);
+//    console.log(`User_Name ${user.User_Name} stored in session.`);
+//    console.log(`User_ID ${user.User_ID} stored in session.`);
 
     // Set logged-in cookie and redirect
-    response.cookie("loggedIn", 1, { expire: Date.now() + 30 * 60 * 1000 }); // 30 min cookie
-    return response.redirect('/account.html');
+    response.cookie("loggedIn", 1, { expire: Date.now() + 30 * 60 * 1000 }); // 30 min cookie THAT RECORDS WHEN YOU LOG IN
+    return response.redirect('/rooms.html');
   });
 });
 
@@ -145,7 +142,7 @@ app.get('/logout', function (request, response){// Redirects user to home page a
   response.redirect(`./index.html`)
 });
 
-app.post('/loginLibrarian', (request, response) => {// Login route
+app.post('/loginStaff', (request, response) => {// Login route
   const the_username = request.body.username.toLowerCase();
   const the_password = request.body.password;
 
@@ -190,7 +187,7 @@ app.post('/loginLibrarian', (request, response) => {// Login route
   });
 });
 
-/*---------------------------------- MAPS SQL ----------------------------------*/
+/*---------------------------------- ROOMS SQL ----------------------------------*/
 
 app.get("/geo", (req, res) => {
   const search = req.query.search; // Use 'search' for query parameter
@@ -517,7 +514,7 @@ app.get("/api/run-query", (req, res) => {
   });
 });
 
-/*----------------------------------- LIBRARIAN VIEW -----------------------------------*/
+/*----------------------------------- STAFF VIEW -----------------------------------*/
 
 app.get('/get-submitted-reservations', (req, res) => {// API endpoint to get submitted reservations. i changed this because we want to see all reservations, not just submitted ones
   const query = `
