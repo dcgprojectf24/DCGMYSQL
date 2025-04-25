@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Hamilton Library - Hawaiian and Pacific Collection</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="./css/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="shortcut icon" href="./images/HPC_logo_zoom.jpg" type="image/png">
+<script src="./functions.js"></script>
+<style>
+body, h1, h2, h3, h4, h5, h6 {
+    font-family: "Raleway", Arial, Helvetica, sans-serif;
+}
+.hero {
+    background-image: url('./images/Books.jpg'); /* Replace with actual image path */
+    background-size: cover;
+    background-position: center;
+    height: 60vh;
+    color: white;
+    display: flex;
+    flex-direction: column; /* Stack child elements vertically */
+    align-items: center; /* Center elements horizontally */
+    justify-content: center; /* Center elements vertically */
+    text-align: center;
+    padding: 20px; /* Add padding to prevent text from touching edges */
+    position: relative; /* For overlay */
+}
+
+.hero h1, .hero p {
+    position: relative; /* Ensure they appear above the overlay */
+    z-index: 2;
+    max-width: 90%; /* Restrict the width for better responsiveness */
+    word-wrap: break-word; /* Ensure text wraps within the container */
+    margin: 10px auto; /* Center the text with auto margins */
+}
+
+.hero h1 {
+    font-size: 2.5rem; /* Adjust font size for responsiveness */
+    font-weight: bold;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+}
+
+.hero p {
+    font-size: 1.25rem; /* Smaller font size for the paragraph */
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
+}
+
+/* Overlay for better text visibility */
+.hero::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.4); /* Semi-transparent overlay */
+    z-index: 1; /* Ensure the overlay is below text */
+}
+.logo-container {
+    text-align: center;
+    margin: 20px 0;
+}
+.logo-container img {
+    max-width: 150px;
+    height: auto;
+}
+.feature-strip {
+    display: flex;
+    justify-content: space-around;
+    padding: 20px 10px;
+    background-color: #f9f9f9;
+    margin-top: 20px;
+}
+.feature-item {
+    flex: 1;
+    text-align: center;
+    padding: 10px;
+}
+.feature-icon {
+    font-size: 2.5rem;
+    color: #4a7c89;
+    margin-bottom: 10px;
+}
+.feature-title {
+    font-size: 1.25rem;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+.feature-description {
+    font-size: 1rem;
+    color: #555;
+}
+/* Media Queries for Smaller Screens */
+@media (max-width: 768px) {
+    .hero {
+        height: auto; /* Allow height to adjust dynamically */
+    }
+
+    .hero h1 {
+        font-size: 2rem; /* Reduce font size for smaller screens */
+    }
+
+    .hero p {
+        font-size: 1rem; /* Reduce paragraph font size */
+    }
+}
+
+</style>
+</head>
+<body class="w3-light-grey";>
+<!---------------------------- Navigation Bar Start ---------------------------->
+<script>navBar();</script>
+<!---------------------------- Navigation Bar End ---------------------------->
+<!---------------------------- Input Form Start (who let Lui cook)---------------------------->
+<div class="hero">
+  <h1>The Hamilton Library's Hawaiian and Pacific Collection</h1>
+  
+  <div class="unique-form-container">
+    <h2>Search Records</h2>
+    <form action="./executeSearch" method="post">
+        <!-- Text Input -->
+        <div class="form-group">
+            <label for="searchInput">Search</label>
+            <input type="text" id="searchInput" name="searchInput" placeholder="Try search Hawaii...">
+        </div>
+
+        <!-- Dropdown -->
+        <div class="form-group">
+            <label for="searchType">Search By</label>
+            <select id="searchType" name="searchType">
+                <option value="Title">Title</option>
+                <option value="Author_ID">Author</option>
+                <option value="Department_ID">Department</option>
+                <option value="Publisher_ID">Publisher</option>
+                <option value="Subject">Subject</option>
+            </select>
+        </div>
+
+        <!-- Radio Buttons -->
+        <div class="radio-group">
+            <label><input type="radio" id="avRadio" name="format" value="AV"> AV</label>
+            <label><input type="radio" id="mapsRadio" name="format" value="Maps"> Maps</label>
+            <label><input type="radio" id="microfilmRadio" name="format" value="Microfilm" checked> Microfilm</label>
+        </div>
+
+        <!-- Submit Button -->
+        <button type="submit" class="niceButton">Search</button>
+    </form>
+  </div>
+  <p>Your gateway to the history and culture of Hawaiʻi, Polynesia, Melanesia, and Micronesia.</p>
+</div>
+
+<!---------------------------- Input Form End (who let Lui cook)----------------------------> 
+<div class="w3-container w3-center w3-padding-10">
+  <h2 class="w3-text-grey">About the Collection</h2>
+</div>
+
+<div class="w3-container w3-padding-10">
+  <div class="logo-container">
+    <img src="./images/HAPClogo.png" alt="Hawaiian and Pacific Collections Logo">
+  </div>
+  <p>
+    The Hawaiian and Pacific Collections house a vast array of unique and specialized materials, encompassing audiovisual (AV) materials, maps, and microfilm records. These collections provide invaluable resources for research, education, and preservation, with a focus on the cultural and historical significance of Hawaiʻi and the broader regions of Polynesia, Melanesia, and Micronesia.
+  </p>
+  <p>
+    Our AV collection includes rare recordings, documentaries, and archival footage that capture the voices, stories, and traditions of the Pacific Islands. The map collection offers detailed cartographic records that highlight geographic, cultural, and linguistic shifts over time. Meanwhile, the microfilm archive preserves historical documents, periodicals, and government records critical to understanding the history and development of the region. Explore these materials through our search tools, tailored to streamline your research and discovery process. For additional information on access and use, visit the <a href="about.html">About page</a>.
+  </p>
+</div>
+
+<div class="feature-strip">
+  <div class="feature-item">
+    <i class="fa fa-book feature-icon"></i>
+    <h3 class="feature-title">Extensive Archives</h3>
+    <p class="feature-description">Books, maps, and audiovisual materials spanning Hawaiian and Pacific history.</p>
+  </div>
+  <div class="feature-item">
+    <i class="fa fa-search feature-icon"></i>
+    <h3 class="feature-title">Advanced Search</h3>
+    <p class="feature-description">Precision search with filters for location, author, and publication date.</p>
+  </div>
+  <div class="feature-item">
+    <i class="fa fa-users feature-icon"></i>
+    <h3 class="feature-title">Dedicated Support</h3>
+    <p class="feature-description">Expert assistance from experienced librarians and staff.</p>
+  </div>
+</div>
+
+<div class="w3-container w3-padding-30 w3-light-grey">
+  <h2 class="w3-center">Explore More</h2>
+  <p class="w3-center">Discover how to make the most of our unique collection and services.</p>
+  <div class="w3-center">
+    <a href="about.html" class="niceButton">Learn More</a>
+  </div>
+</div>
+
+<footer class="w3-container w3-center w3-light-grey w3-padding-16">
+  <p>© 2024 Hamilton Library. All rights reserved.</p>
+</footer>
+
+</body>
+</html>
